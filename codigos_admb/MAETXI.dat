@@ -1,14 +1,16 @@
-#	MODELO	DE	CAPTURA	A	LA	TALLA	(MODBENTO)	IFOP																																																
-#	cristian.canales@ifop.cl																																																							
-#numero	de	años																																																						
-60																																																								
-#numero	de	edades																																																						
-12																																																								
-#edad	minima																																																							
-2																																																								
-#numero	de	intervalos	de	tallas																																																				
-56																																																								
-#Anho	Captura	cv	CPUE	cv	nm																																																			
+# nanos																																																						
+60	
+
+# nedades																																																						
+12	
+
+# edad_min																																																							
+2	
+
+# ntallas																																																				
+56	
+
+# Ind																																																			
 1960	1	0.05	0	0.2	264																																																			
 1961	1	0.05	0	0.2	264																																																			
 1962	2	0.05	0	0.2	264																																																			
@@ -70,10 +72,10 @@
 2018	10532	0.05	130.3	0.2	264
 2019	10233	0.05	123.0	0.2	264
 
-#grupo	de	tallas																																																						
+# Tallas																																																				
 30	32	34	36	38	40	42	44	46	48	50	52	54	56	58	60	62	64	66	68	70	72	74	76	78	80	82	84	86	88	90	92	94	96	98	100	102	104	106	108	110	112	114	116	118	120	122	124	126	128	130	132	134	136	138	140
 
-#COMPOSICION	DE	TALLAS
+# Frec_Tallas
 0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
 0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
 0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
@@ -135,86 +137,81 @@
 0	0	0	0	0	0	0	0	0	0	13	30	67	232	721	1597	3166	4328	5563	5634	5429	4858	3706	2759	2014	1392	897	673	400	292	217	163	120	78	53	37	24	20	12	5	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0
 0	0	0	0	0	0	0	0	0	2	4	8	18	55	172	680	1603	2916	4713	5510	5265	4563	3613	2797	2018	1166	779	434	326	172	158	121	82	40	29	27	19	19	6	8	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
 
-#madurez	&	peso															
+# Madurez															
 0.08	0.11	0.15	0.21	0.27	0.35	0.44	0.53	0.62	0.7	0.77	0.83	0.87	0.91	0.93	0.95	0.97	0.98	0.98	0.99	0.99	0.99	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	
+
+# Wmed
 14.32	16.86	19.66	22.72	26.06	29.67	33.57	37.77	42.27	47.09	52.21	57.67	63.45	69.57	76.04	82.86	90.03	97.57	105.48	113.76	122.42	131.48	140.93	150.77	161.02	171.69	182.77	194.27	206.2	218.56	231.36	244.6	258.3	272.44	287.05	302.12	317.65	333.67	350.16	367.13	384.6	402.55	421.01	439.97	459.43	479.41	499.91	520.92	542.47	564.54	587.15	610.29	633.98	658.22	683.02	708.37	
 
-# CONTROLES DEL MODELO
-#_________________________________________________________________________________
-# Coeficiente de variación de los reclutamientos
-#  sigmaR   
-   0.6
+# sigmaR   
+0.6
 
-#  dt desove NOVIEMBRE (Arias et al 1995 y Bay y Schmith (1981)   
-#  dt CPUE (Concentracion de la captura durante el año MES DE JULIO)	
-   0.91            0.5    
+# dts 	
+0.91 0.5    
+ 
+# Loo_k_Lo_cv_M      
+132.8      0.08          55        0.1          0.20    
 
-# PARAMETROS DE CRECIMIENTO Y MORTALIDAD NATURAL
-#____________________________________________________
-#Loo        k             Lo(mm)    cv(edad)      M       #M estimado   Shepherd and Breen (1992) 
-#131.7      0.164	  55        0.1          0.22     #Gebaguer y Moreno 1995)X REGIÓN (MEHUIN)  Bandas crecimiento placas genitale
-#141.2      0.127         64        0.1          0.25     #Gebaguer y Moreno 1995)X REGIÓN (MEHUIN)  Bandas crecimiento placas genitale
-#119.85     0.139          40        0.1          0.25     #Melo (FIP 97-30) X Region (Hueihue) Bandas crecimiento placas genitales 
-132.8      0.08          55        0.1          0.20     #Melo (FIP 97-30) X Region (Hueihue) Progesion Modal
-#___________________________________________________
-# h (pendiente de la relación S-R) 
+# h 
 0.8
 
-#coeficiente de hiper estabilidad de la CPUE (1=proporcional)
+# hiper_estabilidad_q
 1
 
-# PARAMETROS DE SELECTIVIDAD
-#____________________________________________________
-# A50   rango (A50= edad primera captura)
+# Sel_A50_rango 
 5      1  
 
-# Número de bloques de selectividad y años de inicio
-2
-1960
-2004
+# nbloquesSel
+2 
 
+# ybloquesSel
+1960 2004
 
-# Número de bloques de capturabilidad y años de inicio
+# nbloquesq
 5
-1960
-2001
-2004
-2008
-2012
-#_________________________________________________________________
-# FASES DE ESTIMACION DE PARAMETROS
-# (valores negativos = no se estiman)
 
-# Estimacion del coeficiente de  capturabilidad q (CPUE=q*B^b)
+# ybloquesq
+1960 2001 2004 2008 2012
+
+# Fase_q 
 2
-# Estimacion parámetro de hiper estabilidad (b) de la CPUE
+
+# Fase_hiperestabilidad
 -3
-# Estimacion de  la selectividad y opción selectividad tipo domo
-2  -3
-# Estimacion de Lo y  cv(talla-edad)
-4    -4 
-# Estimación de la mortalidad por pesca
+
+# Fase_selectividad 
+2  
+
+# Opt_seldomo
+-3
+
+# Fase_Lo 
+4   
+
+# Fase_cvLo
+-4 
+
+# Fase_F
 2
-# Estimacion variación anual de reclutamientos
+
+# Fase_desvRt
 2
-# Estimacion condición inicial (si es <0 esta en equilibrio)
+
+# Fase_No
 -1
 
-
-# PROYECCION DE LA POBLACION
-#____________________________________________________
-#numero de escenarios
+# nmf
 4
 
-# Multiplos de F
+# mF
 1e-5	0.5    1.0     1.5
 
-# Años a proyectar
+# nproy
 10
 
-#opt_FMRS
+# opt_FMRS
 -1
 
-#FMRS
+# FMRS
 0.24907
 
