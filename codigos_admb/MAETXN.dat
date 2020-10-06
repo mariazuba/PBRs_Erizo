@@ -1,14 +1,16 @@
-#	MODELO	DE	CAPTURA	A	LA	TALLA	(MODBENTO)	IFOP																																									
-#	cristian.canales@ifop.cl																																																
-#numero	de	años																																															
+# nanos																																														
 60
-#numero	de	edades																																															
-12
-#edad	minima																																																
+
+# nedades																																																
+12 
+
+# edad_min																																																	
 2
-#numero	de	intervalos	de	tallas																																													
+
+# ntallas	
 50
-#Anho	Captura	cv	CPUE	cv	nm.																																												
+
+# Ind		
 1960	1090	0.05	0	0.2	198																																												
 1961	1246	0.05	0	0.2	198																																												
 1962	1910	0.05	0	0.2	198																																												
@@ -23,7 +25,7 @@
 1971	1082	0.05	0	0.2	198																																												
 1972	3133	0.05	0	0.2	198																																												
 1973	2004	0.05	0	0.2	198																																												
-1974	595	0.05	0	0.2	198																																												
+1974	595	  0.05	0	0.2	198																																												
 1975	1162	0.05	0	0.2	198																																												
 1976	5564	0.05	0	0.2	198																																												
 1977	2218	0.05	0	0.2	198																																												
@@ -45,17 +47,17 @@
 1993	1938	0.05	0	0.2	198																																												
 1994	2226	0.05	0	0.2	198																																												
 1995	2545	0.05	0	0.2	198																																												
-1996	947	0.05	89.6	0.2	198																																												
+1996	947	  0.05	89.6	0.2	198																																												
 1997	1050	0.05	78.6	0.2	198																																												
-1998	583	0.05	74.6	0.2	198																																												
-1999	492	0.05	65.1	0.2	198																																												
-2000	339	0.05	72.8	0.2	198																																												
-2001	469	0.05	87.0	0.2	198																																												
+1998	583	  0.05	74.6	0.2	198																																												
+1999	492	  0.05	65.1	0.2	198																																												
+2000	339	  0.05	72.8	0.2	198																																												
+2001	469	  0.05	87.0	0.2	198																																												
 2002	1495	0.05	89.1	0.2	198																																												
 2003	1077	0.05	82.4	0.2	198																																												
 2004	1104	0.05	89.1	0.2	198																																												
-2005	733	0.05	77.42	0.2	198																																												
-2006	483	0.05	97.7	0.2	198																																												
+2005	733	  0.05	77.42	0.2	198																																												
+2006	483	  0.05	97.7	0.2	198																																												
 2007	1466	0.05	112.2	0.2	198																																												
 2008	1929	0.05	134.1	0.2	198																																												
 2009	1570	0.05	136.6	0.2	198																																												
@@ -64,15 +66,16 @@
 2012	1946	0.05	175.8	0.2	198																																												
 2013	1958	0.05	156.32	0.2	198																																												
 2014	1491	0.05	143.8	0.2	198																																												
-2015	813	0.05	108.3	0.2	198																																												
-2016	800	0.05	116.6	0.2	198
+2015	813	  0.05	108.3	0.2	198																																												
+2016	800	  0.05	116.6	0.2	198
 2017	1886	0.05	106.9	0.2	198
 2018	1335	0.05	107.7	0.2	198
 2019	1808	0.05	107.7	0.2	198
 
-#grupo	de	tallas																																															
+# Tallas																																																
 40	42	44	46	48	50	52	54	56	58	60	62	64	66	68	70	72	74	76	78	80	82	84	86	88	90	92	94	96	98	100	102	104	106	108	110	112	114	116	118	120	122	124	126	128	130	132	134	136	138
-#COMPOSICION	DE	TALLAS																																															
+
+# Frec_Tallas																																															
 0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
 0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
 0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
@@ -134,88 +137,80 @@
 0	0	0	0	0	7	24	59	93	223	549	793	1138	1170	1246	1300	1261	1210	1081	972	711	603	483	405	318	245	205	144	135	100	68	53	40	34	18	18	13	11	5	5	1	2	0	0	0	0	0	0	0	0
 0	0	0	0	0	37	50	75	150	245	561	849	1007	1242	1354	1358	1418	1362	1267	1232	902	760	629	477	367	235	214	134	106	75	55	40	38	22	15	8	3	0	3	1	2	0	0	0	0	0	0	0	0 0
 
-#madurez	&	peso																																															
+# Madurez																																														
 0.35	0.44	0.53	0.62	0.7	0.77	0.83	0.87	0.91	0.93	0.95	0.97	0.98	0.98	0.99	0.99	0.99	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1
+
+# Wmed
 30.13	34.29	38.79	43.64	48.86	54.44	60.41	66.77	73.53	80.7	88.29	96.31	104.77	113.68	123.05	132.88	143.19	153.98	165.26	177.05	189.34	202.16	215.5	229.37	243.79	258.76	274.29	290.39	307.07	324.33	342.18	360.62	379.68	399.35	419.65	440.57	462.14	484.35	507.21	530.73	554.92	579.78	605.33	631.57	658.5	686.14	714.49	743.56	773.36	803.89
 
+# sigmaR   
+0.6
+  
+# dts
+0.91 0.5
 
-########################## Archivo control #########################
+# Loo_k_Lo_cv_M     
+119.85 0.139 50 0.1 0.25     
 
-# CONTROLES DEL MODELO
-#_________________________________________________________________________________
-# Coeficiente de variación de los reclutamientos
-#  sigmaR   
-   0.6
-
-#  dt desove NOVIEMBRE (Arias et al 1995 y Bay y Schmith (1981)   
-#  dt CPUE (Concentracion de la captura durante el año MES DE JULIO)	
-   0.91            0.5
-
-# PARAMETROS DE CRECIMIENTO Y MORTALIDAD NATURAL
-#____________________________________________________
-#Loo        k             Lo(mm)    cv(edad)      M       #M Estimado por Brey & Gage 1997)
-#131.7      0.164	  55        0.1          0.22     #Gebaguer y Moreno 1995)X REGIÓN (MEHUIN)  Bandas crecimiento placas genitale
-#141.2      0.127         64        0.1          0.22     #Gebaguer y Moreno 1995)X REGIÓN (MEHUIN)  Bandas crecimiento placas genitale
-119.85     0.139          50        0.1          0.25     #Melo (FIP 97-30) X Region (Hueihue) Bandas crecimiento placas genitales 
-#132.8      0.08          55        0.1          0.10     #Melo (FIP 97-30) X Region (Hueihue) Progesion Modal
-#___________________________________________________
-# h (pendiente de la relación S-R) 
+# h   
 0.8
 
-#coeficiente de hiper estabilidad de la CPUE (1=proporcional)
+# hiper_estabilidad_q
 1
 
-# PARAMETROS DE SELECTIVIDAD
-#____________________________________________________
-# A50   rango (A50= edad primera captura)
- 5      1
+# Sel_A50_rango 
+5 1
 
-# Número de bloques de selectividad y años de inicio
+# nbloquesSel
 2
-1960
-2003
 
+# ybloquesSel
+1960 2003
 
-# Número de bloques de capturabilidad y años de inicio
+# nbloquesq
 4
-1960
-2004
-2009
-2011
 
-#_________________________________________________________________
-# FASES DE ESTIMACION DE PARAMETROS
-# (valores negativos = no se estiman)
+# ybloquesq
+1960 2004 2009 2011
 
-# Estimacion del coeficiente de  capturabilidad q (CPUE=q*B^b)
+# Fase_q 
 2
-# Estimacion parámetro de hiper estabilidad (b) de la CPUE
+
+# Fase_hiperestabilidad
 -3
-# Estimacion de  la selectividad y opción selectividad tipo domo
-2  -3
-# Estimacion de Lo y  cv(talla-edad)
--4    -4 
-# Estimación de la mortalidad por pesca
+
+# Fase_selectividad 
+2  
+
+# Opt_seldomo
+-3
+
+# Fase_Lo 
+-4   
+
+# Fase_cvLo
+-4 
+
+# Fase_F
 2
-# Estimacion variación anual de reclutamientos
+
+# Fase_desvRt
 2
-# Estimacion condición inicial (si es <0 esta en equilibrio)
+
+# Fase_No
 -1
 
-
-# PROYECCION DE LA POBLACION
-#____________________________________________________
-#numero de escenarios
+# nmf
 4
 
-# Multiplos de F
-1e-5	0.5    1.0     1.5
+# mF
+1e-5 0.5 1.0 1.5
 
-# Años a proyectar
+# nproy
 10
 
-#opt_FMRS
+# opt_FMRS
 -1
 
-#FMRS
+# FMRS
 0.208
