@@ -93,3 +93,53 @@ Los principales datos que ingresan al modelo corresponden a los desembarques, CP
 **opt\_FRMS** = opción para utilizar Frms estimado por fuera (\>0 activado, \<0 desactivado)
 
 **FRMS** = Frms estimado por fuera del modelo admb
+
+## **Descripción del archivo de report (.rep)**
+
+**REPORT\_SECTION**
+
+"**years**" = yrs = vector de años
+
+"**CPUE\_obs**" = CPUE = vector de CPUE observado (dato de entrada)
+
+"**CPUE\_pred**" = pred\_CPUE = vector de CPUE estimado por el modelo de evalStock MAET
+
+"**Desemb\_obs**" = Desemb = vector de Desembarque observado (dato de entrada)
+
+"**Desemb\_pred**" =pred\_Desemb = vector de Desembarques estimado por el modelo de evalStock MAET
+
+"**Lmed\_obs**" = Lmed\_obs = vector de tallas medias de la proporción de tallas observadas (datos de entrada)
+
+"**Lmed\_pred**" = Lmed\_pred = vector de tallas medias de la proporción de tallas estimadas por el modelo de evalStock MAET
+
+"**BD**" = BD = vector de Biomasa desovante estimada por el modelo de evalStock MAET (variable)
+
+"**BT**" = BT =vector de Biomasa total estimada por el modelo de evalStock MAET (variable)
+
+"**BV**" = BMflo = vector de Biomasa vulnerable a la flota estimada por el modelo de evalStock MAET (variable)
+
+"**R\_pred**"=Rpred = vector de Reclutamiento predicho por la relación stock recluta???
+
+"**R\_Est**" = column(N,1) = vector de Reclutamiento estimado ???
+
+"**F** " =exp(log\_F) = vector de la mortalidad por pesca estimada por el modelo de evalStock MAET (parámetros)
+
+"**Edades**"= edades = vector de edades (indicador)
+
+"**N**"=N = matriz de abundancia a la edad
+
+"**Sel\_f**"=Sel = matriz de selectividad de la flota a la edad
+
+"**pobs**"=pobs = matriz de proporción de tallas observadas (dato entrada)
+
+"**ppred**"=ppred = matriz de proporción de tallas estimadas por el modelo de evalStock MAET
+
+"**Tallas**"= Tallas = vector de tallas (indicador)
+
+"**Prob\_talla**"= Prob\_talla (matriz de probabilidad edad\_talla) estimada por el modelo de evalStock MAET
+
+"**BDo**" = SSBo = biomasa desovante virginal (número) estimada de la relación stock-recluta???
+
+"**Lmed**" = mu\_edad = vector de talla media a la edad utilizada para el cálculo de probabilidad edad\_talla
+
+"**likeval**"= likeval = vector de verosimilitud
