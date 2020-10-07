@@ -11,7 +11,7 @@
 
 
 
-<title>Readme</title>
+<title>README.utf8</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -374,7 +374,6 @@ summary {
 
 
 
-<h1 class="title toc-ignore">Readme</h1>
 
 </div>
 
@@ -391,193 +390,71 @@ summary {
 <p>Los principales datos que ingresan al modelo corresponden a los desembarques, CPUE y frecuencia de tallas de la flota. Utiliza un vector de pesos medios a la talla, madurez a la talla, y parámetros de crecimiento y mortalidad natural.</p>
 <div id="descripción-del-archivo-de-datos-y-controles-.dat" class="section level2">
 <h2><strong>Descripción del archivo de datos y controles (.dat)</strong></h2>
-<p><strong>Datos de entrada</strong></p>
-<table>
-<colgroup>
-<col width="15%"></col>
-<col width="84%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th>nanos</th>
-<th>número de años</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>nedades</td>
-<td>número de edades a modelar</td>
-</tr>
-<tr class="even">
-<td>edad_min</td>
-<td>edad mínima</td>
-</tr>
-<tr class="odd">
-<td>ntallas</td>
-<td>número de clases/grupos de tallas</td>
-</tr>
-<tr class="even">
-<td>Ind</td>
-<td>matriz de datos , desembarques, cv_desem, CPUE, cv_cpue, nm(tamaño de muestra)</td>
-</tr>
-<tr class="odd">
-<td>Tallas</td>
-<td>vector de tallas (clases/grupos de tallas)</td>
-</tr>
-<tr class="even">
-<td>Frec_Tallas</td>
-<td>matriz de frecuencia de tallas para los años de estudio</td>
-</tr>
-<tr class="odd">
-<td>Madurez&quot;</td>
-<td>vector de madurez a la talla</td>
-</tr>
-<tr class="even">
-<td>Wmed</td>
-<td>vector de pesos medios a la talla</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Parámetros reclutamiento, períodos de desove y cpue, parámetros de crecimiento y mortalidad natural, stepness</strong></p>
-<table>
-<colgroup>
-<col width="13%"></col>
-<col width="86%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th>sigmaR</th>
-<th>Coeficiente de variación de los reclutamientos</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>dts</td>
-<td>dt desove NOVIEMBRE (Arias et al 1995 y Bay y Schmith (1981) y dt CPUE (Concentracion de la captura durante el año MES DE JULIO)</td>
-</tr>
-<tr class="even">
-<td>Loo_k_Lo_cv_M</td>
-<td>PARAMETROS DE CRECIMIENTO Y MORTALIDAD NATURAL Loo k Lo(mm) cv(edad) M</td>
-</tr>
-<tr class="odd">
-<td>h</td>
-<td>h (pendiente de la relación S-R)</td>
-</tr>
-</tbody>
-</table>
+<p><strong>DATOS DE ENTRADA</strong></p>
+<p><strong>nanos</strong> =número de años</p>
+<p><strong>nedades</strong>=número de edades a modelar</p>
+<p><strong>edad_min</strong>=edad mínima</p>
+<p><strong>ntallas</strong>=número de clases/grupos de tallas</p>
+<p><strong>Ind</strong>=matriz de datos , desembarques, cv_desem, CPUE, cv_cpue, nm(tamaño de muestra)</p>
+<p><strong>Tallas</strong>=vector de tallas (clases/grupos de tallas)</p>
+<p><strong>Frec_Tallas</strong>=matriz de frecuencia de tallas para los años de estudio</p>
+<p><strong>Madurez</strong>=vector de madurez a la talla</p>
+<p><strong>Wmed</strong>=vector de pesos medios a la talla</p>
+<p><strong>PARÁMETROS HISTORIA DE VIDA</strong></p>
+<p><strong>sigmaR</strong> =Coeficiente de variación de los reclutamientos</p>
+<p><strong>dts</strong>=dt desove NOVIEMBRE (Arias et al 1995 y Bay y Schmith (1981) y dt CPUE (Concentracion de la captura durante el año MES DE JULIO)</p>
+<p><strong>Loo_k_Lo_cv_M</strong>=PARAMETROS DE CRECIMIENTO Y MORTALIDAD NATURAL Loo k Lo(mm) cv(edad) M</p>
+<p><strong>h</strong>=h (pendiente de la relación S-R)</p>
 <p><strong>PARAMETROS DE SELECTIVIDAD Y CAPTURABILIDAD</strong></p>
-<table>
-<colgroup>
-<col width="27%"></col>
-<col width="72%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th>hiper_estabilidad_q</th>
-<th>coeficiente de hiper estabilidad de la CPUE (1=proporcional)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Sel_A50_rango</td>
-<td>A50 y rango (A50= edad primera captura)</td>
-</tr>
-<tr class="even">
-<td>nbloquesSel</td>
-<td>Número de bloques de selectividad</td>
-</tr>
-<tr class="odd">
-<td>ybloquesSel</td>
-<td>años de inicio de cada bloque de selectividad</td>
-</tr>
-<tr class="even">
-<td>nbloquesq</td>
-<td>Número de bloques de capturabilidad</td>
-</tr>
-<tr class="odd">
-<td>ybloquesq</td>
-<td>años de inicio de cada bloque de capturabilidad</td>
-</tr>
-</tbody>
-</table>
+<p><strong>hiper_estabilidad_q</strong> = coeficiente de hiper estabilidad de la CPUE (1=proporcional)</p>
+<p><strong>Sel_A50_rango</strong> = A50 y rango (A50= edad primera captura)</p>
+<p><strong>nbloquesSel</strong> = Número de bloques de selectividad</p>
+<p><strong>ybloquesSel</strong> = años de inicio de cada bloque de selectividad</p>
+<p><strong>nbloquesq</strong> = Número de bloques de capturabilidad</p>
+<p><strong>ybloquesq</strong> = años de inicio de cada bloque de capturabilidad</p>
 <p><strong>FASES DE ESTIMACION DE PARAMETROS (valores negativos = no se estiman)</strong></p>
-<table>
-<colgroup>
-<col width="28%"></col>
-<col width="71%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th>Fase_q</th>
-<th>Estimacion del coeficiente de capturabilidad q (CPUE=q*B^b)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Fase_hiperestabilidad</td>
-<td>Estimacion parámetro de hiper estabilidad (b) de la CPUE</td>
-</tr>
-<tr class="even">
-<td>Fase_selectividad</td>
-<td>Estimacion de la selectividad</td>
-</tr>
-<tr class="odd">
-<td>Opt_seldomo</td>
-<td>opción selectividad tipo domo</td>
-</tr>
-<tr class="even">
-<td>Fase_Lo</td>
-<td>Estimacion de Lo</td>
-</tr>
-<tr class="odd">
-<td>Fase_cvLo</td>
-<td>Estimación cv(talla-edad)</td>
-</tr>
-<tr class="even">
-<td>Fase_F</td>
-<td>Estimación de la mortalidad por pesca</td>
-</tr>
-<tr class="odd">
-<td>Fase_desvRt</td>
-<td>Estimacion variación anual de reclutamientos</td>
-</tr>
-<tr class="even">
-<td>Fase_No</td>
-<td>Estimacion condición inicial (si es &lt;0 esta en equilibrio)</td>
-</tr>
-</tbody>
-</table>
+<p><strong>Fase_q</strong> = Estimacion del coeficiente de capturabilidad q (CPUE=q*B^b)</p>
+<p><strong>Fase_hiperestabilidad</strong> = Estimacion parámetro de hiper estabilidad (b) de la CPUE</p>
+<p><strong>Fase_selectividad</strong> = Estimacion de la selectividad</p>
+<p><strong>Opt_seldomo</strong> = opción selectividad tipo domo</p>
+<p><strong>Fase_Lo</strong> = Estimacion de Lo</p>
+<p><strong>Fase_cvLo</strong> = Estimación cv(talla-edad)</p>
+<p><strong>Fase_F</strong> = Estimación de la mortalidad por pesca</p>
+<p><strong>Fase_desvRt</strong> = Estimacion variación anual de reclutamientos</p>
+<p><strong>Fase_No</strong> = Estimacion condición inicial (si es &lt;0 esta en equilibrio)</p>
 <p><strong>PROYECCION DE LA POBLACION</strong></p>
-<table>
-<colgroup>
-<col width="13%"></col>
-<col width="86%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th>nmF</th>
-<th>número de multiplicadores de F</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>mF</td>
-<td>multiplicadores de F</td>
-</tr>
-<tr class="even">
-<td>nproy</td>
-<td>número de años a proyectar</td>
-</tr>
-<tr class="odd">
-<td>opt_FRMS</td>
-<td>opción para utilizar Frms estimado por fuera (&gt;0 activado, &lt;0 desactivado)</td>
-</tr>
-<tr class="even">
-<td>FRMS</td>
-<td>Frms estimado por fuera del modelo admb</td>
-</tr>
-</tbody>
-</table>
+<p><strong>nmF =</strong> número de multiplicadores de F</p>
+<p><strong>mF</strong> = multiplicadores de F</p>
+<p><strong>nproy</strong> = número de años a proyectar</p>
+<p><strong>opt_FRMS</strong> = opción para utilizar Frms estimado por fuera (&gt;0 activado, &lt;0 desactivado)</p>
+<p><strong>FRMS</strong> = Frms estimado por fuera del modelo admb</p>
+</div>
+<div id="descripción-del-archivo-de-report-.rep" class="section level2">
+<h2><strong>Descripción del archivo de report (.rep)</strong></h2>
+<p><strong>REPORT_SECTION</strong></p>
+<p>“<strong>years</strong>” = yrs = vector de años</p>
+<p>“<strong>CPUE_obs</strong>” = CPUE = vector de CPUE observado (dato de entrada)</p>
+<p>“<strong>CPUE_pred</strong>” = pred_CPUE = vector de CPUE estimado por el modelo de evalStock MAET</p>
+<p>“<strong>Desemb_obs</strong>” = Desemb = vector de Desembarque observado (dato de entrada)</p>
+<p>“<strong>Desemb_pred</strong>” =pred_Desemb = vector de Desembarques estimado por el modelo de evalStock MAET</p>
+<p>“<strong>Lmed_obs</strong>” = Lmed_obs = vector de tallas medias de la proporción de tallas observadas (datos de entrada)</p>
+<p>“<strong>Lmed_pred</strong>” = Lmed_pred = vector de tallas medias de la proporción de tallas estimadas por el modelo de evalStock MAET</p>
+<p>“<strong>BD</strong>” = BD = vector de Biomasa desovante estimada por el modelo de evalStock MAET (variable)</p>
+<p>“<strong>BT</strong>” = BT =vector de Biomasa total estimada por el modelo de evalStock MAET (variable)</p>
+<p>“<strong>BV</strong>” = BMflo = vector de Biomasa vulnerable a la flota estimada por el modelo de evalStock MAET (variable)</p>
+<p>“<strong>R_pred</strong>”=Rpred = vector de Reclutamiento predicho por la relación stock recluta???</p>
+<p>“<strong>R_Est</strong>” = column(N,1) = vector de Reclutamiento estimado ???</p>
+<p>“<strong>F</strong>” =exp(log_F) = vector de la mortalidad por pesca estimada por el modelo de evalStock MAET (parámetros)</p>
+<p>“<strong>Edades</strong>”= edades = vector de edades (indicador)</p>
+<p>“<strong>N</strong>”=N = matriz de abundancia a la edad</p>
+<p>“<strong>Sel_f</strong>”=Sel = matriz de selectividad de la flota a la edad</p>
+<p>“<strong>pobs</strong>”=pobs = matriz de proporción de tallas observadas (dato entrada)</p>
+<p>“<strong>ppred</strong>”=ppred = matriz de proporción de tallas estimadas por el modelo de evalStock MAET</p>
+<p>“<strong>Tallas</strong>”= Tallas = vector de tallas (indicador)</p>
+<p>“<strong>Prob_talla</strong>”= Prob_talla (matriz de probabilidad edad_talla) estimada por el modelo de evalStock MAET</p>
+<p>“<strong>BDo</strong>” = SSBo = biomasa desovante virginal (número) estimada de la relación stock-recluta???</p>
+<p>“<strong>Lmed</strong>” = mu_edad = vector de talla media a la edad utilizada para el cálculo de probabilidad edad_talla</p>
+<p>“<strong>likeval</strong>”= likeval = vector de verosimilitud</p>
 </div>
 </div>
 
