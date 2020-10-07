@@ -18,7 +18,7 @@ Los principales datos que ingresan al modelo corresponden a los desembarques, CP
 
 ## **Descripción del archivo de datos y controles (.dat)**
 
-**Datos de entrada**
+**DATOS DE ENTRADA**
 
 **nanos** =número de años
 
@@ -38,7 +38,7 @@ Los principales datos que ingresan al modelo corresponden a los desembarques, CP
 
 **Wmed**=vector de pesos medios a la talla
 
-**Parámetros reclutamiento, períodos de desove y cpue, parámetros de crecimiento y mortalidad natural, stepness**
+**PARÁMETROS HISTORIA DE VIDA**
 
 **sigmaR** =Coeficiente de variación de los reclutamientos
 
