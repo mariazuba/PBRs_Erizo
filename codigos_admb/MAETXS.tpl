@@ -1,4 +1,7 @@
+//####################################################################
 GLOBALS_SECTION
+//####################################################################
+
  #include <admodel.h>
  #include <stdio.h>
  #include <time.h>
@@ -7,7 +10,10 @@ GLOBALS_SECTION
  double elapsed_time;
  ofstream mcmc_report("mcmc.csv");
 
+//####################################################################
 TOP_OF_MAIN_SECTION
+//####################################################################
+  
  time(&start);
  arrmblsize = 90000000; 
  gradient_structure::set_GRADSTACK_BUFFER_SIZE(1.e7); 
@@ -15,8 +21,10 @@ TOP_OF_MAIN_SECTION
  gradient_structure::set_MAX_NVAR_OFFSET(5955); 
  gradient_structure::set_NUM_DEPENDENT_VARIABLES(5000); 
 
-
+//####################################################################
 DATA_SECTION
+//####################################################################
+  
  init_int ntime  
  init_int nedades
  init_number minedad
@@ -72,15 +80,17 @@ DATA_SECTION
  init_int    opt_devRt
  init_int    opt_devNo
 
-// Proyeccion de población 
+// Proyeccion de poblaci?n 
  init_int    npbr
  init_vector pbr(1,npbr)
  init_int ntime_sim
  init_int opt_Frms//*********agregar
  init_number Frms//*********agregar
 
+//####################################################################
 INITIALIZATION_SECTION
-
+//####################################################################
+   
   log_Lo        log_Loprior
   log_cv_edad   log_cva_prior
   log_L50        log_L50fprior 
@@ -91,10 +101,11 @@ INITIALIZATION_SECTION
 
 
 
-  
+//####################################################################  
 PARAMETER_SECTION
-
-// selectividad paramétrica a la talla común
+//####################################################################
+   
+// selectividad param?trica a la talla com?n
 // init_bounded_vector log_L50f(1,nbloques1,-5,8,opt1_fase)  
  
  init_vector log_L50(1,nbloques1,opt1_fase)  
@@ -220,9 +231,10 @@ PARAMETER_SECTION
  sdreport_vector YTPp(1,npbr)//*********afregar
 // sdreport_vector RPRp(1,npbr) // RPR proyectado en la simulacion
 
-
+//####################################################################
 PRELIMINARY_CALCS_SECTION
-
+//####################################################################
+   
  yrs=column(mdatos,1);
  Desemb=column(mdatos,2);
  CPUE=column(mdatos,4);
@@ -240,16 +252,20 @@ PRELIMINARY_CALCS_SECTION
  
 
  Unos_edad=1;// lo uso en  operaciones matriciales con la edad
- Unos_anos=1;// lo uso en operaciones matriciales con el año
- Unos_tallas=1;// lo uso en operaciones matriciales con el año
+ Unos_anos=1;// lo uso en operaciones matriciales con el a?o
+ Unos_tallas=1;// lo uso en operaciones matriciales con el a?o
 
-
+//####################################################################
 RUNTIME_SECTION
+//####################################################################
+  
  maximum_function_evaluations 500,2000,5000
  convergence_criteria  1e-2,1e-5,1e-5
 
-
+//####################################################################
 PROCEDURE_SECTION
+//####################################################################
+  
 // se listan las funciones que contienen los calculos
  Eval_prob_talla_edad();
  Eval_selectividad();
@@ -264,8 +280,9 @@ PROCEDURE_SECTION
 
  if(last_phase()){Eval_CTP();}
 
+//####################################################################
 FUNCTION Eval_prob_talla_edad
-
+//####################################################################
 
  int i, j;
 
@@ -280,8 +297,10 @@ FUNCTION Eval_prob_talla_edad
 
   Prob_talla = ALK( mu_edad, sigma_edad, Tallas);
 
-//----------------------------------------------------------------------
+//####################################################################
 FUNCTION dvar_matrix ALK(dvar_vector& mu, dvar_vector& sig, dvector& x)
+//####################################################################
+  
 	//RETURN_ARRAYS_INCREMENT();
 	int i, j;
 	dvariable z1;
@@ -305,9 +324,11 @@ FUNCTION dvar_matrix ALK(dvar_vector& mu, dvar_vector& sig, dvector& x)
 	return(pdf);
 
 
-//----------------------------------------------------------------------
 
+//####################################################################
 FUNCTION Eval_selectividad
+//####################################################################
+  
  int i,j;
 
  for (j=1;j<=nbloques1;j++){
@@ -331,8 +352,9 @@ FUNCTION Eval_selectividad
    }
 
 
-
+//####################################################################
 FUNCTION Eval_mortalidades
+//####################################################################
 
  F=elem_prod(Sel,outer_prod(mfexp(log_F),Unos_edad));
 
@@ -340,8 +362,10 @@ FUNCTION Eval_mortalidades
 
  S=mfexp(-1.0*Z);
 
-
+//####################################################################
 FUNCTION Eval_abundancia
+//####################################################################
+  
  int i, j;
 
 
@@ -368,7 +392,7 @@ FUNCTION Eval_abundancia
  Rpred(1)=exp(log_Ro+0.5*square(sigmaR));//
 
 
-// se estima la sobrevivencia por edad(a+1) y año(t+1)
+// se estima la sobrevivencia por edad(a+1) y a?o(t+1)
  for (i=1;i<ntime;i++)
  {
     Rpred(i+1)=exp(log_Ro+0.5*square(sigmaR)); // 
@@ -387,12 +411,14 @@ FUNCTION Eval_abundancia
 
    Rest=column(N,1);
 
+//####################################################################
 FUNCTION Eval_deinteres
-
+//####################################################################
+  
 // Rutina para calcular RPR
  Nv=N;// solo para empezar los calculos
 
-// se estima la sobrevivencia por edad(a+1) y año(t+1)
+// se estima la sobrevivencia por edad(a+1) y a?o(t+1)
  for (int i=1;i<ntime;i++)
  {
      Nv(i+1)(2,nedades)=++Nv(i)(1,nedades-1)*exp(-1.0*M);
@@ -407,9 +433,10 @@ FUNCTION Eval_deinteres
 
  RPRlp=BD/SSBo;
 
-
+//####################################################################
 FUNCTION Eval_biomasas
- 
+//####################################################################
+  
  NMD=elem_prod(N,mfexp(-dt(1)*Z))*Prob_talla;
  NMD=elem_prod(NMD,outer_prod(Unos_anos,msex));
  
@@ -420,18 +447,19 @@ FUNCTION Eval_biomasas
  BMflo=NVflo*Wmed;
  BT=(N*Prob_talla)*Wmed;
 
-
+//####################################################################
 FUNCTION Eval_capturas_predichas
-
-// matrices de capturas predichas por edad y año
+//####################################################################
+  
+// matrices de capturas predichas por edad y a?o
  pred_Ctot_a=elem_prod(elem_div(F,Z),elem_prod(1.-S,N));
  pred_Ctot=pred_Ctot_a*Prob_talla;
 
 
-// vectores de desembarques predichos por año
+// vectores de desembarques predichos por a?o
  pred_Desemb=pred_Ctot*Wmed;
 
-// matrices de proporcion de capturas por talla y año
+// matrices de proporcion de capturas por talla y a?o
  pobs=elem_div(Ctot,outer_prod(rowsum(Ctot+1e-10),Unos_tallas));
  ppred=elem_div(pred_Ctot,outer_prod(rowsum(pred_Ctot+1e-10),Unos_tallas));
 
@@ -439,8 +467,10 @@ FUNCTION Eval_capturas_predichas
  Lmed_pred=Tallas*trans(ppred);
  Lmed_obs=Tallas*trans(pobs);
 
+//####################################################################
 FUNCTION Eval_indices
- 
+//####################################################################
+  
 
    for (int i=1;i<=ntime;i++){
       for (int j=1;j<=nqbloques;j++){
@@ -449,8 +479,10 @@ FUNCTION Eval_indices
        }
    }
 
-
+//####################################################################
 FUNCTION Eval_logverosim
+//####################################################################
+
 // esta funcion evalua el nucleo de las -log-verosimilitudes marginales para
 // series con datos 0.
  int i;
@@ -499,7 +531,7 @@ FUNCTION  Eval_CTP
   Np=N(ntime);
   Sp=S(ntime);
 
-  for (int j=1;j<=ntime_sim;j++){ // ciclo de años
+  for (int j=1;j<=ntime_sim;j++){ // ciclo de a?os
 
   if(j==1){
   Np(1)=(alfa*BD(ntime)/(beta+BD(ntime)));}
@@ -511,7 +543,7 @@ FUNCTION  Eval_CTP
 
   Fpbr=F(ntime)*pbr(i);//
   
- if(opt_Frms>0)//agregada 1 Activado Frms/ -1 Activa F ultimo año
+ if(opt_Frms>0)//agregada 1 Activado Frms/ -1 Activa F ultimo a?o
   {
    Fpbr=Frms*pbr(i);//agregada Activar o desactivar -1
   }
@@ -527,122 +559,57 @@ FUNCTION  Eval_CTP
 
  }
 
-
-
+//####################################################################
 REPORT_SECTION
-
- report << "Resultados Modelo Captura a la Talla (Modbento)" << endl;
- report << "cristian.canales@ifop.cl, 2014" << endl;
- report << "-----------------------------------------------------------"<<endl;
-
- report << "Años" << endl;
+//####################################################################
+ 
+ report << "years" << endl;
  report << yrs << endl;
- report << "CPUE_obs & pred" << endl;
+ report << "CPUE_obs" << endl;
  report << CPUE << endl;
+ report << "CPUE_pred" << endl;
  report << pred_CPUE << endl;
- report << "Desemb_obs & pred" << endl;
+ report << "Desemb_obs" << endl;
  report << Desemb << endl;
+ report << "Desemb_pred" << endl;
  report << pred_Desemb << endl;
- report << "Lmed_obs & pred" << endl;
+ report << "Lmed_obs" << endl;
  report << Lmed_obs << endl;
+ report << "Lmed_pred" << endl;
  report << Lmed_pred << endl;
- report << "Biomasa_desovante" << endl;
+ report << "BD" << endl;
  report << BD << endl;
- report << "Biomasa_total" << endl;
+ report << "BT" << endl;
  report << BT << endl;
- report << "Biomasa_explotable" << endl;
+ report << "BV" << endl;
  report << BMflo << endl;
- report << "Reclutamiento  predicho & Estimado" << endl;
+ report << "R_pred" << endl;
  report << Rpred<< endl;
+ report << "R_Est" << endl;
  report << column(N,1)<< endl;
  report << "F " << endl;
  report << exp(log_F) << endl;
- report << "Reducción del stock (BD/BDo) de LP" << endl;
- report << RPRlp << endl;
  report << "Edades"<< endl;
  report << edades<< endl;
- report <<"Abundancia a la edad por año"<<endl;
+ report <<"N"<<endl;
  report <<N<< endl;
- report <<"Selectividad a la edad por año"<<endl;
+ report <<"Sel_f"<<endl;
  report <<Sel<< endl;
- report <<"Mort por pesca a la edad por año"<<endl;
- report <<F<< endl;
- report <<"CAPTURAS"<< endl;
  report <<"pobs"<< endl;
  report <<pobs<< endl;
  report <<"ppred"<< endl;
  report <<ppred<< endl;
- 
-// report << "-----------------------------------------------" << endl;
  report << "Tallas"<< endl;
  report << Tallas<< endl;
-// report << "-----------------------------------------------" << endl;
- report << "Abundancia_talla_pobl" << endl;
- report << N*Prob_talla<< endl;
- report << "Proptalla_obs" << endl;
- report << pobs<< endl;
- report << "Proptalla_pred" << endl;
- report << ppred<< endl;
  report << "Prob_talla" << endl;
  report << Prob_talla << endl;
-// report << "-----------------------------------------------" << endl;
- report << "BD_virginal" << endl;
+ report << "BDo" << endl;
  report << SSBo << endl;
- report << "Talla_media_edad" << endl;
- report << edades<< endl;
+ report << "Lmed" << endl;
  report << mu_edad<< endl;
-// report << "-----------------------------------------------" << endl;
-
-
- //report << "BD virgen anual" << endl;
- //report << BDo << endl;
-
-
- //report << "Reducción del stock (BD/BDo) dinámico" << endl;
- //report << RPR << endl;
-
-// report << "-----------------------------------------------" << endl;
-// report << "Lo    CV    " << endl;
-// report << exp(log_Lo) <<" "<<exp(log_cv_edad)<<endl;
-// report << "-----------------------------------------------" << endl;
-
- 
-
- //report << "-----------------------------------------------" << endl;
- //report << "M   #edades   h    bCPUE   sigmaR" << endl;
- //report << M <<" "<<nedades<<" "<<exp(log_h)<<" "<<exp(log_b)<<" "<<sigmaR<< endl;
-
-//-------------------------------------------------------------------
-// ESTIMA nm y CV
-
-  suma1=0; suma2=0;nm1=1;cuenta1=0;
-
-  for (int i=1;i<=ntime;i++){ //
-
-   if (sum(pobs(i))>0){
-      suma1=sum(elem_prod(ppred(i),1-ppred(i)));
-      suma2=norm2(pobs(i)-ppred(i));
-      nm1=nm1*suma1/suma2;
-      cuenta1+=1;
-   }}
- report << "Tamaño muestra ideal" <<endl;
- report <<pow(nm1,1/cuenta1)<< endl;
-
- 
- //report << "-----------------------------------------------" << endl;
- report << "Biomasa_desovante_proyectada_para_cada_mF" << endl;
- report << Bp << endl;
- report << "Capturas proyectadas para cada mF" << endl;
- report << Yp << endl;
- report << "-----------------------------------------------" << endl;
- report << "Componentes de log-verosimilitud" << endl;
- report << "CPUE_Desemb   Prop    dev_Rt   dev_No"<<endl;
+ report << "likeval"<<endl;
  report << likeval << endl;
-
-
-
-
-
+ 
 
 FINAL_SECTION
 

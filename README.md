@@ -1,91 +1,145 @@
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
 # PBRs\_Erizo
 
-Este repositorio contiene los análisis realizados para el cálculo de PBRs para las unidades de stock del Erizo. \#	MODELO	DE	CAPTURA	A	LA	TALLA	(MODBENTO)	IFOP	cristian.canales\@ifop.cl																																							 El modelo utilizado corresponde a Modbento modificado por mariajose.zuniga\@ifop.cl
+Este repositorio contiene los análisis realizados para el cálculo de PBRs para las unidades de stock del Erizo.
 
-**Descripción del contenido**
+**Descripción del contenido de la carpeta "codigos\_admb"**
 
-1.  codigos\_admb: contiene los códigos de ADMB principalmente MAET.tpl y MAET.dat del modelo de evaluación de stock de erizo de la zona X Norte (MAETXN) , X Sur (MAETXS) y XI (MAETXI). Los modelos corresponden a modelos anuales (año calendario) con dinámica a la edad e información en tallas (utiliza matriz de probabilidad edad\_talla). Los principales datos que ingresan al modelo corresponden a los desembarques, CPUE y frecuencia de tallas de la flota. Utiliza un vector de pesos medios a la talla, madurez a la talla, y parámetros de crecimiento y mortalidad natural.
+El código base corresponde a un Modelo de Captura a la talla ("Modbento") creado por cristian.canales\@ifop.cl. Los códigos utilizados para este estudio corresponde a una modificación del "Modbento". Esta modificación es realizada por mariajose.zuniga\@ifop.cl y se detallará a continuación.
 
-## **Descripción del .dat**
+Contiene los códigos de ADMB principalmente MAET.tpl y MAET.dat del modelo de evaluación de stock de erizo de la zona X Norte (MAETXN) , X Sur (MAETXS) y XI (MAETXI).
 
-### **Datos de entrada**
+Los modelos corresponden a modelos anuales (año calendario) con dinámica a la edad e información en tallas (utiliza matriz de probabilidad edad\_talla).
 
--    "nanos" = número de años
+Los principales datos que ingresan al modelo corresponden a los desembarques, CPUE y frecuencia de tallas de la flota. Utiliza un vector de pesos medios a la talla, madurez a la talla, y parámetros de crecimiento y mortalidad natural.
 
--   "nedades" = número de edades a modelar
+## **Descripción del archivo de datos y controles (.dat)**
 
--    "edad\_min" = edad mínima
+**DATOS DE ENTRADA**
 
--   "ntallas" = número de clases/grupos de tallas
+**nanos** =número de años
 
--    "Ind" = matriz de datos , desembarques, cv\_desem, CPUE, cv\_cpue, nm(tamaño de muestra)
+**nedades**=número de edades a modelar
 
--   "Tallas" = vector de tallas (clases/grupos de tallas)
+**edad\_min**=edad mínima
 
--    "Frec\_Tallas" = matriz de frecuencia de tallas para los años de estudio
+**ntallas**=número de clases/grupos de tallas
 
--    "Madurez" = vector de madurez a la talla
+**Ind**=matriz de datos , desembarques, cv\_desem, CPUE, cv\_cpue, nm(tamaño de muestra)
 
--    
- "Wmed" = vector de pesos medios a la talla
+**Tallas**=vector de tallas (clases/grupos de tallas)
 
-### Controles
+**Frec\_Tallas**=matriz de frecuencia de tallas para los años de estudio
 
--    "sigmaR" = Coeficiente de variación de los reclutamientos
+**Madurez**=vector de madurez a la talla
 
--    "dts" = dt desove NOVIEMBRE (Arias et al 1995 y Bay y Schmith (1981) y dt CPUE (Concentracion de la captura durante el año MES DE JULIO)
+**Wmed**=vector de pesos medios a la talla
 
--    "Loo\_k\_Lo\_cv\_M" = PARAMETROS	DE	CRECIMIENTO	Y	MORTALIDAD	NATURAL Loo	k	Lo(mm)	cv(edad)	M	
+**PARÁMETROS HISTORIA DE VIDA**
 
--    
- "h" = h (pendiente de la relación S-R)
+**sigmaR** =Coeficiente de variación de los reclutamientos
 
--    "hiper\_estabilidad\_q" = coeficiente de hiper estabilidad de la CPUE (1=proporcional)
+**dts**=dt desove NOVIEMBRE (Arias et al 1995 y Bay y Schmith (1981) y dt CPUE (Concentracion de la captura durante el año MES DE JULIO)
 
-    **PARAMETROS DE SELECTIVIDAD**
+**Loo\_k\_Lo\_cv\_M**=PARAMETROS DE CRECIMIENTO Y MORTALIDAD NATURAL Loo k Lo(mm) cv(edad) M
 
--   "Sel\_A50\_rango" = A50 , rango (A50= edad primera captura)
+**h**=h (pendiente de la relación S-R)
 
--    "nbloquesSel" = Número de bloques de selectividad
+**PARAMETROS DE SELECTIVIDAD Y CAPTURABILIDAD**
 
--    
-"ybloquesSel" = años de inicio de los bloques de selectividad
+**hiper\_estabilidad\_q** = coeficiente de hiper estabilidad de la CPUE (1=proporcional)
 
--    "nbloquesq" = Número de bloques de capturabilidad
+**Sel\_A50\_rango** = A50 y rango (A50= edad primera captura)
 
--    "ybloquesq" = años de inicio
+**nbloquesSel** = Número de bloques de selectividad
 
-    ### Fases de estimación
+**ybloquesSel** = años de inicio de cada bloque de selectividad
 
--    "Fase\_q"
+**nbloquesq** = Número de bloques de capturabilidad
 
--   "Fase\_hiperestabilidad"
+**ybloquesq** = años de inicio de cada bloque de capturabilidad
 
--   "Fase\_selectividad"
+**FASES DE ESTIMACION DE PARAMETROS (valores negativos = no se estiman)**
 
--   "Opt\_seldomo"
+**Fase\_q** = Estimacion del coeficiente de capturabilidad q (CPUE=q\*B\^b)
 
--    "Fase\_Lo"
+**Fase\_hiperestabilidad** = Estimacion parámetro de hiper estabilidad (b) de la CPUE
 
--    
-"Fase\_cvLo"
+**Fase\_selectividad** = Estimacion de la selectividad
 
--    "Fase\_F"
+**Opt\_seldomo** = opción selectividad tipo domo
 
--    "Fase\_desvRt"
+**Fase\_Lo** = Estimacion de Lo
 
--    "Fase\_No"
+**Fase\_cvLo** = Estimación cv(talla-edad)
 
-    #### Proyección      
+**Fase\_F** = Estimación de la mortalidad por pesca
 
--    
-"nmf" = número de multiplicadores de F
+**Fase\_desvRt** = Estimacion variación anual de reclutamientos
 
--    "mF" = multiplicadores de F
+**Fase\_No** = Estimacion condición inicial (si es \<0 esta en equilibrio)
 
--   "nproy" = número de años a proyectar
+**PROYECCION DE LA POBLACION**
 
--   "opt\_FMRS" = opción para utilizar Frms estimado por fuera (\>0 activado, \<0 desactivado)
+**nmF =** número de multiplicadores de F
 
--    
-"FMRS" = Frms estimado por fuera del modelo admb
+**mF** = multiplicadores de F
+
+**nproy** = número de años a proyectar
+
+**opt\_FRMS** = opción para utilizar Frms estimado por fuera (\>0 activado, \<0 desactivado)
+
+**FRMS** = Frms estimado por fuera del modelo admb
+
+## **Descripción del archivo de report (.rep)**
+
+**REPORT\_SECTION**
+
+"**years**" = yrs = vector de años
+
+"**CPUE\_obs**" = CPUE = vector de CPUE observado (dato de entrada)
+
+"**CPUE\_pred**" = pred\_CPUE = vector de CPUE estimado por el modelo de evalStock MAET
+
+"**Desemb\_obs**" = Desemb = vector de Desembarque observado (dato de entrada)
+
+"**Desemb\_pred**" =pred\_Desemb = vector de Desembarques estimado por el modelo de evalStock MAET
+
+"**Lmed\_obs**" = Lmed\_obs = vector de tallas medias de la proporción de tallas observadas (datos de entrada)
+
+"**Lmed\_pred**" = Lmed\_pred = vector de tallas medias de la proporción de tallas estimadas por el modelo de evalStock MAET
+
+"**BD**" = BD = vector de Biomasa desovante estimada por el modelo de evalStock MAET (variable)
+
+"**BT**" = BT =vector de Biomasa total estimada por el modelo de evalStock MAET (variable)
+
+"**BV**" = BMflo = vector de Biomasa vulnerable a la flota estimada por el modelo de evalStock MAET (variable)
+
+"**R\_pred**"=Rpred = vector de Reclutamiento predicho por la relación stock recluta???
+
+"**R\_Est**" = column(N,1) = vector de Reclutamiento estimado ???
+
+"**F** " =exp(log\_F) = vector de la mortalidad por pesca estimada por el modelo de evalStock MAET (parámetros)
+
+"**Edades**"= edades = vector de edades (indicador)
+
+"**N**"=N = matriz de abundancia a la edad
+
+"**Sel\_f**"=Sel = matriz de selectividad de la flota a la edad
+
+"**pobs**"=pobs = matriz de proporción de tallas observadas (dato entrada)
+
+"**ppred**"=ppred = matriz de proporción de tallas estimadas por el modelo de evalStock MAET
+
+"**Tallas**"= Tallas = vector de tallas (indicador)
+
+"**Prob\_talla**"= Prob\_talla (matriz de probabilidad edad\_talla) estimada por el modelo de evalStock MAET
+
+"**BDo**" = SSBo = biomasa desovante virginal (número) estimada de la relación stock-recluta???
+
+"**Lmed**" = mu\_edad = vector de talla media a la edad utilizada para el cálculo de probabilidad edad\_talla
+
+"**likeval**"= likeval = vector de verosimilitud
