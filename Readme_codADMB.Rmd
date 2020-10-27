@@ -5,7 +5,7 @@ output: pdf_document
 
 # Descripción del archivo de datos y controles (.dat)
 
-### DATOS DE ENTRADA
+### *DATOS DE ENTRADA*
 
 nanos =número de años
 
@@ -25,7 +25,7 @@ Madurez=vector de madurez a la talla
 
 Wmed=vector de pesos medios a la talla
 
-### PARÁMETROS HISTORIA DE VIDA
+### *PARÁMETROS HISTORIA DE VIDA*
 
 sigmaR =Coeficiente de variación de los reclutamientos
 
