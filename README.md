@@ -18,12 +18,26 @@ Los principales datos que ingresan al modelo corresponden a los desembarques, CP
 
 ## 
 
-Códigos en Rmarkdown
+**Códigos en ADMB**
 
--   para graficos y tablas
+-   código fuente (.tpl)
 
--   template informe
+-   datos y controles (.dat)
 
--   otros
+**Códigos en Rmarkdown**
+
+-   Informe\_Estatus\_Erizo\_word.Rmd = corresponde al informe de estatus del las tres unidades de stock del erizo que debe ser entregado entre diciembre y enero.
+
+-   Erizo.Rmd = contendrá los análisis exploratorios y cálculo de PBRs
+
+-   
+
+**Archivos:**
+
+-   Informe\_Estatus\_Erizo\_word.docx = es la salida del código .Rmd con el mismo nombre
+
+-   TemplateWord\_Erizo.docx = es utilizado en el código "Informe\_Estatus\_Erizo\_word.Rmd" para darle el formato deseado (tipo de letra, títulos, etc).
+
+-   Readme\_codADMB.pdf = se describen los archivos de datos y controles (.dat), reporte (.rep), el código fuente (.tpl), los parámetros estimados por el modelo (.par) y parámetros y variables estimadas con error (.std).
 
 -   
