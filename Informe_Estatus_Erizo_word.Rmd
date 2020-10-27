@@ -1,0 +1,166 @@
+---
+title: ''
+author: ''
+date: ''
+lang: es
+output:
+  word_document: 
+    reference_docx: TemplateWord_Erizo.docx
+    toc: yes
+subtitle: ''
+---
+
+# 1. RESUMEN EJECUTIVO
+
+# 2. INTRODUCCIÓN
+
+# 3. ANTECEDENTES
+
+## Contexto Normativo de los Planes de Manejo Bentónico
+
+## Plan de Manejo de erizo en las regiones de Los Lagos y Aysén
+
+# 4. OBJETIVOS
+
+## 4.1. Objetivo General
+
+Evaluar el estado de situación del/de los recurso/s objetivo y generar y
+analizar información que permita apoyar el establecimiento de medidas de
+administración y la implementación y evaluación de Planes de Manejo de
+pesquerías bentónicas.
+
+## 4.2. Objetivos específicos
+
+4.2.1.    Efectuar el análisis de la situación actualizada del recurso y su pesquería sobre la base de la
+información generada y disponible a la fecha, con la realización de evaluaciones de stock de los recursos, según corresponda.
+
+4.2.2.    Analizar información económica y de mercado de recursos bentónicos con planes de manejo en
+desarrollo.
+
+4.2.3.    Evaluar el desempeño de los Planes de Manejo y proponer adaptaciones en función de la información disponible.
+
+4.2.4.    Brindar asesoría técnica en temas específicos requeridos para la implementación de planes de manejo de pesquerías bentónicas o medidas de administración.
+
+# 5. METODOLOGÍA
+
+## 5.1. Objetivo específico 4.2.1
+
+*"Efectuar el análisis de la situación actualizada del recurso y su pesquería sobre la base de la información generada y disponible la fecha para la realización de evaluaciones de stock de los recursos".*
+
+### 5.1.1. Para el recurso erizo (*Loxechinus albus*).
+
+#### Unidades de stock
+
+#### Actualización de antecedentes y datos
+
+1.  Análisis de los desembarques
+
+2.  Estructura de tallas de la pesquería
+
+3.  Índice de abundancia relativa (CPUE)
+
+4.  Parámetros de historia de vida
+
+-   Crecimiento
+
+-   Mortalidad natural
+
+-   Madurez sexual
+
+#### Evaluación de stock
+
+1.  Mortalidad por pesca
+
+2.  Selectividad
+
+3.  Capturabilidad
+
+4.  Ponderadores de la información
+
+-   Tamaño de muestra
+
+-   Coeficientes de variación
+
+#### Estimación de Puntos Biológicos  de Referencia (PBR)
+
+#### Diagnóstico del modelo
+
+1.  Análisis de ajustes y residuales
+
+2.  Análisis retrospectivo
+
+3.  Perfil de verosimilitud
+
+4.  Análisis de sensibilidad
+
+# 6. RESULTADOS
+
+## 6.1. Objetivo específico 4.2.1
+
+*"Efectuar el análisis de la situación actualizada del recurso y su pesquería sobre la base de la información generada y disponible la fecha para la realización de evaluaciones de stock de los recursos".*
+
+### 6.1.1. Erizo zona norte Región de Los Lagos
+
+#### Diagnóstico del modelo
+
+1.  Ajustes del modelo a los datos observados
+
+2.  Análisis de residuos
+
+3.  Análisis retrospectivo
+
+4.  Perfil de verosimilitud
+
+#### Variables de estado
+
+#### Puntos Biológicos de Referencia
+
+#### Indicadores del estatus
+
+#### Estatus del erizo de la zona norte de la Región de Los Lagos
+
+### 6.1.2. Erizo zona sur Región de Los Lagos
+
+#### Diagnóstico del modelo
+
+1.  Ajustes del modelo a los datos observados
+
+2.  Análisis de residuos
+
+3.  Análisis retrospectivo
+
+4.  Perfil de verosimilitud
+
+#### Variables de estado
+
+#### Puntos Biológicos de Referencia
+
+#### Indicadores del estatus
+
+#### Estatus del erizo de la zona sur de la Región de Los Lagos
+
+### 6.1.3. Erizo Región de Aysén
+
+#### Diagnóstico del modelo
+
+1.  Ajustes del modelo a los datos observados
+
+2.  Análisis de residuos
+
+3.  Análisis retrospectivo
+
+4.  Perfil de verosimilitud
+
+#### Variables de estado
+
+#### Puntos Biológicos de Referencia
+
+#### Indicadores del estatus
+
+#### Estatus del erizo de la Región de Aysén
+
+### 6.1.4. Análisis integrado de las tres zonas de estudio
+
+# 7. DISCUSIÓN
+
+# 8. REFERENCIAS
