@@ -17,3 +17,13 @@ Los modelos corresponden a modelos anuales (año calendario) con dinámica a la 
 Los principales datos que ingresan al modelo corresponden a los desembarques, CPUE y frecuencia de tallas de la flota. Utiliza un vector de pesos medios a la talla, madurez a la talla, y parámetros de crecimiento y mortalidad natural.
 
 ## 
+
+Códigos en Rmarkdown
+
+-   para graficos y tablas
+
+-   template informe
+
+-   otros
+
+-   
