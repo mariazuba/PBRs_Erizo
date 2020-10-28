@@ -18,11 +18,19 @@ Los principales datos que ingresan al modelo corresponden a los desembarques, CP
 
 ## 
 
-**Códigos en ADMB**
+**CARPETAS:**
+
+1.  **codigos\_admb**
 
 -   código fuente (.tpl)
 
 -   datos y controles (.dat)
+
+2.  **funciones**
+
+-   Fn\_Retrospectivo.R = Retrospectivo (genera la carpeta con archivos admb)
+
+-   functions.R = lisread (función que lee archivo ".dat") y reptoRlist (función que lee archivo ".rep")
 
 **Códigos en Rmarkdown**
 
@@ -39,5 +47,3 @@ Los principales datos que ingresan al modelo corresponden a los desembarques, CP
 -   TemplateWord\_Erizo.docx = es utilizado en el código "Informe\_Estatus\_Erizo\_word.Rmd" para darle el formato deseado (tipo de letra, títulos, etc).
 
 -   Readme\_codADMB.pdf = se describen los archivos de datos y controles (.dat), reporte (.rep), el código fuente (.tpl), los parámetros estimados por el modelo (.par) y parámetros y variables estimadas con error (.std).
-
--   
