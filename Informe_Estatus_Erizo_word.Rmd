@@ -10,6 +10,100 @@ output:
 subtitle: ''
 ---
 
+```{r llama codigos, warning=F, include=T, message=F, echo=FALSE }
+
+library(stringr)
+library(lattice)
+library(ggplot2)
+library(reshape)
+library(dplyr)
+library(ggthemes)
+library(stringr)
+library(knitr)
+
+carpetabase    <-getwd()
+
+# FIGURAS
+dir.Fig        <-"Figuras/"
+fig            <-c("pdf","bmp")
+
+#DIRECTORIOS
+dir.0<-carpetabase
+dir.1<-paste(dir.0,"/codigos_admb",sep="")
+dir.3<-paste(dir.0,"/Verosimilitud",sep="")
+
+dir.fun        <-paste(dir.0,"/funciones/",sep="")
+
+#FUNCIONES
+source(paste(dir.fun,"functions.R",sep=""))
+source(paste(dir.fun,"Fn_PBRs.R",sep=""))
+source(paste(dir.fun,"Fn_Verosimilitud.R",sep=""))
+source(paste(dir.fun,"Fn_DiagramaFase.R",sep=""))
+
+```
+
+```{r PRIMER PASO CORRE MODELOS BASE, eval=FALSE, echo=FALSE, warning=FALSE}
+
+setwd(dir.1)
+
+#para mac
+#system("~/admb-12.2/admb MAETXN")
+#system("./MAETXN")
+
+#system("~/admb-12.2/admb MAETXS")
+#system("./MAETXS")
+
+system("~/admb-12.2/admb MAETXI")
+system("./MAETXI")
+
+```
+
+```{r lee_datos, echo=F, warning=FALSE}
+
+setwd(dir.1)
+
+# Zona X Norte
+data1        <- lisread("MAETXN.dat") 
+names(data1) <- str_trim(names(data1), side="right")
+dat1         <- data1
+rep1         <- reptoRlist("MAETXN.rep")
+std1         <- read.table("MAETXN.std",header=T,sep="",na="NA",fill=T) 
+
+# Zona X Sur
+data2        <- lisread("MAETXS.dat") 
+names(data2) <- str_trim(names(data2), side="right")
+dat2         <- data2
+rep2         <- reptoRlist("MAETXS.rep")
+std2         <- read.table("MAETXS.std",header=T,sep="",na="NA",fill=T) 
+
+# Zona XI
+
+data3        <- lisread("MAETXI.dat") 
+names(data3) <- str_trim(names(data3), side="right")
+dat3         <- data3
+rep3         <- reptoRlist("MAETXI.rep")
+std3         <- read.table("MAETXI.std",header=T,sep="",na="NA",fill=T) 
+
+```
+
+```{r RetrospectivoXN, echo=F, warning=FALSE,eval=F}
+source(paste(dir.fun,"Fn_Retrospectivo.R",sep=""))
+Retrospectivo("MAETXN",dir.0,dir.1,"/RetrospectivoXN") 
+
+```
+
+```{r RetrospectivoXS, echo=F, warning=FALSE,eval=F}
+source(paste(dir.fun,"Fn_Retrospectivo.R",sep=""))
+Retrospectivo("MAETXS",dir.0,dir.1,"/RetrospectivoXS") 
+
+```
+
+```{r RetrospectivoXI, echo=F, warning=FALSE,eval=F}
+source(paste(dir.fun,"Fn_Retrospectivo.R",sep=""))
+Retrospectivo("MAETXI",dir.0,dir.1,"/RetrospectivoXI") 
+
+```
+
 # 1. RESUMEN EJECUTIVO
 
 # 2. INTRODUCCIÓN
@@ -24,18 +118,13 @@ subtitle: ''
 
 ## 4.1. Objetivo General
 
-Evaluar el estado de situación del/de los recurso/s objetivo y generar y
-analizar información que permita apoyar el establecimiento de medidas de
-administración y la implementación y evaluación de Planes de Manejo de
-pesquerías bentónicas.
+Evaluar el estado de situación del/de los recurso/s objetivo y generar y analizar información que permita apoyar el establecimiento de medidas de administración y la implementación y evaluación de Planes de Manejo de pesquerías bentónicas.
 
 ## 4.2. Objetivos específicos
 
-4.2.1.    Efectuar el análisis de la situación actualizada del recurso y su pesquería sobre la base de la
-información generada y disponible a la fecha, con la realización de evaluaciones de stock de los recursos, según corresponda.
+4.2.1.    Efectuar el análisis de la situación actualizada del recurso y su pesquería sobre la base de la información generada y disponible a la fecha, con la realización de evaluaciones de stock de los recursos, según corresponda.
 
-4.2.2.    Analizar información económica y de mercado de recursos bentónicos con planes de manejo en
-desarrollo.
+4.2.2.    Analizar información económica y de mercado de recursos bentónicos con planes de manejo en desarrollo.
 
 4.2.3.    Evaluar el desempeño de los Planes de Manejo y proponer adaptaciones en función de la información disponible.
 
@@ -81,7 +170,7 @@ desarrollo.
 
 -   Coeficientes de variación
 
-#### Estimación de Puntos Biológicos  de Referencia (PBR)
+#### Estimación de Puntos Biológicos de Referencia (PBR)
 
 #### Diagnóstico del modelo
 
@@ -105,11 +194,224 @@ desarrollo.
 
 1.  Ajustes del modelo a los datos observados
 
-2.  Análisis de residuos
+```{r Ajustes_indices, echo=FALSE, message=FALSE, warning=FALSE, include=T}
 
-3.  Análisis retrospectivo
 
-4.  Perfil de verosimilitud
+library(patchwork)
+yrs   <- rep1$years
+nyrs  <- length(yrs)
+lasty <- yrs[nyrs]
+cvcpue   <-0.20
+cvdes   <-0.05
+
+# Erizo X Norte
+ind_obsXN           <- cbind(rep1$CPUE_obs, rep1$Desemb_obs); ind_obsXN[ind_obsXN==0] <- NA
+colnames(ind_obsXN) <- c('CPUE', 'Desembarques') 
+indXN               <- data.frame(ind_obsXN) %>% mutate(Asesoria='observado') %>% mutate (yrs= yrs) %>% melt(id.var=c('yrs', 'Asesoria'))  
+
+ind_predXN           <- cbind(c(rep1$CPUE_pred), c(rep1$Desemb_pred)) 
+colnames(ind_predXN) <- c('CPUE', 'Desembarques') 
+predXN               <- data.frame(ind_predXN) %>% mutate (Asesoria='Índices') %>% mutate (yrs= yrs)  %>% melt(id.var=c('yrs', 'Asesoria'))
+
+baseXN <- data.frame(rbind(indXN, predXN))  
+
+# Erizo X Sur
+ind_obsXS           <- cbind(rep2$CPUE_obs, rep2$Desemb_obs); ind_obsXS[ind_obsXS==0] <- NA
+colnames(ind_obsXS) <- c('CPUE', 'Desembarques') 
+indXS               <- data.frame(ind_obsXS) %>% mutate(Asesoria='observado') %>% mutate (yrs= yrs) %>% melt(id.var=c('yrs', 'Asesoria'))  
+
+ind_predXS           <- cbind(c(rep2$CPUE_pred), c(rep2$Desemb_pred)) 
+colnames(ind_predXS) <- c('CPUE', 'Desembarques') 
+predXS               <- data.frame(ind_predXS) %>% mutate (Asesoria='Índices') %>% mutate (yrs= yrs)  %>% melt(id.var=c('yrs', 'Asesoria'))
+
+baseXS <- data.frame(rbind(indXS, predXS))  
+
+# Erizo XI
+ind_obsXI           <- cbind(rep3$CPUE_obs, rep3$Desemb_obs); ind_obsXI[ind_obsXI==0] <- NA
+colnames(ind_obsXI) <- c('CPUE', 'Desembarques') 
+indXI               <- data.frame(ind_obsXI) %>% mutate(Asesoria='observado') %>% mutate (yrs= yrs) %>% melt(id.var=c('yrs', 'Asesoria'))  
+
+ind_predXI           <- cbind(c(rep3$CPUE_pred), c(rep3$Desemb_pred)) 
+colnames(ind_predXI) <- c('CPUE', 'Desembarques') 
+predXI               <- data.frame(ind_predXI) %>% mutate (Asesoria='Índices') %>% mutate (yrs= yrs)  %>% melt(id.var=c('yrs', 'Asesoria'))
+
+baseXI <- data.frame(rbind(indXI, predXI))  
+
+```
+
+```{r  ajustes_desembarques, echo=FALSE, fig.align="center", fig.height=6, fig.path=dir.Fig, fig.width=6, message=FALSE, warning=FALSE, dev=fig, include=T, fig.cap="Ajustes de los desembarques de las tres unidades de stock de erizo"}
+
+cpueXN <- ggplot(baseXN %>% filter(Asesoria!='observado', variable=='CPUE'), 
+       aes(yrs,value)) + 
+       geom_line(aes(colour=Asesoria), size=0.8) +
+       scale_colour_manual(values=c('black')) +
+       geom_point(data = baseXN %>% filter(Asesoria=='observado', variable=='CPUE'),
+       aes(yrs,value), shape = 19, colour = 'gray30') +
+       geom_errorbar(data = baseXN %>% filter(Asesoria=='observado', variable=='CPUE'),
+       aes(ymin = value*exp(-1.96*cvcpue), ymax = value*exp(1.96*cvcpue)), color = 'gray30') +
+       scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+       labs(x = '', y = '') +
+       theme_bw(base_size=9) + 
+       ggtitle('CPUE_XN')+
+       theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+cpueXS <- ggplot(baseXS %>% filter(Asesoria!='observado', variable=='CPUE'), 
+       aes(yrs,value)) + 
+       geom_line(aes(colour=Asesoria), size=0.8) +
+       scale_colour_manual(values=c('black')) +
+       geom_point(data = baseXS %>% filter(Asesoria=='observado', variable=='CPUE'),
+       aes(yrs,value), shape = 19, colour = 'gray30') +
+       geom_errorbar(data = baseXS %>% filter(Asesoria=='observado', variable=='CPUE'),
+       aes(ymin = value*exp(-1.96*cvcpue), ymax = value*exp(1.96*cvcpue)), color = 'gray30') +
+       scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+       labs(x = '', y = '') +
+       theme_bw(base_size=9) + 
+       ggtitle('CPUE_XS')+
+       theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+cpueXI <- ggplot(baseXI %>% filter(Asesoria!='observado', variable=='CPUE'), 
+       aes(yrs,value)) + 
+       geom_line(aes(colour=Asesoria), size=0.8) +
+       scale_colour_manual(values=c('black')) +
+       geom_point(data = baseXI %>% filter(Asesoria=='observado', variable=='CPUE'),
+       aes(yrs,value), shape = 19, colour = 'gray30') +
+       geom_errorbar(data = baseXI %>% filter(Asesoria=='observado', variable=='CPUE'),
+       aes(ymin = value*exp(-1.96*cvcpue), ymax = value*exp(1.96*cvcpue)), color = 'gray30') +
+       scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+       labs(x = '', y = '') +
+       theme_bw(base_size=9) + 
+       ggtitle('CPUE_XI')+
+       theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+
+cpueXN/cpueXS/cpueXI  + plot_layout(guides="collect")
+```
+
+1.  ***Análisis de residuos***
+
+2.  ***Análisis retrospectivo***
+
+    ```{r Fig_RetrospectivoXN,eval=T, warning=F, include=T, message=F, echo=FALSE,fig.height=7,fig.width=7}
+
+    admb<-"MAETXN"
+
+    ejey<- "ylab"
+
+
+    dir<-paste(dir.0,"/RetrospectivoXN",sep="")
+
+    setwd(dir)
+
+    rep.0       <- reptoRlist(paste(admb,"s1.rep",sep=""))
+    retros      <- c(0:4)
+
+    # =====================================================================================#
+    # AN?LISIS DE PATRONES RETROSPECTIVOS "MOHN RHO"
+    # =====================================================================================#
+    # Reclutamientos
+    retroR      <- matrix(0,nrow=length(rep.0$years),ncol=length(retros)+1)
+    retroR[,1]  <- rep.0$years;
+    #retroR[,2]  <- rep.0$Reclutas
+    retroBD     <- matrix(0,nrow=length(rep.0$years),ncol=length(retros)+1)
+    retroBD[,1] <- rep.0$years;
+    #retroBD[,2] <- rep.0$SSB
+    retroF      <- matrix(0,nrow=length(rep.0$years),ncol=length(retros)+1)
+    retroF[,1]  <- rep.0$years;
+    #retroF[,2]  <- rep.0$Ftot
+
+
+    for(i in 1:length(retros)){
+      rep<- reptoRlist(paste(admb,"s",i,".rep",sep=""))
+      retroR[,i+1] <- c(rep$R_Est,rep(0,i-1))
+      retroBD[,i+1] <- c(rep$BD,rep(0,i-1))
+      retroF[,i+1]  <- c(rep$F,rep(0,i-1))
+      }
+
+    #C?digo de Francisco y Fernando
+    # Mohn rho
+    years      <- retroBD[,1]
+    nyears     <- length(years)
+    nyrs.retro <- length(retros)
+
+    mohn.r     <- rep(NA, nyrs.retro)
+    rel.diff.r <- matrix(NA, nrow=nyears, ncol=(nyrs.retro ))
+    mohn.ssb     <- rep(NA, nyrs.retro)
+    rel.diff.ssb <- matrix(NA, nrow=nyears, ncol=(nyrs.retro ))
+    mohn.f       <- rep(NA, nyrs.retro)
+    rel.diff.f   <- matrix(NA, nrow=nyears, ncol=(nyrs.retro ))
+
+    for (j in 1:nyrs.retro) {
+      rel.diff.r[,j] <- (retroR[,(j+1)]-retroR[,2])/retroR[,2]
+      mohn.r[j]      <- rel.diff.r[(nyears-j),j]
+      rel.diff.ssb[,j] <- (retroBD[,(j+1)]-retroBD[,2])/retroBD[,2]
+      mohn.ssb[j]      <- rel.diff.ssb[(nyears-j),j]
+      rel.diff.f[,j]   <- (retroF[,(j+1)]-retroF[,2])/retroF[,2]
+      mohn.f[j]        <- rel.diff.f[(nyears-j),j]}
+
+    #reclutamientos
+    ave.mohn.r  <- mean(mohn.r)
+    a0r            <- which(rel.diff.r==-1,arr.ind=TRUE)
+    junkr          <- rel.diff.r
+    a1r            <- which(rel.diff.r==-1,arr.ind=TRUE);
+    ffr            <- dim(a1r)
+    for(l in 1:ffr[1]){rel.diff.r[a1r[l,1],a1r[l,2]]<-NA}
+
+    #biomasa desovante
+    ave.mohn.ssb  <- mean(mohn.ssb)
+    a0b            <- which(rel.diff.ssb==-1,arr.ind=TRUE)
+    junkb          <- rel.diff.ssb
+    a1b            <- which(rel.diff.ssb==-1,arr.ind=TRUE);
+    ffb            <- dim(a1b)
+    for(l in 1:ffb[1]){rel.diff.ssb[a1b[l,1],a1b[l,2]]<-NA}
+
+    #mortalidad por pesca
+    ave.mohn.f    <- mean(mohn.f)
+    a0f           <- which(rel.diff.f==-1,arr.ind=TRUE)
+    junkf         <- rel.diff.f
+    a1f           <- which(rel.diff.f==-1,arr.ind=TRUE)
+    fff           <- dim(a1f)
+    for(l in 1:fff[1]){rel.diff.f[a1f[l,1],a1f[l,2]]<-NA}
+
+    ##########################
+    # Gr?fico
+    ##########################
+    par(mfcol=c(3,2),mar=c(2,4,2,1)+0.05)
+    #reclutamientos
+    plot(rep$years,rep$R_Est,las=1,type="n",xlim=c(1960,2020),
+         xaxp=c(1960,2020,30),ylab="Reclutamientos*10^6",xlab="",cex.lab=0.9,cex.axis=0.9)
+    for(i in 1:length(retros)){rep<-reptoRlist(paste(admb,"s",i,".rep",sep=""))
+    lines(rep$years,rep$R_Est,type="l",col=i,lwd=1)}
+    #Biomasa desovante
+    plot(rep$years,rep$BD,las=1,type="n",xlim=c(1960,2020),
+         xaxp=c(1960,2020,30),ylab="Biomasa desovante*10^6",xlab="",cex.lab=0.9,cex.axis=0.9)
+    for(i in 1:length(retros)){rep<-reptoRlist(paste(admb,"s",i,".rep",sep=""))
+    lines(rep$years,rep$BD,type="l",col=i,lwd=1)}
+    legend (2010,1,rev(seq(2016,2020,1)),lty=1,col=seq(1,8,1),bty="n",cex=0.9,lwd=1)
+    #Mortalidad por pesca
+    plot(rep$years,rep$F,las=1,type="n",ylim=c(0,4),xlim=c(1960,2020),
+         xaxp=c(1960,2020,30),ylab="Mortalidad por Pesca",xlab="",cex.lab=0.9,cex.axis=0.9)
+    for(i in 1:length(retros)){rep<-reptoRlist(paste(admb,"s",i,".rep",sep=""))
+    lines(rep$years,rep$F,type="l",col=i,lwd=1)}
+    #reclutamientos
+    plot(years,rel.diff.r[,1],type="l",lty=2,ylim=c(-1.5,1.5),xlim=c(1960,2020),xaxp=c(1960,2020,30),
+         main="Reclutamientos",ylab="",xlab="",cex.lab=0.9,cex.axis=0.9,cex.main=0.9)
+    for (j in 1:nyrs.retro){lines(years,rel.diff.r[,j],col=j,lwd=1) }
+    text(2002,-0.5,paste("Rho=",round(ave.mohn.r,2),sep=""),cex=1.2)
+    #biomasa desovante
+    plot(years,rel.diff.ssb[,1],type="l",lty=2,xlim=c(1960,2020),xaxp=c(1960,2020,30),
+         main="Biomasa desovante",ylab=ejey,xlab="",cex.lab=0.9,cex.axis=0.9,cex.main=0.9)
+    for (j in 1:nyrs.retro){lines(years,rel.diff.ssb[,j],col=j,lwd=1)}
+    text(2002,-0.5,paste("Rho=",round(ave.mohn.ssb,2),sep=""),cex=1.2)
+    legend (2002,1.1,rev(seq(2016,2019,1)),lty=1,col=seq(2,8,1),bty="n",cex=0.9,lwd=1)
+    #mortalidad por pesca
+    plot(years,rel.diff.f[,1],type="l",lty=2,xlim=c(1960,2020),xaxp=c(1960,2020,30),
+         main="Mortalidad por pesca",ylab="",xlab="",cex.lab=0.9,cex.axis=0.9,cex.main=0.9)
+    for (j in 1:nyrs.retro){lines(years,rel.diff.f[,j],col=j,lwd=1)}
+    text(2002,-0.5,paste("Rho=",round(ave.mohn.f,2),sep=""),cex=1.2)
+
+    ```
+
+3.  ***Perfil de verosimilitud***
 
 #### Variables de estado
 
