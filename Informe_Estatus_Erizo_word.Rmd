@@ -2,11 +2,11 @@
 title: ''
 author: ''
 date: ''
-lang: es
 output:
-  word_document: 
+  word_document:
     reference_docx: TemplateWord_Erizo.docx
     toc: yes
+lang: es
 subtitle: ''
 ---
 
@@ -264,6 +264,35 @@ cpueXN/desXN + plot_layout(guides="collect")
 
 ```
 
+```{r Fig_ajustesCompFXN,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=8,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Ajustes de la proporción de tallas de erizo de la zona XN"}
+age  <-rep1$Tallas                                          
+nage<-length(age)   
+
+etcf1_obs <- data.frame(rep1$pobs)
+etcf1_pre <- rbind(rep1$ppred) 
+
+yearc1   <- rep1$years
+nyearc1  <- length(yearc1)  
+
+ obs  <- as.data.frame(etcf1_obs) %>% mutate(year=yearc1) %>% melt(id.vars='year') %>%
+              mutate(edad = rep(age, each=nyearc1)) %>% mutate(type='obs')
+ 
+ pred_sep <- as.data.frame(etcf1_pre) %>% mutate(year=yearc1) %>% melt(id.vars='year') %>%
+              mutate(edad = rep(age, each=nyearc1)) %>% mutate(type='')
+ 
+  mat  <- rbind(obs,pred_sep)
+ 
+  fig1 <- ggplot(filter(mat, type=='obs')) + 
+          geom_bar(aes(x = edad, y = value), stat="identity", fill='gray66', color = 'gray78') + 
+          facet_wrap(~year, dir = 'v', as.table = TRUE) + labs(x = 'Edad', y = 'Proporción') +
+          geom_line(data = mat %>% filter(type != 'obs'), aes(x = edad, y = value, colour=type)) +
+          scale_colour_manual(values=c('red'),name="") +
+          theme(panel.background = element_rect(fill ="gray99")) + theme(panel.grid=element_line(color=NA)) +
+          ggtitle("FLOTA Zona XNorte") + theme(plot.title = element_text(size = 12))
+  fig1
+
+```
+
 1.  ***Análisis de residuos***
 
 2.  ***Análisis retrospectivo***
@@ -367,7 +396,6 @@ cpueXN/desXN + plot_layout(guides="collect")
     text(2002,-0.5,paste("Rho=",round(ave.mohn.f,2),sep=""),cex=1.2)
 
     ```
-
 
 ```{r VariablesXN_std, echo=F,message=FALSE, warning=FALSE, include=T}
 
@@ -530,7 +558,6 @@ Rt/BT | (BD/Ft)
 
 ```
 
-
 #### Puntos Biológicos de Referencia
 
 #### Indicadores del estatus
@@ -577,10 +604,38 @@ cpueXS/desXS + plot_layout(guides="collect")
 
 ```
 
+```{r ajustesCompFXS,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=8,fig.align="center",fig.path=dir.Fig,dev=fig,  fig.cap="**Figura x**. Ajustes de la proporción de tallas de erizo de la zona X Sur"}
+age  <-rep2$Tallas                                          
+nage<-length(age)   
+
+etcf1_obs <- data.frame(rep2$pobs)
+etcf1_pre <- rbind(rep2$ppred) 
+
+yearc1   <- rep2$years
+nyearc1  <- length(yearc1)  
+
+ obs  <- as.data.frame(etcf1_obs) %>% mutate(year=yearc1) %>% melt(id.vars='year') %>%
+              mutate(edad = rep(age, each=nyearc1)) %>% mutate(type='obs')
+ 
+ pred_sep <- as.data.frame(etcf1_pre) %>% mutate(year=yearc1) %>% melt(id.vars='year') %>%
+              mutate(edad = rep(age, each=nyearc1)) %>% mutate(type='')
+ 
+  mat  <- rbind(obs,pred_sep)
+ 
+  fig1 <- ggplot(filter(mat, type=='obs')) + 
+          geom_bar(aes(x = edad, y = value), stat="identity", fill='gray66', color = 'gray78') + 
+          facet_wrap(~year, dir = 'v', as.table = TRUE) + labs(x = 'Edad', y = 'Proporción') +
+          geom_line(data = mat %>% filter(type != 'obs'), aes(x = edad, y = value, colour=type)) +
+          scale_colour_manual(values=c('red'),name="") +
+          theme(panel.background = element_rect(fill ="gray99")) + theme(panel.grid=element_line(color=NA)) +
+          ggtitle("FLOTA Zona X Sur") + theme(plot.title = element_text(size = 12))
+  fig1
+
+```
+
 1.  Análisis de residuos de erizo zona X sur
 
 2.  Análisis retrospectivo de erizo zona X sur
-
 
 ```{r VariablesXS_std, echo=F,message=FALSE, warning=FALSE, include=T}
 
@@ -691,7 +746,6 @@ Rt/BD/Ft
 
 #### Variables de estado de erizo Zona X sur.
 
-
 ```{r Fig_VarpoblXS, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Variables poblacionales de Erizo zona X Sur", fig.path=dir.Fig,fig.height=6, fig.width=8}
 
 
@@ -791,10 +845,41 @@ cpueXI/desXI + plot_layout(guides="collect")
 
 ```
 
+
+```{r ajustesCompFXI,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=8,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**.Ajustes de la proporción de tallas de erizo de la zona XI"}
+age  <-rep3$Tallas                                          
+nage<-length(age)   
+
+etcf1_obs <- data.frame(rep3$pobs)
+etcf1_pre <- rbind(rep3$ppred) 
+
+yearc1   <- rep3$years
+nyearc1  <- length(yearc1)  
+
+ obs  <- as.data.frame(etcf1_obs) %>% mutate(year=yearc1) %>% melt(id.vars='year') %>%
+              mutate(edad = rep(age, each=nyearc1)) %>% mutate(type='obs')
+ 
+ pred_sep <- as.data.frame(etcf1_pre) %>% mutate(year=yearc1) %>% melt(id.vars='year') %>%
+              mutate(edad = rep(age, each=nyearc1)) %>% mutate(type='')
+ 
+  mat  <- rbind(obs,pred_sep)
+ 
+  fig1 <- ggplot(filter(mat, type=='obs')) + 
+          geom_bar(aes(x = edad, y = value), stat="identity", fill='gray66', color = 'gray78') + 
+          facet_wrap(~year, dir = 'v', as.table = TRUE) + labs(x = 'Edad', y = 'Proporción') +
+          geom_line(data = mat %>% filter(type != 'obs'), aes(x = edad, y = value, colour=type)) +
+          scale_colour_manual(values=c('red'),name="") +
+          theme(panel.background = element_rect(fill ="gray99")) + theme(panel.grid=element_line(color=NA)) +
+          ggtitle("FLOTA zona XI") + theme(plot.title = element_text(size = 12))
+  fig1
+
+```
+
+
+
 1.  Análisis de residuos
 
 2.  Análisis retrospectivo
-
 
 ```{r VariablesXI_std, echo=F,message=FALSE, warning=FALSE, include=T}
 
@@ -901,11 +986,9 @@ Rt/BD/Ft
 
 ```
 
-
 3.  Perfil de verosimilitud
 
 #### Variables de estado
-
 
 ```{r Fig_VarpoblXI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Variables poblacionales de Erizo zona XI", fig.path=dir.Fig,fig.height=6, fig.width=8}
 
