@@ -358,105 +358,7 @@ box()
 
 2.  ***Análisis retrospectivo***
 
-    ```{r Fig_RetrosrelativoXN,eval=F, warning=F, include=T, message=F, echo=FALSE,fig.height=7,fig.width=7}
 
-    admb<-"MAETXN"
-
-    ejey<- "ylab"
-
-
-    dir<-paste(dir.0,"/RetrospectivoXN",sep="")
-
-    setwd(dir)
-
-    rep.0       <- reptoRlist(paste(admb,"s1.rep",sep=""))
-    retros      <- c(0:4)
-
-    # =====================================================================================#
-    # AN?LISIS DE PATRONES RETROSPECTIVOS "MOHN RHO"
-    # =====================================================================================#
-    # Reclutamientos
-    retroR      <- matrix(0,nrow=length(rep.0$years),ncol=length(retros)+1)
-    retroR[,1]  <- rep.0$years;
-    #retroR[,2]  <- rep.0$Reclutas
-    retroBD     <- matrix(0,nrow=length(rep.0$years),ncol=length(retros)+1)
-    retroBD[,1] <- rep.0$years;
-    #retroBD[,2] <- rep.0$SSB
-    retroF      <- matrix(0,nrow=length(rep.0$years),ncol=length(retros)+1)
-    retroF[,1]  <- rep.0$years;
-    #retroF[,2]  <- rep.0$Ftot
-
-
-    for(i in 1:length(retros)){
-      rep<- reptoRlist(paste(admb,"s",i,".rep",sep=""))
-      retroR[,i+1] <- c(rep$R_Est,rep(0,i-1))
-      retroBD[,i+1] <- c(rep$BD,rep(0,i-1))
-      retroF[,i+1]  <- c(rep$F,rep(0,i-1))
-      }
-
-    #C?digo de Francisco y Fernando
-    # Mohn rho
-    years      <- retroBD[,1]
-    nyears     <- length(years)
-    nyrs.retro <- length(retros)
-
-    mohn.r     <- rep(NA, nyrs.retro)
-    rel.diff.r <- matrix(NA, nrow=nyears, ncol=(nyrs.retro ))
-    mohn.ssb     <- rep(NA, nyrs.retro)
-    rel.diff.ssb <- matrix(NA, nrow=nyears, ncol=(nyrs.retro ))
-    mohn.f       <- rep(NA, nyrs.retro)
-    rel.diff.f   <- matrix(NA, nrow=nyears, ncol=(nyrs.retro ))
-
-    for (j in 1:nyrs.retro) {
-      rel.diff.r[,j] <- (retroR[,(j+1)]-retroR[,2])/retroR[,2]
-      mohn.r[j]      <- rel.diff.r[(nyears-j),j]
-      rel.diff.ssb[,j] <- (retroBD[,(j+1)]-retroBD[,2])/retroBD[,2]
-      mohn.ssb[j]      <- rel.diff.ssb[(nyears-j),j]
-      rel.diff.f[,j]   <- (retroF[,(j+1)]-retroF[,2])/retroF[,2]
-      mohn.f[j]        <- rel.diff.f[(nyears-j),j]}
-
-    #reclutamientos
-    ave.mohn.r  <- mean(mohn.r)
-    a0r            <- which(rel.diff.r==-1,arr.ind=TRUE)
-    junkr          <- rel.diff.r
-    a1r            <- which(rel.diff.r==-1,arr.ind=TRUE);
-    ffr            <- dim(a1r)
-    for(l in 1:ffr[1]){rel.diff.r[a1r[l,1],a1r[l,2]]<-NA}
-
-    #biomasa desovante
-    ave.mohn.ssb  <- mean(mohn.ssb)
-    a0b            <- which(rel.diff.ssb==-1,arr.ind=TRUE)
-    junkb          <- rel.diff.ssb
-    a1b            <- which(rel.diff.ssb==-1,arr.ind=TRUE);
-    ffb            <- dim(a1b)
-    for(l in 1:ffb[1]){rel.diff.ssb[a1b[l,1],a1b[l,2]]<-NA}
-
-    #mortalidad por pesca
-    ave.mohn.f    <- mean(mohn.f)
-    a0f           <- which(rel.diff.f==-1,arr.ind=TRUE)
-    junkf         <- rel.diff.f
-    a1f           <- which(rel.diff.f==-1,arr.ind=TRUE)
-    fff           <- dim(a1f)
-    for(l in 1:fff[1]){rel.diff.f[a1f[l,1],a1f[l,2]]<-NA}
-
-    #reclutamientos
-    plot(years,rel.diff.r[,1],type="l",lty=2,ylim=c(-1.5,1.5),xlim=c(1960,2020),xaxp=c(1960,2020,30),
-         main="Reclutamientos",ylab="",xlab="",cex.lab=0.9,cex.axis=0.9,cex.main=0.9)
-    for (j in 1:nyrs.retro){lines(years,rel.diff.r[,j],col=j,lwd=1) }
-    text(2002,-0.5,paste("Rho=",round(ave.mohn.r,2),sep=""),cex=1.2)
-    #biomasa desovante
-    plot(years,rel.diff.ssb[,1],type="l",lty=2,xlim=c(1960,2020),xaxp=c(1960,2020,30),
-         main="Biomasa desovante",ylab=ejey,xlab="",cex.lab=0.9,cex.axis=0.9,cex.main=0.9)
-    for (j in 1:nyrs.retro){lines(years,rel.diff.ssb[,j],col=j,lwd=1)}
-    text(2002,-0.5,paste("Rho=",round(ave.mohn.ssb,2),sep=""),cex=1.2)
-    legend (2002,1.1,rev(seq(2016,2019,1)),lty=1,col=seq(2,8,1),bty="n",cex=0.9,lwd=1)
-    #mortalidad por pesca
-    plot(years,rel.diff.f[,1],type="l",lty=2,xlim=c(1960,2020),xaxp=c(1960,2020,30),
-         main="Mortalidad por pesca",ylab="",xlab="",cex.lab=0.9,cex.axis=0.9,cex.main=0.9)
-    for (j in 1:nyrs.retro){lines(years,rel.diff.f[,j],col=j,lwd=1)}
-    text(2002,-0.5,paste("Rho=",round(ave.mohn.f,2),sep=""),cex=1.2)
-
-    ```
 
 ```{r VariablesXN_std, echo=F,message=FALSE, warning=FALSE, include=T}
 
@@ -502,27 +404,55 @@ for(i in 1:length(retros)){
   retroF[,i+1]  <- c(rep$F,rep(NA,i-1)) }
 
 
+# retrospectivo relativo (cálculo)
+    mohn.r       <- rep(NA, nretros)
+    rel.diff.r   <- matrix(NA, nrow=nyears, ncol=(nretros))
+    mohn.ssb     <- rep(NA, nretros)
+    rel.diff.ssb <- matrix(NA, nrow=nyears, ncol=(nretros))
+    mohn.f       <- rep(NA, nretros)
+    rel.diff.f   <- matrix(NA, nrow=nyears, ncol=(nretros))
 
-Rt_retro<- data.frame(x=years, y1=retroR[,2],y2=retroR[,3],y3=retroR[,4],y4=retroR[,5],y5=retroR[,6], lower = (Rt1 -1.96*Rt1std), upper = (Rt1+1.96*Rt1std))
+    for(j in 1:nretros){
+      rel.diff.r[,j] <- (retroR[,(j+1)]-retroR[,2])/retroR[,2]
+      mohn.r[j]      <- rel.diff.r[(nyears-j),j]
+      rel.diff.ssb[,j] <- (retroBD[,(j+1)]-retroBD[,2])/retroBD[,2]
+      mohn.ssb[j]      <- rel.diff.ssb[(nyears-j),j]
+      rel.diff.f[,j]   <- (retroF[,(j+1)]-retroF[,2])/retroF[,2]
+      mohn.f[j]        <- rel.diff.f[(nyears-j),j]}
+    
+    ave.mohn.r    <- mean(mohn.r)
+    ave.mohn.ssb  <- mean(mohn.ssb)
+    ave.mohn.f    <- mean(mohn.f)
+    
+ # Arreglo datos
 
-BD_retro<- data.frame(x=years, y1=retroBD[,2],y2=retroBD[,3],y3=retroBD[,4],y4=retroBD[,5],y5=retroBD[,6], lower = (BD1 -1.96*BD1std), upper = (BD1+1.96*BD1std))
+#Para retrospectivo tradicional
+Rt_retro<- data.frame(x=years, y1=retroR[,2],y2=retroR[,3],y3=retroR[,4],y4=retroR[,5],y5=retroR[,6],
+                      lower = (Rt1 -1.96*Rt1std), upper = (Rt1+1.96*Rt1std))
+BD_retro<- data.frame(x=years, y1=retroBD[,2],y2=retroBD[,3],y3=retroBD[,4],y4=retroBD[,5],y5=retroBD[,6],
+                      lower = (BD1 -1.96*BD1std), upper = (BD1+1.96*BD1std))
+Ft_retro<- data.frame(x=years, y1=retroF[,2],y2=retroF[,3],y3=retroF[,4],y4=retroF[,5],y5=retroF[,6], 
+                      lower = exp(Ft1-1.96*Ft1std), upper = exp(Ft1+1.96*Ft1std))
 
-Ft_retro<- data.frame(x=years, y1=retroF[,2],y2=retroF[,3],y3=retroF[,4],y4=retroF[,5],y5=retroF[,6], lower = exp(Ft1-1.96*Ft1std), upper = exp(Ft1+1.96*Ft1std))
-
+#Para restrospectivo relativo
+Rt_retroRel<- data.frame(x=years, y1=rel.diff.r[,1],y2=rel.diff.r[,2],y3=rel.diff.r[,3],y4=rel.diff.r[,4],y5=rel.diff.r[,5])
+BD_retroRel<- data.frame(x=years, y1=rel.diff.ssb[,1],y2=rel.diff.ssb[,2],y3=rel.diff.ssb[,3],y4=rel.diff.ssb[,4],y5=rel.diff.ssb[,5])
+Ft_retroRel<- data.frame(x=years, y1=rel.diff.f[,1],y2=rel.diff.f[,2],y3=rel.diff.f[,3],y4=rel.diff.f[,4],y5=rel.diff.f[,5])
 
 ```
 
-```{r Fig_RetrospectivoXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Patrón retrospectivo estándar (panel izquierdo) y  relativo (panel derecho) de los reclutamientos", fig.height=5, fig.width=6}
+```{r Fig_RetrospectivoXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Patrón retrospectivo estándar (panel izquierdo) y  relativo (panel derecho) de los reclutamientos", fig.height=7, fig.width=6}
 
+#Retrospectivo tradicional
 Rt <- ggplot(Rt_retro) + 
+    geom_ribbon(aes(ymin=lower, ymax=upper, x=x, fill = "Intervalo de confianza asintótico"), alpha = 0.2)+
     geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
     geom_line(aes(y=y2, x=x, colour = year_retros[nretros-1]), size=0.5)+
     geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
     geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
     geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
-    geom_ribbon(aes(ymin=lower, ymax=upper, x=x, fill = "Intervalo de confianza asintótico"), alpha = 0.2)+
     labs(x = '', y = 'Reclutamientos',colour='Asesorías')  +
-    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
     scale_colour_manual("",values=c("orange","green","blue","red","black"))+
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
@@ -530,14 +460,14 @@ Rt <- ggplot(Rt_retro) +
      theme(plot.title = element_text(hjust = 0.5),legend.position="top")
 
 BD <- ggplot(BD_retro) + 
+     geom_ribbon(aes(ymin=lower, ymax=upper, x=x, fill = ""), alpha = 0.2)+
      geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
     geom_line(aes(y=y2, x=x, colour = year_retros[nretros-1]), size=0.5)+
     geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
     geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
     geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
-    geom_ribbon(aes(ymin=lower, ymax=upper, x=x, fill = ""), alpha = 0.2)+
     labs(x = '', y = 'Biomasa desovante',colour='Asesorías')  +
-    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
     scale_colour_manual("",values=c("orange","green","blue","red","black"))+
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
@@ -550,20 +480,66 @@ Ft <- ggplot(Ft_retro) +
     geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
     geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
     geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
-    geom_ribbon(aes(ymin=lower, ymax=upper, x=x, fill = ""), alpha = 0.2)+
     labs(x = '', y = 'Mortalidad por pesca',colour='Asesorías')  +
-    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
     scale_colour_manual("",values=c("orange","green","blue","red","black"))+
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
     ggtitle('')+
     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
 
-Rt/BD/Ft
+#Retrospectivo relativo
+Rtrel <- ggplot(Rt_retroRel) + lims(y=c(-1,1)) +
+    geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
+    geom_line(aes(y=y2, x=x, colour = year_retros[nretros-1]), size=0.5)+
+    geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
+    geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
+    geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
+   annotate("text", x=1975, y=0.5,label=paste("Rho =",round(ave.mohn.r,2))) +
+    labs(x = '', y = 'Diferencia porcentual del último año',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
+    scale_colour_manual("",values=c("orange","green","blue","red","black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),legend.position="top")
+
+BDrel <- ggplot(BD_retroRel) + lims(y=c(-1,1)) +
+     geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
+    geom_line(aes(y=y2, x=x, colour = year_retros[nretros-1]), size=0.5)+
+    geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
+    geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
+    geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
+   annotate("text", x=1975, y=0.5,label=paste("Rho =",round(ave.mohn.ssb,2))) +
+    labs(x = '', y = 'Diferencia porcentual del último año',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
+    scale_colour_manual("",values=c("orange","green","blue","red","black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+Ftrel <- ggplot(Ft_retroRel) + lims(y=c(-1,1)) +
+    geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
+    geom_line(aes(y=y2, x=x, colour = year_retros[nretros-1]), size=0.5)+
+    geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
+    geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
+    geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
+   annotate("text", x=1975, y=0.5,label=paste("Rho =",round(ave.mohn.f,2))) +
+    labs(x = '', y = 'Diferencia porcentual del último año',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
+    scale_colour_manual("",values=c("orange","green","blue","red","black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+    ggtitle('')+
+    theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+Rt/BD/Ft |Rtrel/BDrel/Ftrel
 
 ```
 
 3.  ***Perfil de verosimilitud***
+
 
 #### Variables de estado
 
@@ -804,16 +780,46 @@ for(i in 1:length(retros)){
 
 
 
-Rt_retro<- data.frame(x=years, y1=retroR[,2],y2=retroR[,3],y3=retroR[,4],y4=retroR[,5],y5=retroR[,6], lower = (Rt2 -1.96*Rt2std), upper = (Rt2+1.96*Rt2std))
+# retrospectivo relativo (cálculo)
+    mohn.r       <- rep(NA, nretros)
+    rel.diff.r   <- matrix(NA, nrow=nyears, ncol=(nretros))
+    mohn.ssb     <- rep(NA, nretros)
+    rel.diff.ssb <- matrix(NA, nrow=nyears, ncol=(nretros))
+    mohn.f       <- rep(NA, nretros)
+    rel.diff.f   <- matrix(NA, nrow=nyears, ncol=(nretros))
 
-BD_retro<- data.frame(x=years, y1=retroBD[,2],y2=retroBD[,3],y3=retroBD[,4],y4=retroBD[,5],y5=retroBD[,6], lower = (BD2 -1.96*BD2std), upper = (BD2+1.96*BD2std))
+    for(j in 1:nretros){
+      rel.diff.r[,j] <- (retroR[,(j+1)]-retroR[,2])/retroR[,2]
+      mohn.r[j]      <- rel.diff.r[(nyears-j),j]
+      rel.diff.ssb[,j] <- (retroBD[,(j+1)]-retroBD[,2])/retroBD[,2]
+      mohn.ssb[j]      <- rel.diff.ssb[(nyears-j),j]
+      rel.diff.f[,j]   <- (retroF[,(j+1)]-retroF[,2])/retroF[,2]
+      mohn.f[j]        <- rel.diff.f[(nyears-j),j]}
+    
+    ave.mohn.r    <- mean(mohn.r)
+    ave.mohn.ssb  <- mean(mohn.ssb)
+    ave.mohn.f    <- mean(mohn.f)
+    
+ # Arreglo datos
 
-Ft_retro<- data.frame(x=years, y1=retroF[,2],y2=retroF[,3],y3=retroF[,4],y4=retroF[,5],y5=retroF[,6], lower = exp(Ft2-1.96*Ft2std), upper = exp(Ft2+1.96*Ft2std))
+#Para retrospectivo tradicional
+Rt_retro<- data.frame(x=years, y1=retroR[,2],y2=retroR[,3],y3=retroR[,4],y4=retroR[,5],y5=retroR[,6],
+                      lower = (Rt2 -1.96*Rt2std), upper = (Rt2+1.96*Rt2std))
+BD_retro<- data.frame(x=years, y1=retroBD[,2],y2=retroBD[,3],y3=retroBD[,4],y4=retroBD[,5],y5=retroBD[,6],
+                      lower = (BD2 -1.96*BD2std), upper = (BD2+1.96*BD2std))
+Ft_retro<- data.frame(x=years, y1=retroF[,2],y2=retroF[,3],y3=retroF[,4],y4=retroF[,5],y5=retroF[,6], 
+                      lower = exp(Ft2-1.96*Ft2std), upper = exp(Ft2+1.96*Ft2std))
+
+#Para restrospectivo relativo
+Rt_retroRel<- data.frame(x=years, y1=rel.diff.r[,1],y2=rel.diff.r[,2],y3=rel.diff.r[,3],y4=rel.diff.r[,4],y5=rel.diff.r[,5])
+BD_retroRel<- data.frame(x=years, y1=rel.diff.ssb[,1],y2=rel.diff.ssb[,2],y3=rel.diff.ssb[,3],y4=rel.diff.ssb[,4],y5=rel.diff.ssb[,5])
+Ft_retroRel<- data.frame(x=years, y1=rel.diff.f[,1],y2=rel.diff.f[,2],y3=rel.diff.f[,3],y4=rel.diff.f[,4],y5=rel.diff.f[,5])
+
 
 
 ```
 
-```{r Fig_RetrospectivoXS, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Patrón retrospectivo estándar (panel izquierdo) y  relativo (panel derecho) de los reclutamientos", fig.path=dir.Fig,fig.height=5, fig.width=6}
+```{r Fig_RetrospectivoXS, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Patrón retrospectivo estándar (panel izquierdo) y  relativo (panel derecho) de los reclutamientos", fig.path=dir.Fig,fig.height=7, fig.width=6}
 
 Rt <- ggplot(Rt_retro) + 
     geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
@@ -823,7 +829,7 @@ Rt <- ggplot(Rt_retro) +
     geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
     geom_ribbon(aes(ymin=lower, ymax=upper, x=x, fill = "Intervalo de confianza asintótico"), alpha = 0.2)+
     labs(x = '', y = 'Reclutamientos',colour='Asesorías')  +
-    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
     scale_colour_manual("",values=c("orange","green","blue","red","black"))+
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
@@ -838,7 +844,7 @@ BD <- ggplot(BD_retro) +
     geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
     geom_ribbon(aes(ymin=lower, ymax=upper, x=x, fill = ""), alpha = 0.2)+
     labs(x = '', y = 'Biomasa desovante',colour='Asesorías')  +
-    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
     scale_colour_manual("",values=c("orange","green","blue","red","black"))+
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
@@ -853,14 +859,60 @@ Ft <- ggplot(Ft_retro) +
     geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
     geom_ribbon(aes(ymin=lower, ymax=upper, x=x, fill = ""), alpha = 0.2)+
     labs(x = '', y = 'Mortalidad por pesca',colour='Asesorías')  +
-    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
     scale_colour_manual("",values=c("orange","green","blue","red","black"))+
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
     ggtitle('')+
     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
 
-Rt/BD/Ft
+#Retrospectivo relativo
+Rtrel <- ggplot(Rt_retroRel) + lims(y=c(-1,1)) +
+    geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
+    geom_line(aes(y=y2, x=x, colour = year_retros[nretros-1]), size=0.5)+
+    geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
+    geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
+    geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
+   annotate("text", x=1975, y=0.5,label=paste("Rho =",round(ave.mohn.r,2))) +
+    labs(x = '', y = 'Diferencia porcentual del último año',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
+    scale_colour_manual("",values=c("orange","green","blue","red","black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),legend.position="top")
+
+BDrel <- ggplot(BD_retroRel) + lims(y=c(-1,1)) +
+     geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
+    geom_line(aes(y=y2, x=x, colour = year_retros[nretros-1]), size=0.5)+
+    geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
+    geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
+    geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
+   annotate("text", x=1975, y=0.5,label=paste("Rho =",round(ave.mohn.ssb,2))) +
+    labs(x = '', y = 'Diferencia porcentual del último año',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
+    scale_colour_manual("",values=c("orange","green","blue","red","black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+Ftrel <- ggplot(Ft_retroRel) + lims(y=c(-1,1)) +
+    geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
+    geom_line(aes(y=y2, x=x, colour = year_retros[nretros-1]), size=0.5)+
+    geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
+    geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
+    geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
+   annotate("text", x=1975, y=0.5,label=paste("Rho =",round(ave.mohn.f,2))) +
+    labs(x = '', y = 'Diferencia porcentual del último año',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
+    scale_colour_manual("",values=c("orange","green","blue","red","black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+    ggtitle('')+
+    theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+Rt/BD/Ft |Rtrel/BDrel/Ftrel
 
 ```
 
@@ -1109,16 +1161,47 @@ for(i in 1:length(retros)){
 
 
 
-Rt_retro<- data.frame(x=years, y1=retroR[,2],y2=retroR[,3],y3=retroR[,4],y4=retroR[,5],y5=retroR[,6], lower = (Rt3 -1.96*Rt3std), upper = (Rt3+1.96*Rt3std))
 
-BD_retro<- data.frame(x=years, y1=retroBD[,2],y2=retroBD[,3],y3=retroBD[,4],y4=retroBD[,5],y5=retroBD[,6], lower = (BD3 -1.96*BD3std), upper = (BD3+1.96*BD3std))
+# retrospectivo relativo (cálculo)
+    mohn.r       <- rep(NA, nretros)
+    rel.diff.r   <- matrix(NA, nrow=nyears, ncol=(nretros))
+    mohn.ssb     <- rep(NA, nretros)
+    rel.diff.ssb <- matrix(NA, nrow=nyears, ncol=(nretros))
+    mohn.f       <- rep(NA, nretros)
+    rel.diff.f   <- matrix(NA, nrow=nyears, ncol=(nretros))
 
-Ft_retro<- data.frame(x=years, y1=retroF[,2],y2=retroF[,3],y3=retroF[,4],y4=retroF[,5],y5=retroF[,6], lower = exp(Ft3-1.96*Ft3std), upper = exp(Ft3+1.96*Ft3std))
+    for(j in 1:nretros){
+      rel.diff.r[,j] <- (retroR[,(j+1)]-retroR[,2])/retroR[,2]
+      mohn.r[j]      <- rel.diff.r[(nyears-j),j]
+      rel.diff.ssb[,j] <- (retroBD[,(j+1)]-retroBD[,2])/retroBD[,2]
+      mohn.ssb[j]      <- rel.diff.ssb[(nyears-j),j]
+      rel.diff.f[,j]   <- (retroF[,(j+1)]-retroF[,2])/retroF[,2]
+      mohn.f[j]        <- rel.diff.f[(nyears-j),j]}
+    
+    ave.mohn.r    <- mean(mohn.r)
+    ave.mohn.ssb  <- mean(mohn.ssb)
+    ave.mohn.f    <- mean(mohn.f)
+    
+ # Arreglo datos
+
+#Para retrospectivo tradicional
+Rt_retro<- data.frame(x=years, y1=retroR[,2],y2=retroR[,3],y3=retroR[,4],y4=retroR[,5],y5=retroR[,6],
+                      lower = (Rt3 -1.96*Rt3std), upper = (Rt3+1.96*Rt3std))
+BD_retro<- data.frame(x=years, y1=retroBD[,2],y2=retroBD[,3],y3=retroBD[,4],y4=retroBD[,5],y5=retroBD[,6],
+                      lower = (BD3 -1.96*BD3std), upper = (BD3+1.96*BD3std))
+Ft_retro<- data.frame(x=years, y1=retroF[,2],y2=retroF[,3],y3=retroF[,4],y4=retroF[,5],y5=retroF[,6], 
+                      lower = exp(Ft3-1.96*Ft3std), upper = exp(Ft3+1.96*Ft3std))
+
+#Para restrospectivo relativo
+Rt_retroRel<- data.frame(x=years, y1=rel.diff.r[,1],y2=rel.diff.r[,2],y3=rel.diff.r[,3],y4=rel.diff.r[,4],y5=rel.diff.r[,5])
+BD_retroRel<- data.frame(x=years, y1=rel.diff.ssb[,1],y2=rel.diff.ssb[,2],y3=rel.diff.ssb[,3],y4=rel.diff.ssb[,4],y5=rel.diff.ssb[,5])
+Ft_retroRel<- data.frame(x=years, y1=rel.diff.f[,1],y2=rel.diff.f[,2],y3=rel.diff.f[,3],y4=rel.diff.f[,4],y5=rel.diff.f[,5])
+
 
 
 ```
 
-```{r Fig_RetrospectivoXI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Patrón retrospectivo estándar (panel izquierdo) y  relativo (panel derecho) de los reclutamientos", fig.path=dir.Fig,fig.height=5, fig.width=6}
+```{r Fig_RetrospectivoXI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Patrón retrospectivo estándar (panel izquierdo) y  relativo (panel derecho) de los reclutamientos", fig.path=dir.Fig,fig.height=7, fig.width=6}
 
 Rt <- ggplot(Rt_retro) + 
     geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
@@ -1128,7 +1211,7 @@ Rt <- ggplot(Rt_retro) +
     geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
     geom_ribbon(aes(ymin=lower, ymax=upper, x=x, fill = "Intervalo de confianza asintótico"), alpha = 0.2)+
     labs(x = '', y = 'Reclutamientos',colour='Asesorías')  +
-    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
     scale_colour_manual("",values=c("orange","green","blue","red","black"))+
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
@@ -1143,7 +1226,7 @@ BD <- ggplot(BD_retro) +
     geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
     geom_ribbon(aes(ymin=lower, ymax=upper, x=x, fill = ""), alpha = 0.2)+
     labs(x = '', y = 'Biomasa desovante',colour='Asesorías')  +
-    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
     scale_colour_manual("",values=c("orange","green","blue","red","black"))+
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
@@ -1158,14 +1241,60 @@ Ft <- ggplot(Ft_retro) +
     geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
     geom_ribbon(aes(ymin=lower, ymax=upper, x=x, fill = ""), alpha = 0.2)+
     labs(x = '', y = 'Mortalidad por pesca',colour='Asesorías')  +
-    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
     scale_colour_manual("",values=c("orange","green","blue","red","black"))+
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
     ggtitle('')+
     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
 
-Rt/BD/Ft
+#Retrospectivo relativo
+Rtrel <- ggplot(Rt_retroRel) + lims(y=c(-1,1)) +
+    geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
+    geom_line(aes(y=y2, x=x, colour = year_retros[nretros-1]), size=0.5)+
+    geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
+    geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
+    geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
+    annotate("text", x=1975, y=0.5,label=paste("Rho =",round(ave.mohn.r,2))) +
+    labs(x = '', y = 'Diferencia porcentual del último año',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
+    scale_colour_manual("",values=c("orange","green","blue","red","black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),legend.position="top")
+
+BDrel <- ggplot(BD_retroRel) + lims(y=c(-1,1)) +
+     geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
+    geom_line(aes(y=y2, x=x, colour = year_retros[nretros-1]), size=0.5)+
+    geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
+    geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
+    geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
+    annotate("text", x=1975, y=0.5,label=paste("Rho =",round(ave.mohn.ssb,2))) +
+    labs(x = '', y = 'Diferencia porcentual del último año',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
+    scale_colour_manual("",values=c("orange","green","blue","red","black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+Ftrel <- ggplot(Ft_retroRel) + lims(y=c(-1,1)) +
+    geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
+    geom_line(aes(y=y2, x=x, colour = year_retros[nretros-1]), size=0.5)+
+    geom_line(aes(y=y3, x=x, colour = year_retros[nretros-2]), size=0.5)+
+    geom_line(aes(y=y4, x=x, colour = year_retros[nretros-3]), size=0.5)+
+    geom_line(aes(y=y5, x=x, colour = year_retros[nretros-4]), size=0.5)+
+    annotate("text", x=1975, y=0.5,label=paste("Rho =",round(ave.mohn.f,2))) +
+    labs(x = '', y = 'Diferencia porcentual del último año',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
+    scale_colour_manual("",values=c("orange","green","blue","red","black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+    ggtitle('')+
+    theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+Rt/BD/Ft |Rtrel/BDrel/Ftrel
 
 ```
 
