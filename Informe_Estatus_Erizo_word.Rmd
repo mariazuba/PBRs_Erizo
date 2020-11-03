@@ -502,7 +502,7 @@ Rtrel <- ggplot(Rt_retroRel) + lims(y=c(-1,1)) +
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
      ggtitle('')+
-     theme(plot.title = element_text(hjust = 0.5),legend.position="top")
+     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
 
 BDrel <- ggplot(BD_retroRel) + lims(y=c(-1,1)) +
      geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
@@ -595,11 +595,114 @@ Rt/BT | (BD/Ft)
 
 ```
 
+```{r Fig_SelFlotaXN,warning=F, include=T, message=F, echo=FALSE,fig.height=5,fig.width=5,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Selectividad de la flota de la Zona X Norte"}
+# ASESORIA DE SEPTIEMBRE
+age<-rep1$Edades
+par(mfrow=c(1,1),mar=c(4,4,1,1))
+	plot(age,rep1$Sel_f[1,],type="l",lwd=2,las=1,ylim=c(0,1.1),ylab="Selectividad",xlab="Edad (año)")
+	lines(age,rep1$Sel_f[44,],type="o",pch="o")
+	legend (6,0.5,c("sel_bloque (1960-2002)","sel_bloque (2003-2020)"),pch=c("","o"),lwd=c(2,1),bty='n',cex=0.8)
+
+```
+
+
 #### Puntos Biológicos de Referencia
+
+```{r Fig_PBRsXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Puntos Biológicos de referencia de Erizo zona X Norte", fig.height=7, fig.width=6}
+
+Frms<-dat1$FMRS
+BDo<-rep1$BDo
+BDrms<-BDo*0.4
+BDlim<-BDrms/2
+
+BD <- ggplot(VarPob) + 
+     geom_line(aes(y=BD1, x=x, colour = "Estimado Zona X Norte"), size=0.5)+
+     geom_ribbon(aes(ymin=lowerBD1, ymax=upperBD1, x=x, fill = "Intervalo de confianza asintótico"), alpha = 0.2)+
+     geom_hline(yintercept = c(BDrms,BDlim,BDo),colour=c('green3','red','blue'))+
+  annotate("text", x=c(rep(2012,3)), y=c(BDrms,BDlim,BDo),
+              label=c(expression("BD"[RMS]),expression("BD"[LIM]),expression("BD"[0]))) +
+    labs(x = '', y = 'Biomasa desovante',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_colour_manual("",values=c("black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),legend.position="top")
+
+Ft <- ggplot(VarPob) + 
+     geom_line(aes(y=Ft1, x=x, colour = "Estimado Zona X Norte"), size=0.5)+
+   geom_hline(yintercept = c(Frms),colour=c('green3')) +
+     annotate("text", x=c(2011), y=c(Frms),label=c(expression("F"[RMS]))) +
+    labs(x = '', y = 'Mortalidad por pesca',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_colour_manual("",values=c("black")) +
+    scale_fill_manual("",values=c("grey30")) +
+    theme_bw(base_size=8) +
+     ggtitle('') +
+     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+ BD/Ft
+
+
+```
+
 
 #### Indicadores del estatus
 
+
+
 #### Estatus del erizo de la zona norte de la Región de Los Lagos
+
+```{r Fig_DiagramaFaseXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase Erizo zona X Norte", fig.height=6, fig.width=8}
+Zona<- "Erizo Zona X Norte"
+Frms<-dat1$FMRS
+BDo<-rep1$BDo
+BDrms<-BDo*0.4
+BDlim<-BDrms/2
+
+bd_bdrms<-VarPob$BD1/BDrms
+f_frms<-VarPob$Ft1/Frms
+
+x.bottom.left <- c(1, 0, 1, 1)
+x.top.left    <- c(1, 0, 1, 1)
+x.bottom.right<- c(0, 1, 4, 4)
+x.top.right   <- c(0, 1, 4, 4)
+
+y.bottom.left <- c(0, 1, 0, 1)
+y.bottom.right<- c(0, 1, 0, 1)
+y.top.left    <- c( 1, 10,  1, 10)
+y.top.right   <- c( 1, 10,  1, 10)
+
+# declare a vector of values
+values <- c("1_Sobreexplotación","2_Sobreexplotación","3_Subexplotación","4_Sobrepesca")
+# create a data frame containing values and ids
+values.df <- data.frame(value = values, id = c(1, 2, 3, 4))
+# create the x and y vectors containing the coordinates of each polygon in the correct order
+x.coords <- unlist(lapply(1:length(x.bottom.left), function(i) {
+    c(x.bottom.left[i], x.bottom.right[i], x.top.right[i], x.top.left[i])
+}))
+y.coords <- unlist(lapply(1:length(y.bottom.left), function(i) {
+    c(y.bottom.left[i], y.bottom.right[i], y.top.right[i], y.top.left[i])
+}))
+# create a coordinates data frame
+coords.df <- data.frame(id = rep(c(1, 2, 3, 4), each = 4), x = x.coords, y = y.coords)
+# merge the data frames
+data.df <- merge(values.df, coords.df, by = c("id"))
+
+# plot
+ggplot() + 
+  geom_polygon(data = data.df, aes(x = x, y = y, fill = factor(value), group = id)) +
+  geom_line(aes(x=bd_bdrms,y=f_frms))+geom_point(aes(x=bd_bdrms,y=f_frms),shape = 21, colour = "black", fill = "white", size = 3, stroke = 1)+
+scale_fill_grey(start=0.4, end=0.9) +
+geom_hline(yintercept = 1) + geom_vline(xintercept = c(0.5,1),colour=c(2,1)) +
+annotate("text", x=c(0.5,1,4.05), y=c(10.05,10.05,1.05),
+              label=c(expression("BD"[LIM]),expression("BD"[RMS]),expression("F"[RMS]))) +
+
+labs(x = 'BD/BDrms', y = 'F/Frms',fill='Estados de explotación') +
+   theme_bw(base_size=12) +
+  ggtitle(Zona)
+
+```
 
 ### 6.1.2. Erizo zona sur Región de Los Lagos
 
@@ -880,7 +983,7 @@ Rtrel <- ggplot(Rt_retroRel) + lims(y=c(-1,1)) +
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
      ggtitle('')+
-     theme(plot.title = element_text(hjust = 0.5),legend.position="top")
+     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
 
 BDrel <- ggplot(BD_retroRel) + lims(y=c(-1,1)) +
      geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
@@ -972,11 +1075,115 @@ Rt/BT | BD/Ft
 
 ```
 
+```{r Fig_SelFlotaXS,warning=F, include=T, message=F, echo=FALSE,fig.height=5,fig.width=5,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Selectividad de la flota de la Zona X sur"}
+# ASESORIA DE SEPTIEMBRE
+age<-rep2$Edades
+par(mfrow=c(1,1),mar=c(4,4,1,1))
+	plot(age,rep2$Sel_f[1,],type="l",lwd=2,las=1,ylim=c(0,1.1),ylab="Selectividad",xlab="Edad (año)")
+	legend (6,0.5,c("sel_bloque (1960-2020)"),pch=c(""),lwd=c(2),bty='n',cex=0.8)
+
+```
+
+
 #### Puntos Biológicos de Referencia
+
+```{r Fig_PBRsXS, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Puntos Biológicos de referencia de Erizo zona X Sur", fig.height=7, fig.width=6}
+
+Frms<-dat2$FMRS
+BDo<-rep2$BDo
+BDrms<-BDo*0.4
+BDlim<-BDrms/2
+
+BD <- ggplot(VarPob) + 
+     geom_line(aes(y=BD2, x=x, colour = "Estimado Zona X sur"), size=0.5)+
+     geom_ribbon(aes(ymin=lowerBD2, ymax=upperBD2, x=x, fill = "Intervalo de confianza asintótico"), alpha = 0.2)+
+   geom_hline(yintercept = c(BDrms,BDlim,BDo),colour=c('green3','red','blue'))+
+  annotate("text", x=c(rep(2012,3)), y=c(BDrms,BDlim,BDo),
+              label=c(expression("BD"[RMS]),expression("BD"[LIM]),expression("BD"[0]))) +
+    labs(x = '', y = 'Biomasa desovante',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_colour_manual("",values=c("black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),legend.position="top")
+
+Ft <- ggplot(VarPob) + 
+     geom_line(aes(y=Ft2, x=x, colour = "Estimado Zona X sur"), size=0.5)+
+    geom_ribbon(aes(ymin=lowerFt2, ymax=upperFt2, x=x, fill = ""), alpha = 0.2)+
+  geom_hline(yintercept = c(Frms),colour=c('green3')) +
+     annotate("text", x=c(2011), y=c(Frms),label=c(expression("F"[RMS]))) +
+    labs(x = '', y = 'Mortalidad por pesca',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
+    scale_colour_manual("",values=c("black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+
+ BD/Ft
+
+
+```
+
 
 #### Indicadores del estatus
 
 #### Estatus del erizo de la zona sur de la Región de Los Lagos
+
+```{r Fig_DiagramaFaseXS, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase Erizo zona X Sur", fig.height=6, fig.width=8}
+Zona<- "Erizo Zona X Sur"
+Frms<-dat2$FMRS
+BDo<-rep2$BDo
+BDrms<-BDo*0.4
+BDlim<-BDrms/2
+
+bd_bdrms<-VarPob$BD2/BDrms
+f_frms<-VarPob$Ft2/Frms
+
+x.bottom.left <- c(1, 0, 1, 1)
+x.top.left    <- c(1, 0, 1, 1)
+x.bottom.right<- c(0, 1, 4, 4)
+x.top.right   <- c(0, 1, 4, 4)
+
+y.bottom.left <- c(0, 1, 0, 1)
+y.bottom.right<- c(0, 1, 0, 1)
+y.top.left    <- c( 1, 10,  1, 10)
+y.top.right   <- c( 1, 10,  1, 10)
+
+# declare a vector of values
+values <- c("1_Sobreexplotación","2_Sobreexplotación","3_Subexplotación","4_Sobrepesca")
+# create a data frame containing values and ids
+values.df <- data.frame(value = values, id = c(1, 2, 3, 4))
+# create the x and y vectors containing the coordinates of each polygon in the correct order
+x.coords <- unlist(lapply(1:length(x.bottom.left), function(i) {
+    c(x.bottom.left[i], x.bottom.right[i], x.top.right[i], x.top.left[i])
+}))
+y.coords <- unlist(lapply(1:length(y.bottom.left), function(i) {
+    c(y.bottom.left[i], y.bottom.right[i], y.top.right[i], y.top.left[i])
+}))
+# create a coordinates data frame
+coords.df <- data.frame(id = rep(c(1, 2, 3, 4), each = 4), x = x.coords, y = y.coords)
+# merge the data frames
+data.df <- merge(values.df, coords.df, by = c("id"))
+
+
+
+# plot
+ggplot() + 
+  geom_polygon(data = data.df, aes(x = x, y = y, fill = factor(value), group = id)) +
+  geom_line(aes(x=bd_bdrms,y=f_frms))+geom_point(aes(x=bd_bdrms,y=f_frms),shape = 21, colour = "black", fill = "white", size = 3, stroke = 1)+
+scale_fill_grey(start=0.4, end=0.9) +
+geom_hline(yintercept = 1) + geom_vline(xintercept = c(0.5,1),colour=c(2,1)) +
+annotate("text", x=c(0.5,1,4.05), y=c(10.05,10.05,1.05),
+              label=c(expression("BD"[LIM]),expression("BD"[RMS]),expression("F"[RMS]))) +
+
+labs(x = 'BD/BDrms', y = 'F/Frms',fill='Estados de explotación') +
+   theme_bw(base_size=12) +
+  ggtitle(Zona)
+
+```
 
 ### 6.1.3. Erizo Región de Aysén
 
@@ -1160,8 +1367,6 @@ for(i in 1:length(retros)){
   retroF[,i+1]  <- c(rep$F,rep(NA,i-1)) }
 
 
-
-
 # retrospectivo relativo (cálculo)
     mohn.r       <- rep(NA, nretros)
     rel.diff.r   <- matrix(NA, nrow=nyears, ncol=(nretros))
@@ -1196,8 +1401,6 @@ Ft_retro<- data.frame(x=years, y1=retroF[,2],y2=retroF[,3],y3=retroF[,4],y4=retr
 Rt_retroRel<- data.frame(x=years, y1=rel.diff.r[,1],y2=rel.diff.r[,2],y3=rel.diff.r[,3],y4=rel.diff.r[,4],y5=rel.diff.r[,5])
 BD_retroRel<- data.frame(x=years, y1=rel.diff.ssb[,1],y2=rel.diff.ssb[,2],y3=rel.diff.ssb[,3],y4=rel.diff.ssb[,4],y5=rel.diff.ssb[,5])
 Ft_retroRel<- data.frame(x=years, y1=rel.diff.f[,1],y2=rel.diff.f[,2],y3=rel.diff.f[,3],y4=rel.diff.f[,4],y5=rel.diff.f[,5])
-
-
 
 ```
 
@@ -1262,7 +1465,7 @@ Rtrel <- ggplot(Rt_retroRel) + lims(y=c(-1,1)) +
     scale_fill_manual("",values=c("grey30"))+
     theme_bw(base_size=8) +
      ggtitle('')+
-     theme(plot.title = element_text(hjust = 0.5),legend.position="top")
+     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
 
 BDrel <- ggplot(BD_retroRel) + lims(y=c(-1,1)) +
      geom_line(aes(y=y1, x=x, colour = year_retros[nretros]), size=0.5)+
@@ -1354,11 +1557,119 @@ Rt/BT|BD/Ft
 
 ```
 
+```{r Fig_SelFlotaXI,warning=F, include=T, message=F, echo=FALSE,fig.height=5,fig.width=5,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Selectividad de la flota de la Zona XI"}
+
+age<-rep3$Edades
+par(mfrow=c(1,1),mar=c(4,4,1,1))
+	plot(age,rep3$Sel_f[1,],type="l",lwd=2,las=1,ylim=c(0,1.1),ylab="Selectividad",xlab="Edad (año)")
+	lines(age,rep3$Sel_f[45,],type="o",pch="o")
+	legend (6,0.5,c("sel_bloque (1960-2003)","sel_bloque (2004-2020)"),pch=c("","o"),lwd=c(2,1),bty='n',cex=0.8)
+
+```
+
+
 #### Puntos Biológicos de Referencia
+
+```{r  Fig_PBRsXI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Puntos Biológicos de referencia de Erizo zona XI", fig.height=7, fig.width=6}
+
+Frms<-dat3$FMRS
+BDo<-rep3$BDo
+BDrms<-BDo*0.4
+BDlim<-BDrms/2
+
+
+BD <- ggplot(VarPob) + 
+     geom_line(aes(y=BD3, x=x, colour = "Estimado Zona XI"), size=0.5)+
+     geom_ribbon(aes(ymin=lowerBD3, ymax=upperBD3, x=x, fill = "Intervalo de confianza asintótico"), alpha = 0.2)+
+   geom_hline(yintercept = c(BDrms,BDlim,BDo),colour=c('green3','red','blue'))+
+  annotate("text", x=c(rep(2012,3)), y=c(BDrms,BDlim,BDo),
+              label=c(expression("BD"[RMS]),expression("BD"[LIM]),expression("BD"[0]))) +
+    labs(x = '', y = 'Biomasa desovante',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = years[1], to = years[nyears], by = 5)) +
+    scale_colour_manual("",values=c("black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),legend.position="top")
+
+Ft <- ggplot(VarPob) + 
+     geom_line(aes(y=Ft3, x=x, colour = "Estimado Zona XI"), size=0.5)+
+    geom_ribbon(aes(ymin=lowerFt3, ymax=upperFt3, x=x, fill = ""), alpha = 0.2)+
+  geom_hline(yintercept = c(Frms),colour=c('green3')) +
+     annotate("text", x=c(2011), y=c(Frms),label=c(expression("F"[RMS]))) +
+    labs(x = '', y = 'Mortalidad por pesca',colour='Asesorías')  +
+    scale_x_continuous(breaks = seq(from = years[1], to = years[nyears], by = 5)) +
+    scale_colour_manual("",values=c("black"))+
+    scale_fill_manual("",values=c("grey30"))+
+    theme_bw(base_size=8) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+
+BD/Ft
+
+
+```
+
 
 #### Indicadores del estatus
 
+
+
 #### Estatus del erizo de la Región de Aysén
+
+
+```{r Fig_DiagramaFaseXI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase Erizo zona XI", fig.height=6, fig.width=8}
+Zona<- "Erizo Zona XI"
+Frms<-dat3$FMRS
+BDo<-rep3$BDo
+BDrms<-BDo*0.4
+BDlim<-BDrms/2
+
+bd_bdrms<-VarPob$BD3/BDrms
+f_frms<-VarPob$Ft3/Frms
+
+x.bottom.left <- c(1, 0, 1, 1)
+x.top.left    <- c(1, 0, 1, 1)
+x.bottom.right<- c(0, 1, 4, 4)
+x.top.right   <- c(0, 1, 4, 4)
+
+y.bottom.left <- c(0, 1, 0, 1)
+y.bottom.right<- c(0, 1, 0, 1)
+y.top.left    <- c( 1, 10,  1, 10)
+y.top.right   <- c( 1, 10,  1, 10)
+
+# declare a vector of values
+values <- c("1_Sobreexplotación","2_Sobreexplotación","3_Subexplotación","4_Sobrepesca")
+# create a data frame containing values and ids
+values.df <- data.frame(value = values, id = c(1, 2, 3, 4))
+# create the x and y vectors containing the coordinates of each polygon in the correct order
+x.coords <- unlist(lapply(1:length(x.bottom.left), function(i) {
+    c(x.bottom.left[i], x.bottom.right[i], x.top.right[i], x.top.left[i])
+}))
+y.coords <- unlist(lapply(1:length(y.bottom.left), function(i) {
+    c(y.bottom.left[i], y.bottom.right[i], y.top.right[i], y.top.left[i])
+}))
+# create a coordinates data frame
+coords.df <- data.frame(id = rep(c(1, 2, 3, 4), each = 4), x = x.coords, y = y.coords)
+# merge the data frames
+data.df <- merge(values.df, coords.df, by = c("id"))
+
+
+
+# plot
+ggplot() + 
+  geom_polygon(data = data.df, aes(x = x, y = y, fill = factor(value), group = id)) +
+  geom_line(aes(x=bd_bdrms,y=f_frms))+geom_point(aes(x=bd_bdrms,y=f_frms),shape = 21, colour = "black", fill = "white", size = 3, stroke = 1)+
+scale_fill_grey(start=0.4, end=0.9) +
+geom_hline(yintercept = 1) + geom_vline(xintercept = c(0.5,1),colour=c(2,1)) +
+annotate("text", x=c(0.5,1,4.05), y=c(10.05,10.05,1.05),
+              label=c(expression("BD"[LIM]),expression("BD"[RMS]),expression("F"[RMS]))) +
+
+labs(x = 'BD/BDrms', y = 'F/Frms',fill='Estados de explotación') +
+   theme_bw(base_size=12) +
+  ggtitle(Zona)
+
+```
 
 ### 6.1.4. Análisis integrado de las tres zonas de estudio
 
