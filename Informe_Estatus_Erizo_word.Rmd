@@ -69,7 +69,6 @@ rep2         <- reptoRlist("MAETXS.rep")
 std2         <- read.table("MAETXS.std",header=T,sep="",na="NA",fill=T) 
 
 # Zona XI
-
 data3        <- lisread("MAETXI.dat") 
 names(data3) <- str_trim(names(data3), side="right")
 dat3         <- data3
@@ -294,6 +293,68 @@ nyearc1  <- length(yearc1)
 ```
 
 1.  ***Análisis de residuos***
+
+```{r Fig_residualesIndicesXN,warning=F, include=T, message=F, echo=FALSE,fig.height=7,fig.width=6,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Residuos de la CPUE y desembarques de erizo de la zona X Norte"}
+
+predcpue        <- rep1$CPUE_pred
+obscpue         <- rep1$CPUE_obs       ;obscpue[obscpue<=1] <-NA  
+Res_cpue   <- log(obscpue)-log(predcpue) 
+
+obsD         <- rep1$Desemb_obs
+predD        <- rep1$Desemb_pred
+Res_Desemb   <- log(obsD)-log(predD)
+
+par(mfcol=c(3,2),mar=c(4,4,1,1)+0.5)
+	plot(yrs,Res_cpue,cex.axis=0.8,type="h",main="CPUE zona X norte",ylab="Residuales (escala log)",xlab="")
+	abline(h=0,col="darkgray")
+	plot(log(predcpue),Res_cpue, main="Residuales vs ajustado",ylab="Residuales",xlab="Valor ajustado")
+	abline(h=0,col="darkgray")
+	qqnorm(Res_cpue); qqline(Res_cpue, col = 2)
+	
+	
+plot(yrs,Res_Desemb,cex.axis=0.8,ylim=c(-0.01,0.01),type="h",main="Desembarques zona X norte",ylab="Residuales (escala log)",xlab="")
+abline(h=0,col="darkgray")
+plot(log(predD),Res_Desemb, ylim=c(-0.01,0.01),main="Residuales vs ajustado",ylab="Residuales",xlab="Valor ajustado")
+abline(h=0,col="darkgray")
+qqnorm(Res_Desemb,ylim=c(-0.01,0.01)); qqline(Res_Desemb, col = 2)
+
+```    
+
+```{r Fig_residuosCompXN,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=6,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Residuos de la proporción de tallas de erizo de la zona X Norte"}
+
+ppredF <-rep1$ppred[37:60,]
+anos   <-yrs[37:60]
+obsF   <-rep1$pobs[37:60,]
+preF   <-ppredF
+
+resF <-obsF-preF
+rng <-range(resF,na.rm=T)
+dd  <-dim(resF)
+est <-matrix(NA,nrow=dd[1],ncol=dd[2])
+
+for(j in 1:dd[1]){for(k in 1:dd[2]){val<-resF[j,k]
+if(val>0){est[j,k]<-val/rng[2]}
+else{est[j,k]<-val/rng[1]*-1}}}
+
+par(mfrow=c(1,1),mar=c(5.4,6.7,2,1),cex.axis=1,cex.lab=1.1)
+fig1<-image(age,anos,t(est),col=0,yaxt="n",xlab="",ylab="")
+ee  <-dim(est)
+for(n in 1:ee[1]){for(m in 1:ee[2]){vol<-est[n,m]
+if(is.na(vol)==FALSE){
+	if(vol>0){points(age[m],anos[n],pch=19,cex=2.82*sqrt(vol),col=1)}
+	if(vol<0){points(age[m],anos[n],pch=1,cex=2.82*sqrt(vol*-1),col=1)}
+}}}
+
+mtext("Residuos Flota zona X norte",side=3,cex=1.2)
+mtext("Edades",side=1,line=3.2,cex=1.1);posi<-seq(1,57,by=4)
+axis(2,at=anos,labels=anos,las=2)
+mtext("Años",side=2,line=4.7,cex=1.1)
+mtext("a)",side=3,line=0.25,adj=-0.15,cex=1.5)
+box()
+
+```
+
+
 
 2.  ***Análisis retrospectivo***
 
@@ -635,6 +696,67 @@ nyearc1  <- length(yearc1)
 
 1.  Análisis de residuos de erizo zona X sur
 
+```{r Fig_residualesIndicesXS,warning=F, include=T, message=F, echo=FALSE,fig.height=7,fig.width=6,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Residuos de la CPUE y desembarques de erizo de la zona X Sur"}
+
+predcpue        <- rep2$CPUE_pred
+obscpue         <- rep2$CPUE_obs       ;obscpue[obscpue<=1] <-NA  
+Res_cpue   <- log(obscpue)-log(predcpue) 
+
+obsD         <- rep2$Desemb_obs
+predD        <- rep2$Desemb_pred
+Res_Desemb   <- log(obsD)-log(predD)
+
+par(mfcol=c(3,2),mar=c(4,4,1,1)+0.5)
+	plot(yrs,Res_cpue,cex.axis=0.8,type="h",main="CPUE zona X sur",ylab="Residuales (escala log)",xlab="")
+	abline(h=0,col="darkgray")
+	plot(log(predcpue),Res_cpue, main="Residuales vs ajustado",ylab="Residuales",xlab="Valor ajustado")
+	abline(h=0,col="darkgray")
+	qqnorm(Res_cpue); qqline(Res_cpue, col = 2)
+	
+	
+plot(yrs,Res_Desemb,cex.axis=0.8,ylim=c(-0.01,0.01),type="h",main="Desembarques zona X sur",ylab="Residuales (escala log)",xlab="")
+abline(h=0,col="darkgray")
+plot(log(predD),Res_Desemb, ylim=c(-0.01,0.01),main="Residuales vs ajustado",ylab="Residuales",xlab="Valor ajustado")
+abline(h=0,col="darkgray")
+qqnorm(Res_Desemb,ylim=c(-0.01,0.01)); qqline(Res_Desemb, col = 2)
+
+```    
+
+```{r Fig_residuosCompXS,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=6,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Residuos de la proporción de tallas de erizo de la zona X sur"}
+
+ppredF <-rep2$ppred[28:60,]
+anos   <-yrs[28:60]
+obsF   <-rep2$pobs[28:60,]
+preF   <-ppredF
+
+resF <-obsF-preF
+rng <-range(resF,na.rm=T)
+dd  <-dim(resF)
+est <-matrix(NA,nrow=dd[1],ncol=dd[2])
+
+for(j in 1:dd[1]){for(k in 1:dd[2]){val<-resF[j,k]
+if(val>0){est[j,k]<-val/rng[2]}
+else{est[j,k]<-val/rng[1]*-1}}}
+
+par(mfrow=c(1,1),mar=c(5.4,6.7,2,1),cex.axis=1,cex.lab=1.1)
+fig1<-image(age,anos,t(est),col=0,yaxt="n",xlab="",ylab="")
+ee  <-dim(est)
+for(n in 1:ee[1]){for(m in 1:ee[2]){vol<-est[n,m]
+if(is.na(vol)==FALSE){
+	if(vol>0){points(age[m],anos[n],pch=19,cex=2.82*sqrt(vol),col=1)}
+	if(vol<0){points(age[m],anos[n],pch=1,cex=2.82*sqrt(vol*-1),col=1)}
+}}}
+
+mtext("Residuos Flota zona X sur",side=3,cex=1.2)
+mtext("Edades",side=1,line=3.2,cex=1.1);posi<-seq(1,57,by=4)
+axis(2,at=anos,labels=anos,las=2)
+mtext("Años",side=2,line=4.7,cex=1.1)
+mtext("a)",side=3,line=0.25,adj=-0.15,cex=1.5)
+box()
+
+```
+
+
 2.  Análisis retrospectivo de erizo zona X sur
 
 ```{r VariablesXS_std, echo=F,message=FALSE, warning=FALSE, include=T}
@@ -878,6 +1000,67 @@ nyearc1  <- length(yearc1)
 
 
 1.  Análisis de residuos
+
+```{r Fig_residualesIndicesXI,warning=F, include=T, message=F, echo=FALSE,fig.height=7,fig.width=6,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Residuos de la CPUE y desembarques de erizo de la zona XI"}
+
+predcpue        <- rep3$CPUE_pred
+obscpue         <- rep3$CPUE_obs       ;obscpue[obscpue<=1] <-NA  
+Res_cpue   <- log(obscpue)-log(predcpue) 
+
+obsD         <- rep3$Desemb_obs
+predD        <- rep3$Desemb_pred
+Res_Desemb   <- log(obsD)-log(predD)
+
+par(mfcol=c(3,2),mar=c(4,4,1,1)+0.5)
+	plot(yrs,Res_cpue,cex.axis=0.8,type="h",main="CPUE zona XI",ylab="Residuales (escala log)",xlab="")
+	abline(h=0,col="darkgray")
+	plot(log(predcpue),Res_cpue, main="Residuales vs ajustado",ylab="Residuales",xlab="Valor ajustado")
+	abline(h=0,col="darkgray")
+	qqnorm(Res_cpue); qqline(Res_cpue, col = 2)
+	
+	
+plot(yrs,Res_Desemb,cex.axis=0.8,ylim=c(-0.01,0.01),type="h",main="Desembarques zona XI",ylab="Residuales (escala log)",xlab="")
+abline(h=0,col="darkgray")
+plot(log(predD),Res_Desemb, ylim=c(-0.01,0.01),main="Residuales vs ajustado",ylab="Residuales",xlab="Valor ajustado")
+abline(h=0,col="darkgray")
+qqnorm(Res_Desemb,ylim=c(-0.01,0.01)); qqline(Res_Desemb, col = 2)
+
+```    
+
+```{r Fig_residuosCompXI,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=6,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Residuos de la proporción de tallas de erizo de la zona XI"}
+
+ppredF <-rep3$ppred[29:60,]
+anos   <-yrs[29:60]
+obsF   <-rep3$pobs[29:60,]
+preF   <-ppredF
+
+resF <-obsF-preF
+rng <-range(resF,na.rm=T)
+dd  <-dim(resF)
+est <-matrix(NA,nrow=dd[1],ncol=dd[2])
+
+for(j in 1:dd[1]){for(k in 1:dd[2]){val<-resF[j,k]
+if(val>0){est[j,k]<-val/rng[2]}
+else{est[j,k]<-val/rng[1]*-1}}}
+
+par(mfrow=c(1,1),mar=c(5.4,6.7,2,1),cex.axis=1,cex.lab=1.1)
+fig1<-image(age,anos,t(est),col=0,yaxt="n",xlab="",ylab="")
+ee  <-dim(est)
+for(n in 1:ee[1]){for(m in 1:ee[2]){vol<-est[n,m]
+if(is.na(vol)==FALSE){
+	if(vol>0){points(age[m],anos[n],pch=19,cex=2.82*sqrt(vol),col=1)}
+	if(vol<0){points(age[m],anos[n],pch=1,cex=2.82*sqrt(vol*-1),col=1)}
+}}}
+
+mtext("Residuos Flota zona XI",side=3,cex=1.2)
+mtext("Edades",side=1,line=3.2,cex=1.1);posi<-seq(1,57,by=4)
+axis(2,at=anos,labels=anos,las=2)
+mtext("Años",side=2,line=4.7,cex=1.1)
+mtext("a)",side=3,line=0.25,adj=-0.15,cex=1.5)
+box()
+
+```
+
 
 2.  Análisis retrospectivo
 
