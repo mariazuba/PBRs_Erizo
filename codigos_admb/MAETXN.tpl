@@ -71,7 +71,7 @@ DATA_SECTION
  init_int    nqbloques
  init_vector yqbloques(1,nqbloques)
 
-// Fases de Estimaci?n de Par?metros
+// Fases de Estimación de Parámetros
 
  init_int    opt_qf
  init_int    opt_bpow
@@ -80,10 +80,12 @@ DATA_SECTION
  init_int    opt_Lo
  init_int    opt_cva
  init_int    opt_F
+ init_number log_priorRo 
+ init_int    opt_Ro
  init_int    opt_devRt
  init_int    opt_devNo
 
-// Proyeccion de poblaci?n 
+// Proyeccion de población 
  init_int    npbr
  init_vector pbr(1,npbr)
  init_int ntime_sim
@@ -105,15 +107,13 @@ INITIALIZATION_SECTION
 PARAMETER_SECTION
 //########################################################
 
-// selectividad param?trica a la talla com?n
-// init_bounded_vector log_L50f(1,nbloques1,-5,8,opt1_fase)  
- 
+// selectividad parametrica 
  init_vector log_L50(1,nbloques1,opt1_fase)  
  init_vector log_sigma1(1,nbloques1,opt1_fase)
  init_vector log_sigma2(1,nbloques1,opt_tiposel)
 
 // parametros reclutamientos y mortalidades)
- init_number log_Ro(1)
+ init_number log_Ro(opt_Ro)
  init_bounded_dev_vector dev_log_Ro(1,ntime,-10,10,opt_devRt)
  init_bounded_vector dev_log_No(1,nedades,-10,10,opt_devNo)
  init_bounded_vector log_F(1,ntime,-20,0.7,opt_F) // log  mortalidad por pesca por flota
@@ -122,117 +122,112 @@ PARAMETER_SECTION
  init_vector log_qflo(1,nqbloques,opt_qf)
  init_number log_b(opt_bpow)
 
-// Crecim
+// Crecimiento
  init_number log_Lo(opt_Lo)
  init_number log_cv_edad(opt_cva)
 
 //---------------------------------------------------------------------------------
 //Defino las variables de estado 
 //---------------------------------------------------------------------------------
- vector BMflo(1,ntime)
- vector Brec(1,ntime)
- vector pred_CPUE(1,ntime);
- vector pred_Desemb(1,ntime);
- vector likeval(1,5);
- vector Neq(1,nedades);
-
- vector Rpred(1,ntime);
- sdreport_vector Rest(1,ntime);
+ vector yrs(1,ntime)
  vector Unos_edad(1,nedades);
  vector Unos_anos(1,ntime);
  vector Unos_tallas(1,ntallas);
- vector mu_edad(1,nedades)
- vector sigma_edad(1,nedades)
- vector BDo(1,ntime);
- vector No(1,nedades)
+ vector edades(1,nedades)
  vector prior(1,7)
-
- vector yrs(1,ntime)
- vector Desemb(1,ntime);
- vector CPUE(1,ntime);
  matrix cv_index(1,3,1,ntime)
  vector nm(1,ntime)
+
+ // Estimados y predichos
+ vector Desemb(1,ntime);
+ vector pred_Desemb(1,ntime);
+ vector CPUE(1,ntime);
+ vector pred_CPUE(1,ntime);
+ matrix pobs(1,ntime,1,ntallas)
+ matrix ppred(1,ntime,1,ntallas)
  vector Lmed_obs(1,ntime)
  vector Lmed_pred(1,ntime)
- vector edades(1,nedades)
-
+   
+//Matriz edad-talla
+ number Linf
+ number k
+ number Linfh
+ vector mu_edad(1,nedades)
+ vector sigma_edad(1,nedades)
+ matrix Prob_talla(1,nedades,1,ntallas)
+ matrix P1(1,nedades,1,ntallas)
+ matrix P2(1,nedades,1,ntallas)
+ matrix P3(1,nedades,1,ntallas)
+   
+// Selectividades
  matrix S1(1,nbloques1,1,nedades)
  matrix S2(1,nbloques1,1,nedades)
-
  matrix Sel(1,ntime,1,nedades)
+   
+// Mortalidades y sobrevivencia
+ number M
  matrix F(1,ntime,1,nedades)
  matrix Z(1,ntime,1,nedades)
  matrix S(1,ntime,1,nedades)
-
-
+ 
+// Dinámica
+ number h
+ number So
+ number alfa
+ number beta 
+ vector BDo(1,ntime);
+ vector No(1,nedades)
+ vector Neq(1,nedades);
  matrix N(1,ntime,1,nedades)
-
  matrix NM(1,ntime,1,nedades)
  matrix NMD(1,ntime,1,ntallas)
  matrix NDv(1,ntime,1,ntallas)
  matrix Nrec(1,ntime,1,ntallas)
  matrix NVflo(1,ntime,1,ntallas)
-
+ matrix Nv(1,ntime,1,nedades)
+ matrix NMDv(1,ntime,1,nedades)
+   
+// Captura a la talla y edad
  matrix pred_Ctot(1,ntime,1,ntallas)
  matrix pred_Ctot_a(1,ntime,1,nedades)
 
- matrix pobs(1,ntime,1,ntallas)
- matrix ppred(1,ntime,1,ntallas)
-
- matrix Prob_talla(1,nedades,1,ntallas)
-
- matrix P1(1,nedades,1,ntallas)
- matrix P2(1,nedades,1,ntallas)
- matrix P3(1,nedades,1,ntallas)
- matrix Nv(1,ntime,1,nedades)
- matrix NMDv(1,ntime,1,nedades)
-
+// Variables 
+ vector BMflo(1,ntime)
+ vector Brec(1,ntime)
+ vector Rpred(1,ntime);
+ sdreport_vector Rest(1,ntime);
+ sdreport_vector BD(1,ntime) // 
+ sdreport_vector BT(1,ntime) // 
+ sdreport_vector RPR(1,ntime) // 
+ sdreport_number SSBo
+   
+// Verosimilitud
+ number nm1;
+ number cuenta1;
  number suma1
  number suma2
  number suma3
  number suma4
-
  number penalty
+ vector likeval(1,5);
+ objective_function_value f
 
- number So
- number alfa
- number beta
-
- number Linf
- number k
- number Linfh
- number M
- number h
-
+ // Proyección
  number BDp
  number Npplus
  number Bp_anch 
-
- number nm1;
- number cuenta1;
-
+ 
  vector Np(1,nedades)
  vector Zpbr(1,nedades)
  vector Fpbr(1,nedades)
  vector Sp(1,nedades)
-
  matrix Bp(1,npbr,1,ntime_sim)
  vector CTPp(1,nedades)
  matrix Yp(1,npbr,1,ntime_sim)
-
- 
- objective_function_value f
-  
- sdreport_vector BD(1,ntime) // 
- sdreport_vector BT(1,ntime) // 
- sdreport_vector RPR(1,ntime) // 
  vector RPRlp(1,ntime) // 
- 
- sdreport_number SSBo
  sdreport_vector YTPp(1,npbr)//*********afregar
 
-// sdreport_vector RPRp(1,npbr) // RPR proyectado en la simulacion
-
+ 
 //########################################################
 PRELIMINARY_CALCS_SECTION
 //########################################################
@@ -366,6 +361,11 @@ FUNCTION Eval_abundancia
 //----------------------------------------------------------------------
  int i, j;
 
+ if(opt_Ro<0)
+ {
+  log_Ro=log_priorRo;
+ }
+
 
  h=hprior;
 
@@ -433,9 +433,6 @@ FUNCTION Eval_deinteres
 //----------------------------------------------------------------------
 FUNCTION Eval_biomasas
 //----------------------------------------------------------------------
- 
-// NMD=elem_prod(N,mfexp(-dt(1)*Z))*Prob_talla;
-// NMD=elem_prod(NMD,outer_prod(Unos_anos,msex));
  
  NVflo=elem_prod(elem_prod(N,mfexp(-dt(2)*(Z))),Sel)*Prob_talla;
 
