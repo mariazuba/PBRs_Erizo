@@ -30,24 +30,30 @@ fig            <-c("pdf","bmp")
 carpetabase <-getwd()
 dir.0       <-carpetabase
 dir.1       <-paste(dir.0,"/codigos_admb",sep="")
-dir.3       <-paste(dir.0,"/Verosimilitud",sep="")
-dir.fun        <-paste(dir.0,"/funciones/",sep="")
+dir.fun     <-paste(dir.0,"/funciones/",sep="")
 ```
 
-```{r PRIMER PASO CORRE MODELOS BASE, eval=FALSE, echo=FALSE, warning=FALSE}
 
+```{r PRIMER PASO CORRE MODELOS BASE XN, eval=FALSE, echo=FALSE, warning=FALSE}
 setwd(dir.1)
-
 #para mac
-#system("~/admb-12.2/admb MAETXN")
-#system("./MAETXN")
+system("~/admb-12.2/admb MAETXN")
+system("./MAETXN")
 
-#system("~/admb-12.2/admb MAETXS")
-#system("./MAETXS")
+```
 
+```{r PRIMER PASO CORRE MODELOS BASE XS, eval=FALSE, echo=FALSE, warning=FALSE}
+setwd(dir.1)
+#para mac
+system("~/admb-12.2/admb MAETXS")
+system("./MAETXS")
+```
+
+```{r PRIMER PASO CORRE MODELOS BASE XI, eval=FALSE, echo=FALSE, warning=FALSE}
+setwd(dir.1)
+#para mac
 system("~/admb-12.2/admb MAETXI")
 system("./MAETXI")
-
 ```
 
 ```{r lee_datos, echo=F, warning=FALSE}
@@ -79,21 +85,48 @@ std3         <- read.table("MAETXI.std",header=T,sep="",na="NA",fill=T)
 
 ```{r RetrospectivoXN, echo=F, warning=FALSE,eval=F}
 source(paste(dir.fun,"Fn_Retrospectivo.R",sep=""))
-Retrospectivo("MAETXN",dir.0,dir.1,"/RetrospectivoXN") 
-
+Retrospectivo("MAETXN",dir.0,dir.1,"/RetrospectivoXN",logRo,priorRo) 
 ```
+
 
 ```{r RetrospectivoXS, echo=F, warning=FALSE,eval=F}
 source(paste(dir.fun,"Fn_Retrospectivo.R",sep=""))
 Retrospectivo("MAETXS",dir.0,dir.1,"/RetrospectivoXS") 
-
 ```
+
 
 ```{r RetrospectivoXI, echo=F, warning=FALSE,eval=F}
 source(paste(dir.fun,"Fn_Retrospectivo.R",sep=""))
 Retrospectivo("MAETXI",dir.0,dir.1,"/RetrospectivoXI") 
-
 ```
+
+
+
+```{r VerosimilitudXN, echo=F, warning=F,eval=F}
+source(paste(dir.fun,"Fn_Verosimilitud.R",sep=""))
+logRo    <- 3.17467674069
+priorRo <- seq(1.9,4.1,0.1)
+Verosimilitud("MAETXN",dir.0,dir.1,"/VerosimilitudXN",logRo,priorRo) 
+```
+
+```{r VerosimilitudXS, echo=F, warning=F,eval=F}
+source(paste(dir.fun,"Fn_Verosimilitud.R",sep=""))
+logRo    <- 4.57233200892
+priorRo <- seq(3,6.5,0.1)
+Verosimilitud("MAETXS",dir.0,dir.1,"/VerosimilitudXS",logRo,priorRo) 
+```
+
+
+```{r VerosimilitudXI, echo=F, warning=F,eval=F}
+source(paste(dir.fun,"Fn_Verosimilitud.R",sep=""))
+logRo    <- 4.80889832023
+priorRo <- seq(3,6.5,0.1)
+Verosimilitud("MAETXI",dir.0,dir.1,"/VerosimilitudXI",logRo,priorRo) 
+```
+
+
+
+
 
 # 1. RESUMEN EJECUTIVO
 
@@ -441,7 +474,7 @@ Ft_retroRel<- data.frame(x=years, y1=rel.diff.f[,1],y2=rel.diff.f[,2],y3=rel.dif
 
 ```
 
-```{r Fig_RetrospectivoXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Patrón retrospectivo estándar (panel izquierdo) y  relativo (panel derecho) de los reclutamientos", fig.height=7, fig.width=6}
+```{r Fig_RetrospectivoXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Patrón retrospectivo estándar (panel izquierdo) y  relativo (panel derecho) de los reclutamientos", fig.height=10, fig.width=10}
 
 #Retrospectivo tradicional
 Rt <- ggplot(Rt_retro) + 
@@ -539,6 +572,45 @@ Rt/BD/Ft |Rtrel/BDrel/Ftrel
 ```
 
 3.  ***Perfil de verosimilitud***
+
+
+```{r Fig_VerosimilitudXN,echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Perfil de verosimilitud erizo zona X norte", fig.height=10, fig.width=10}
+
+source(paste(dir.fun,"functions.R",sep=""))
+dir       <-paste(dir.0,"/VerosimilitudXN",sep="")
+setwd(dir)
+
+casos <-23
+logRo    <- rep(0,casos)
+likeval  <- matrix(ncol=5,nrow=casos)
+slikeval <- matrix(ncol=6,nrow=casos)
+
+
+for(i in 1:casos){
+report      <- reptoRlist(paste(dir,"//MAETXNs",i,".rep",sep=""))
+logRo[i]    <- report$Ro
+likeval[i,] <- report$likeval}
+
+like    <- data.frame(round(likeval,3),Total=apply(likeval,1,sum))
+minLik  <- apply(like,2,min)                         # busca el mínimo
+for(i in 1:6){slikeval[,i]<-like[,i]-minLik[i]}    # Estandarización
+
+names<-c("Ro","cpue","desembarque","propF","devRo","log_F","Total")
+# Tabla verosimilitud
+TLk1 <- data.frame(exp(logRo),like);colnames(TLk1)<-names
+# Tabla estandarizada
+TLk2 <- data.frame(exp(logRo),slikeval);colnames(TLk2)<-names
+
+par(mar=c(4,4,1,1))
+plot(TLk2$Ro,TLk2$Total,type="l",lwd=3,ylim=c(0,3),xlim=c(0.5,45),xaxs="i",ylab="L-min(L)",xlab="Ro",las=1,main='Erizo zona X norte',cex.axis=0.7,cex.main=0.8,cex.lab=0.8)
+
+lines(c(0,TLk2$Ro),rep(2,casos+1),lty=2,lwd=2)
+for(i in 2:6){lines(TLk2$Ro,TLk2[,i],col=i,lty=2,lwd=2)}
+legend(30,3,names[c(7,2:6)],col=1:7,lty=c(1,rep(2,6)),lwd=2,bty="n",cex=0.7)
+
+
+```
+
 
 
 #### Variables de estado
@@ -653,20 +725,28 @@ Ft <- ggplot(VarPob) +
 
 #### Estatus del erizo de la zona norte de la Región de Los Lagos
 
-```{r Fig_DiagramaFaseXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase Erizo zona X Norte", fig.height=6, fig.width=8}
+```{r Fig_DiagramaFaseXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase Erizo zona X Norte", fig.height=8, fig.width=10}
 Zona<- "Erizo Zona X Norte"
 Frms<-dat1$FMRS
 BDo<-rep1$BDo
 BDrms<-BDo*0.4
 BDlim<-BDrms/2
 
-bd_bdrms<-VarPob$BD1/BDrms
-f_frms<-VarPob$Ft1/Frms
+
+bd_bdrms<-(VarPob$BD1/BDrms) 
+f_frms<-(VarPob$Ft1/Frms)
+
+Qmult<- -qnorm((1-(80/100))/2.0)
+
+sb95min <-BD1[nyears]-Qmult*BD1std[nyears]/BDrms
+sb95max <-BD1[nyears]+Qmult*BD1std[nyears]/BDrms
+F95min  <- exp(Ft1[nyears])*exp(-Qmult*Ft1std[nyears])/Frms
+F95max  <-exp(Ft1[nyears])*exp(Qmult*Ft1std[nyears])/Frms
 
 x.bottom.left <- c(1, 0, 1, 1)
 x.top.left    <- c(1, 0, 1, 1)
-x.bottom.right<- c(0, 1, 4, 4)
-x.top.right   <- c(0, 1, 4, 4)
+x.bottom.right<- c(0, 1, 3, 3)
+x.top.right   <- c(0, 1, 3, 3)
 
 y.bottom.left <- c(0, 1, 0, 1)
 y.bottom.right<- c(0, 1, 0, 1)
@@ -691,18 +771,22 @@ data.df <- merge(values.df, coords.df, by = c("id"))
 
 # plot
 ggplot() + 
-  geom_polygon(data = data.df, aes(x = x, y = y, fill = factor(value), group = id)) +
-  geom_line(aes(x=bd_bdrms,y=f_frms))+geom_point(aes(x=bd_bdrms,y=f_frms),shape = 21, colour = "black", fill = "white", size = 3, stroke = 1)+
+  geom_polygon(data = data.df, aes(x = x, y = y, fill = factor(value), group = id,alpha = 0.9)) +
 scale_fill_grey(start=0.4, end=0.9) +
 geom_hline(yintercept = 1) + geom_vline(xintercept = c(0.5,1),colour=c(2,1)) +
-annotate("text", x=c(0.5,1,4.05), y=c(10.05,10.05,1.05),
+annotate("text", x=c(0.5,1,3.07), y=c(10.07,10.07,1.07),
               label=c(expression("BD"[LIM]),expression("BD"[RMS]),expression("F"[RMS]))) +
-
-labs(x = 'BD/BDrms', y = 'F/Frms',fill='Estados de explotación') +
-   theme_bw(base_size=12) +
+  geom_path(aes(x=bd_bdrms,y=f_frms)) +
+  geom_point(aes(x=bd_bdrms,y=f_frms),shape = 21, colour = "black", fill = "white", size = 2.5, stroke = 1)+
+  geom_point(aes(x=bd_bdrms[c(nyears,1)],y=f_frms[c(nyears,1)]),shape =c(21,21), colour = c("blue","green"), fill =c("blue4","green4"), size =c(4,4), stroke =c(1,1)) +
+   geom_text(aes(x=bd_bdrms,y=f_frms,label=years),angle = 45,nudge_y = 0.15,size = 3) +
+labs(x = expression("BD/BD"[RMS]), y = expression("F/F"[RMS]),fill='Estados de explotación') +
+   theme_bw(base_size=15) +
   ggtitle(Zona)
 
 ```
+
+
 
 ### 6.1.2. Erizo zona sur Región de Los Lagos
 
@@ -1021,6 +1105,42 @@ Rt/BD/Ft |Rtrel/BDrel/Ftrel
 
 3.  Perfil de verosimilitud de erizo zona X sur
 
+```{r Fig_VerosimilitudXS,echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Perfil de verosimilitud erizo zona X sur", fig.height=10, fig.width=10}
+
+source(paste(dir.fun,"functions.R",sep=""))
+dir       <-paste(dir.0,"/VerosimilitudXS",sep="")
+setwd(dir)
+
+casos <-36
+logRo    <- rep(0,casos)
+likeval  <- matrix(ncol=5,nrow=casos)
+slikeval <- matrix(ncol=6,nrow=casos)
+
+for(i in 1:casos){
+report      <- reptoRlist(paste(dir,"//MAETXSs",i,".rep",sep=""))
+logRo[i]    <- report$Ro
+likeval[i,] <- report$likeval}
+
+like    <- data.frame(round(likeval,3),Total=apply(likeval,1,sum))
+minLik  <- apply(like,2,min)                         # busca el mínimo
+for(i in 1:6){slikeval[,i]<-like[,i]-minLik[i]}    # Estandarización
+
+names<-c("Ro","cpue","desembarque","propF","devRo","log_F","Total")
+# Tabla verosimilitud
+TLk1 <- data.frame(exp(logRo),like);colnames(TLk1)<-names
+# Tabla estandarizada
+TLk2 <- data.frame(exp(logRo),slikeval);colnames(TLk2)<-names
+
+par(mar=c(4,4,1,1))
+plot(TLk2$Ro,TLk2$Total,type="l",lwd=3,ylim=c(0,3),xlim=c(0.5,200),xaxs="i",ylab="L-min(L)",xlab="Ro",las=1,main='Erizo zona X sur',cex.axis=0.7,cex.main=0.8,cex.lab=0.8)
+
+lines(c(0,TLk2$Ro),rep(2,casos+1),lty=2,lwd=2)
+for(i in 2:6){lines(TLk2$Ro,TLk2[,i],col=i,lty=2,lwd=2)}
+legend(30,3,names[c(7,2:6)],col=1:7,lty=c(1,rep(2,6)),lwd=2,bty="n",cex=0.7)
+
+
+```
+
 #### Variables de estado de erizo Zona X sur.
 
 ```{r Fig_VarpoblXS, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Variables poblacionales de Erizo zona X Sur", fig.path=dir.Fig,fig.height=6, fig.width=8}
@@ -1132,7 +1252,7 @@ Ft <- ggplot(VarPob) +
 
 #### Estatus del erizo de la zona sur de la Región de Los Lagos
 
-```{r Fig_DiagramaFaseXS, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase Erizo zona X Sur", fig.height=6, fig.width=8}
+```{r Fig_DiagramaFaseXS, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase Erizo zona X Sur", fig.height=8, fig.width=10}
 Zona<- "Erizo Zona X Sur"
 Frms<-dat2$FMRS
 BDo<-rep2$BDo
@@ -1144,8 +1264,8 @@ f_frms<-VarPob$Ft2/Frms
 
 x.bottom.left <- c(1, 0, 1, 1)
 x.top.left    <- c(1, 0, 1, 1)
-x.bottom.right<- c(0, 1, 4, 4)
-x.top.right   <- c(0, 1, 4, 4)
+x.bottom.right<- c(0, 1, 3, 3)
+x.top.right   <- c(0, 1, 3, 3)
 
 y.bottom.left <- c(0, 1, 0, 1)
 y.bottom.right<- c(0, 1, 0, 1)
@@ -1172,15 +1292,17 @@ data.df <- merge(values.df, coords.df, by = c("id"))
 
 # plot
 ggplot() + 
-  geom_polygon(data = data.df, aes(x = x, y = y, fill = factor(value), group = id)) +
-  geom_line(aes(x=bd_bdrms,y=f_frms))+geom_point(aes(x=bd_bdrms,y=f_frms),shape = 21, colour = "black", fill = "white", size = 3, stroke = 1)+
+  geom_polygon(data = data.df, aes(x = x, y = y, fill = factor(value), group = id,alpha = 0.9)) +
 scale_fill_grey(start=0.4, end=0.9) +
 geom_hline(yintercept = 1) + geom_vline(xintercept = c(0.5,1),colour=c(2,1)) +
-annotate("text", x=c(0.5,1,4.05), y=c(10.05,10.05,1.05),
+annotate("text", x=c(0.5,1,3.07), y=c(10.07,10.07,1.07),
               label=c(expression("BD"[LIM]),expression("BD"[RMS]),expression("F"[RMS]))) +
-
-labs(x = 'BD/BDrms', y = 'F/Frms',fill='Estados de explotación') +
-   theme_bw(base_size=12) +
+  geom_path(aes(x=bd_bdrms,y=f_frms)) +
+  geom_point(aes(x=bd_bdrms,y=f_frms),shape = 21, colour = "black", fill = "white", size = 2.5, stroke = 1)+
+  geom_point(aes(x=bd_bdrms[c(nyears,1)],y=f_frms[c(nyears,1)]),shape =c(21,21), colour = c("blue","green"), fill =c("blue4","green4"), size =c(4,4), stroke =c(1,1)) +
+   geom_text(aes(x=bd_bdrms,y=f_frms,label=years),angle = 45,nudge_y = 0.15,size = 3) +
+labs(x = expression("BD/BD"[RMS]), y = expression("F/F"[RMS]),fill='Estados de explotación') +
+   theme_bw(base_size=15) +
   ggtitle(Zona)
 
 ```
@@ -1503,6 +1625,42 @@ Rt/BD/Ft |Rtrel/BDrel/Ftrel
 
 3.  Perfil de verosimilitud
 
+```{r Fig_VerosimilitudXI,echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Perfil de verosimilitud erizo zona XI", fig.height=10, fig.width=10}
+
+source(paste(dir.fun,"functions.R",sep=""))
+
+dir       <-paste(dir.0,"/VerosimilitudXI",sep="")
+setwd(dir)
+
+casos <-34
+logRo    <- rep(0,casos)
+likeval  <- matrix(ncol=5,nrow=casos)
+slikeval <- matrix(ncol=6,nrow=casos)
+
+for(i in 1:casos){
+report      <- reptoRlist(paste(dir,"//MAETXIs",i,".rep",sep=""))
+logRo[i]    <- report$Ro
+likeval[i,] <- report$likeval}
+
+like    <- data.frame(round(likeval,3),Total=apply(likeval,1,sum))
+minLik  <- apply(like,2,min)                         # busca el mínimo
+for(i in 1:6){slikeval[,i]<-like[,i]-minLik[i]}    # Estandarización
+
+names<-c("Ro","cpue","desembarque","propF","devRo","log_F","Total")
+# Tabla verosimilitud
+TLk1 <- data.frame(exp(logRo),like);colnames(TLk1)<-names
+# Tabla estandarizada
+TLk2 <- data.frame(exp(logRo),slikeval);colnames(TLk2)<-names
+
+par(mar=c(4,4,1,1))
+plot(TLk2$Ro,TLk2$Total,type="l",lwd=3,ylim=c(0,3),xlim=c(0.5,200),xaxs="i",ylab="L-min(L)",xlab="Ro",las=1,main='Erizo zona XI',cex.axis=0.7,cex.main=0.8,cex.lab=0.8)
+
+lines(c(0,TLk2$Ro),rep(2,casos+1),lty=2,lwd=2)
+for(i in 2:6){lines(TLk2$Ro,TLk2[,i],col=i,lty=2,lwd=2)}
+legend(30,3,names[c(7,2:6)],col=1:7,lty=c(1,rep(2,6)),lwd=2,bty="n",cex=0.7)
+
+
+```
 #### Variables de estado
 
 ```{r Fig_VarpoblXI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Variables poblacionales de Erizo zona XI", fig.path=dir.Fig,fig.height=6, fig.width=8}
@@ -1618,7 +1776,7 @@ BD/Ft
 #### Estatus del erizo de la Región de Aysén
 
 
-```{r Fig_DiagramaFaseXI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase Erizo zona XI", fig.height=6, fig.width=8}
+```{r Fig_DiagramaFaseXI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase Erizo zona XI", fig.height=8, fig.width=10}
 Zona<- "Erizo Zona XI"
 Frms<-dat3$FMRS
 BDo<-rep3$BDo
@@ -1630,8 +1788,8 @@ f_frms<-VarPob$Ft3/Frms
 
 x.bottom.left <- c(1, 0, 1, 1)
 x.top.left    <- c(1, 0, 1, 1)
-x.bottom.right<- c(0, 1, 4, 4)
-x.top.right   <- c(0, 1, 4, 4)
+x.bottom.right<- c(0, 1, 3, 3)
+x.top.right   <- c(0, 1, 3, 3)
 
 y.bottom.left <- c(0, 1, 0, 1)
 y.bottom.right<- c(0, 1, 0, 1)
@@ -1658,15 +1816,17 @@ data.df <- merge(values.df, coords.df, by = c("id"))
 
 # plot
 ggplot() + 
-  geom_polygon(data = data.df, aes(x = x, y = y, fill = factor(value), group = id)) +
-  geom_line(aes(x=bd_bdrms,y=f_frms))+geom_point(aes(x=bd_bdrms,y=f_frms),shape = 21, colour = "black", fill = "white", size = 3, stroke = 1)+
+  geom_polygon(data = data.df, aes(x = x, y = y, fill = factor(value), group = id,alpha = 0.9)) +
 scale_fill_grey(start=0.4, end=0.9) +
 geom_hline(yintercept = 1) + geom_vline(xintercept = c(0.5,1),colour=c(2,1)) +
-annotate("text", x=c(0.5,1,4.05), y=c(10.05,10.05,1.05),
+annotate("text", x=c(0.5,1,3.07), y=c(10.07,10.07,1.07),
               label=c(expression("BD"[LIM]),expression("BD"[RMS]),expression("F"[RMS]))) +
-
-labs(x = 'BD/BDrms', y = 'F/Frms',fill='Estados de explotación') +
-   theme_bw(base_size=12) +
+  geom_path(aes(x=bd_bdrms,y=f_frms)) +
+  geom_point(aes(x=bd_bdrms,y=f_frms),shape = 21, colour = "black", fill = "white", size = 2.5, stroke = 1)+
+  geom_point(aes(x=bd_bdrms[c(nyears,1)],y=f_frms[c(nyears,1)]),shape =c(21,21), colour = c("blue","green"), fill =c("blue4","green4"), size =c(4,4), stroke =c(1,1)) +
+   geom_text(aes(x=bd_bdrms,y=f_frms,label=years),angle = 45,nudge_y = 0.15,size = 3) +
+labs(x = expression("BD/BD"[RMS]), y = expression("F/F"[RMS]),fill='Estados de explotación') +
+   theme_bw(base_size=15) +
   ggtitle(Zona)
 
 ```
