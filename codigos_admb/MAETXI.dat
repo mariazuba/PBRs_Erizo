@@ -194,6 +194,12 @@
 # Fase_F
 2
 
+# log_priorRo 
+3.175
+
+# opt_Ro
+1
+
 # Fase_desvRt
 2
 

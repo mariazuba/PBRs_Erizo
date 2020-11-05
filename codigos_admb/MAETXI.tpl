@@ -82,6 +82,8 @@ DATA_SECTION
  init_int    opt_Lo
  init_int    opt_cva
  init_int    opt_F
+ init_number log_priorRo 
+ init_int    opt_Ro
  init_int    opt_devRt
  init_int    opt_devNo
 
@@ -120,7 +122,7 @@ PARAMETER_SECTION
  init_vector log_sigma2(1,nbloques1,opt_tiposel)
 
 // parametros reclutamientos y mortalidades)
- init_number log_Ro(1)
+ init_number log_Ro(opt_Ro)
  init_bounded_dev_vector dev_log_Ro(1,ntime,-10,10,opt_devRt)
  init_bounded_vector dev_log_No(1,nedades,-10,10,opt_devNo)
  init_bounded_vector log_F(1,ntime,-20,0.7,opt_F) // log  mortalidad por pesca por flota
@@ -390,6 +392,10 @@ FUNCTION Eval_abundancia
   
  int i, j;
 
+ if(opt_Ro<0)
+ {
+  log_Ro=log_priorRo;
+ }
 
  h=hprior;
 
@@ -649,6 +655,8 @@ REPORT_SECTION
  report << mu_edad<< endl;
  report << "likeval"<<endl;
  report << likeval << endl;
+ report << "Ro"<<endl;
+ report << log_Ro << endl;
 
 //-----------------------------------------------------------------
 //-----------------------------------------------------------------

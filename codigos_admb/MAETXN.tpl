@@ -366,7 +366,6 @@ FUNCTION Eval_abundancia
   log_Ro=log_priorRo;
  }
 
-
  h=hprior;
 
  // Biomasa desovante virgen de largo plazo
@@ -609,7 +608,8 @@ REPORT_SECTION
  report << mu_edad<< endl;
  report << "likeval"<<endl;
  report << likeval << endl;
- 
+ report << "Ro"<<endl;
+ report << log_Ro << endl;
 
 //####################################################################
 FINAL_SECTION
