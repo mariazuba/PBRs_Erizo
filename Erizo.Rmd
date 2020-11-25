@@ -296,7 +296,7 @@ cpueXS <- ggplot(baseXS %>% filter(Asesoria!='observado', variable=='CPUE'),
        geom_line(aes(colour=Asesoria), size=0.8) +
        scale_colour_manual(values=c('black')) +
        geom_point(data = baseXS %>% filter(Asesoria=='observado', variable=='CPUE'),
-       aes(yrs,value), shape = 19, colour = 'gray30') +
+       aes(yrs,value), shape = 19, colour = 3) +
        geom_errorbar(data = baseXS %>% filter(Asesoria=='observado', variable=='CPUE'),
        aes(ymin = value*exp(-1.96*cvcpue), ymax = value*exp(1.96*cvcpue)), color = 'gray30') +
        scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
