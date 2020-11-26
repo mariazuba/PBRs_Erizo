@@ -8,6 +8,8 @@ output:
 
 ## Resumen
 
++++++++
+
 El erizo de mar rojo (*Loxechinus albus*) es uno de los recursos de invertebrados bentónicos importantes más económicos, sociales y ecológicos en Chile y la pesquería de invertebrados más grande del mundo que representa entre el 60% y el 70% de los desembarques mundiales de erizos de mar. La pesquería comienza a mediados de los 60 y a mediados de los 80 experimenta una gran expansión, pero ha experimentado una disminución sustancial en los desembarques desde 2005. El área donde se distribuye la pesca es extensa (\~ 2500 km de costa), que no realizó encuestas independientes. Utilizando parámetros de la historia de vida de la pesquería y el erizo derivados de estudios científicos, junto con los datos disponibles recopilados del programa de monitoreo pesquero, realizamos una evaluación formal de las poblaciones de erizos de mar para conocer los niveles de estado y de explotación.
 
 Se evalúa la incertidumbre en la estimación de PBRs y determinación del estatus del erizo para cada unidad de pesquería?. Se estructuran tres áreas de evaluación en el área de estudio basadas en cuestiones operativas de pesca y suficiencia de datos, y se lleva a cabo una estandarización de los rendimientos de pesca. Este estudio muestra que las 3 poblaciones analizadas tienen diferentes niveles de biomasa reproductora disponibles, pero todas muestran signos claros de agotamiento con respecto a la biomasa virgen estimada. Estos resultados son relevantes al momento de tomar decisiones por parte de la administración, para definir los planes de recuperación.
@@ -282,7 +284,7 @@ cpueXN <- ggplot(baseXN %>% filter(Asesoria!='observado', variable=='CPUE'),
        geom_line(aes(colour=Asesoria), size=0.8) +
        scale_colour_manual(values=c('black')) +
        geom_point(data = baseXN %>% filter(Asesoria=='observado', variable=='CPUE'),
-       aes(yrs,value), shape = 19, colour = 'gray30') +
+       aes(yrs,value), shape = 19, colour = 2) +
        geom_errorbar(data = baseXN %>% filter(Asesoria=='observado', variable=='CPUE'),
        aes(ymin = value*exp(-1.96*cvcpue), ymax = value*exp(1.96*cvcpue)), color = 'gray30') +
        scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
@@ -296,7 +298,7 @@ cpueXS <- ggplot(baseXS %>% filter(Asesoria!='observado', variable=='CPUE'),
        geom_line(aes(colour=Asesoria), size=0.8) +
        scale_colour_manual(values=c('black')) +
        geom_point(data = baseXS %>% filter(Asesoria=='observado', variable=='CPUE'),
-       aes(yrs,value), shape = 19, colour = 'gray30') +
+       aes(yrs,value), shape = 19, colour = 2) +
        geom_errorbar(data = baseXS %>% filter(Asesoria=='observado', variable=='CPUE'),
        aes(ymin = value*exp(-1.96*cvcpue), ymax = value*exp(1.96*cvcpue)), color = 'gray30') +
        scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
