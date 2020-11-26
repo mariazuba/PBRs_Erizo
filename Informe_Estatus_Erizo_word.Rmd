@@ -85,7 +85,7 @@ std3         <- read.table("MAETXI.std",header=T,sep="",na="NA",fill=T)
 
 ```{r RetrospectivoXN, echo=F, warning=FALSE,eval=F}
 source(paste(dir.fun,"Fn_Retrospectivo.R",sep=""))
-Retrospectivo("MAETXN",dir.0,dir.1,"/RetrospectivoXN",logRo,priorRo) 
+Retrospectivo("MAETXN",dir.0,dir.1,"/RetrospectivoXN") 
 ```
 
 
