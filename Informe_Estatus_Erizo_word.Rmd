@@ -85,7 +85,7 @@ std3         <- read.table("MAETXI.std",header=T,sep="",na="NA",fill=T)
 
 ```{r RetrospectivoXN, echo=F, warning=FALSE,eval=F}
 source(paste(dir.fun,"Fn_Retrospectivo.R",sep=""))
-Retrospectivo("MAETXN",dir.0,dir.1,"/RetrospectivoXN",logRo,priorRo) 
+Retrospectivo("MAETXN",dir.0,dir.1,"/RetrospectivoXN") 
 ```
 
 
@@ -288,7 +288,7 @@ desXN <- ggplot(baseXN %>% filter(Asesoria!='observado', variable=='Desembarques
        aes(ymin = value*exp(-1.96*cvcpue), ymax = value*exp(1.96*cvcpue)), color = 'gray30') +
        scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5)) +
        labs(x = '', y = 'Toneladas') +
-       theme_bw(base_size=9) + 
+       theme_bw(base_size=12) + 
        ggtitle('Desembarques zona X Norte')+
        theme(plot.title = element_text(hjust = 0.5),legend.position="none")
 
@@ -316,7 +316,7 @@ nyearc1  <- length(yearc1)
  
   fig1 <- ggplot(filter(mat, type=='obs')) + 
           geom_bar(aes(x = edad, y = value), stat="identity", fill='gray66', color = 'gray78') + 
-          facet_wrap(~year, dir = 'v', as.table = TRUE) + labs(x = 'Edad', y = 'Proporción') +
+          facet_wrap(~year, dir = 'v', as.table = TRUE) + labs(x = 'Longitud', y = 'Proporción') +
           geom_line(data = mat %>% filter(type != 'obs'), aes(x = edad, y = value, colour=type)) +
           scale_colour_manual(values=c('red'),name="") +
           theme(panel.background = element_rect(fill ="gray99")) + theme(panel.grid=element_line(color=NA)) +
