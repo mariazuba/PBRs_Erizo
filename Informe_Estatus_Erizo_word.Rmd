@@ -37,9 +37,12 @@ dir.fun     <-paste(dir.0,"/funciones/",sep="")
 ```{r PRIMER PASO CORRE MODELOS BASE XN, eval=FALSE, echo=FALSE, warning=FALSE}
 setwd(dir.1)
 #para mac
-system("~/admb-12.2/admb MAETXN")
-system("./MAETXN")
+#system("~/admb-12.2/admb MAETXN")
+#system("./MAETXN")
 
+#para windows
+system("admb MAETXN")
+system("./MAETXN")
 ```
 
 ```{r PRIMER PASO CORRE MODELOS BASE XS, eval=FALSE, echo=FALSE, warning=FALSE}
@@ -47,6 +50,8 @@ setwd(dir.1)
 #para mac
 system("~/admb-12.2/admb MAETXS")
 system("./MAETXS")
+
+
 ```
 
 ```{r PRIMER PASO CORRE MODELOS BASE XI, eval=FALSE, echo=FALSE, warning=FALSE}
@@ -116,7 +121,6 @@ priorRo <- seq(3,6.5,0.1)
 Verosimilitud("MAETXS",dir.0,dir.1,"/VerosimilitudXS",logRo,priorRo) 
 ```
 
-
 ```{r VerosimilitudXI, echo=F, warning=F,eval=F}
 source(paste(dir.fun,"Fn_Verosimilitud.R",sep=""))
 logRo    <- 4.80889832023
@@ -124,8 +128,41 @@ priorRo <- seq(3,6.5,0.1)
 Verosimilitud("MAETXI",dir.0,dir.1,"/VerosimilitudXI",logRo,priorRo) 
 ```
 
+```{r MortalidadNaturalXN, echo=F, warning=F,eval=F}
+source(paste(dir.fun,"Fn_MortalidadNatural.R",sep=""))
+rango_M   <-seq(0.15, 0.25, 0.01)
+MortalidadNatural("MAETXN",dir.0,dir.1,"/MortalidadNatural_XN",rango_M) 
+```
 
+```{r MortalidadNaturalXS, echo=F, warning=F,eval=F}
+source(paste(dir.fun,"Fn_MortalidadNatural.R",sep=""))
+rango_M   <-seq(0.22, 0.32, 0.01)
+MortalidadNatural("MAETXS",dir.0,dir.1,"/MortalidadNatural_XS",rango_M) 
+```
 
+```{r MortalidadNaturalXI, echo=F, warning=F,eval=F}
+source(paste(dir.fun,"Fn_MortalidadNatural.R",sep=""))
+rango_M   <-seq(0.15, 0.25, 0.01)
+MortalidadNatural("MAETXI",dir.0,dir.1,"/MortalidadNatural_XI",rango_M) 
+```
+
+```{r Rango_Loo_XN, echo=F, warning=F,eval=F}
+source(paste(dir.fun,"Fn_Rango_Loo.R",sep=""))
+rango_Loo   <-seq(128, 136, 0.5)
+Rango_Loo("MAETXN",dir.0,dir.1,"/RangoLoo_XN",rango_Loo) 
+```
+
+```{r Rango_Loo_XS, echo=F, warning=F,eval=F}
+source(paste(dir.fun,"Fn_Rango_Loo.R",sep=""))
+rango_Loo   <-seq(116, 128, 0.5)
+Rango_Loo("MAETXS",dir.0,dir.1,"/RangoLoo_XS",rango_Loo) 
+```
+
+```{r Rango_Loo_XI, echo=F, warning=F,eval=F}
+source(paste(dir.fun,"Fn_Rango_Loo.R",sep=""))
+rango_Loo   <-seq(128, 136, 0.5)
+Rango_Loo("MAETXI",dir.0,dir.1,"/RangoLoo_XI",rango_Loo) 
+```
 
 
 # 1. RESUMEN EJECUTIVO
