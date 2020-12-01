@@ -149,6 +149,7 @@ MortalidadNatural("MAETXI",dir.0,dir.1,"/MortalidadNatural_XI",rango_M)
 ```{r Rango_Loo_XN, echo=F, warning=F,eval=F}
 source(paste(dir.fun,"Fn_Rango_Loo.R",sep=""))
 rango_Loo   <-seq(128, 136, 0.5)
+
 Rango_Loo("MAETXN",dir.0,dir.1,"/RangoLoo_XN",rango_Loo) 
 ```
 
