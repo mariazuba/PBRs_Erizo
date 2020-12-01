@@ -206,6 +206,15 @@
 # Fase_No
 -1
 
+# Fase_Fpbr 
+ 6 
+
+# npbrs 
+ 2 
+
+# Tasas_BDPR 
+0.40 0.50
+
 # nmf
 4
 

@@ -180,7 +180,7 @@
 -3
 
 # Fase_selectividad 
--2  
+2  
 
 # Opt_seldomo
 -3
@@ -204,7 +204,16 @@
 2
 
 # Fase_No
--1
+1
+
+# Fase_Fpbr 
+ 6 
+
+# npbrs 
+ 2 
+
+# Tasas_BDPR 
+0.40 0.50
 
 # nmf
 4
