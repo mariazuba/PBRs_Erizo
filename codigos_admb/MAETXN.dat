@@ -194,7 +194,7 @@
 -4 
 
 # Fase_F
-2
+1
 
 # log_priorRo 
 3.175
@@ -207,6 +207,15 @@
 
 # Fase_No
 -1
+
+# Fase_Fpbr 
+ 6 
+
+# npbrs 
+ 2 
+
+# Tasas_BDPR 
+0.40 0.50
 
 # nmf
 4
