@@ -44,7 +44,7 @@ DATA_SECTION
  init_number hprior
  init_number bprior
 
-
+// Calculos preliminares
   number log_Loprior
   number log_cva_prior
   number log_h_prior
@@ -55,21 +55,26 @@ DATA_SECTION
   !! log_cva_prior = log(Par_bio(4));
   !! log_b_prior = log(bprior);
 
+// Selectividad
  init_number L50prior
  init_number s1prior
-
+   
+//Calculos preliminares Selectividad
  number log_L50fprior
  number log_s1prior
 
  !! log_L50fprior = log(L50prior);
  !! log_s1prior = log(s1prior);
 
+// BLoques de Selectividad
  init_int    nbloques1
  init_vector ybloques1(1,nbloques1)
 
+// Bloques de Capturabilidad
  init_int    nqbloques
  init_vector yqbloques(1,nqbloques)
 
+// Fases de Estimación de Parámetros
  init_int    opt_qf
  init_int    opt_bpow
  init_int    opt1_fase
@@ -81,13 +86,17 @@ DATA_SECTION
  init_int    opt_Ro
  init_int    opt_devRt
  init_int    opt_devNo
-
+// Puntos biológicos de referencia
+ init_int    opt_Fpbr //fase de estimación Fpbr (se sugiere sea la última)
+ init_int    npbr     //número de pbrs a calcular
+ init_vector pbr(1,npbr) //tasas de BDPR ejemplo 30%,40%,60% etc
+   
 // Proyeccion de poblaci?n 
- init_int    npbr
- init_vector pbr(1,npbr)
+ init_int    nmF
+ init_vector mF(1,nmF)
  init_int ntime_sim
- init_int opt_Frms//*********agregar
- init_number Frms//*********agregar
+ init_int opt_Frms
+ init_number Frms
 
 //####################################################################
 INITIALIZATION_SECTION
@@ -107,132 +116,164 @@ INITIALIZATION_SECTION
 PARAMETER_SECTION
 //####################################################################
    
-// selectividad param?trica a la talla com?n
-// init_bounded_vector log_L50f(1,nbloques1,-5,8,opt1_fase)  
- 
+//-------------------------------------------------------------- 
+// selectividad parametrica 
+//-------------------------------------------------------------- 
  init_vector log_L50(1,nbloques1,opt1_fase)  
  init_vector log_sigma1(1,nbloques1,opt1_fase)
  init_vector log_sigma2(1,nbloques1,opt_tiposel)
 
+//-------------------------------------------------------------- 
 // parametros reclutamientos y mortalidades)
+//-------------------------------------------------------------- 
  init_number log_Ro(opt_Ro)
  init_bounded_dev_vector dev_log_Ro(1,ntime,-10,10,opt_devRt)
  init_bounded_vector dev_log_No(1,nedades,-10,10,opt_devNo)
  init_bounded_vector log_F(1,ntime,-20,0.7,opt_F) // log  mortalidad por pesca por flota
 
+//-------------------------------------------------------------- 
 // capturabilidades
+//-------------------------------------------------------------- 
  init_vector log_qflo(1,nqbloques,opt_qf)
  init_number log_b(opt_bpow)
 
-// Crecim
+//-------------------------------------------------------------- 
+// Crecimiento
+//-------------------------------------------------------------- 
  init_number log_Lo(opt_Lo)
  init_number log_cv_edad(opt_cva)
 
-//---------------------------------------------------------------------------------
+//-------------------------------------------------------------- 
+// Fpbr
+//--------------------------------------------------------------
+ init_bounded_vector log_Fref(1,npbr,0.01,2.,opt_Fpbr)
+ //init_vector log_Fref(1,npbr,opt_Fpbr);
+   
+//*******************************
 //Defino las variables de estado 
- vector BMflo(1,ntime)
- vector Brec(1,ntime)
- vector pred_CPUE(1,ntime);
- vector pred_Desemb(1,ntime);
- vector likeval(1,5);
- vector Neq(1,nedades);
-
- vector Rpred(1,ntime);
- sdreport_vector Rest(1,ntime);
- vector Unos_edad(1,nedades);
- vector Unos_anos(1,ntime);
- vector Unos_tallas(1,ntallas);
- vector mu_edad(1,nedades)
- vector sigma_edad(1,nedades)
- vector BDo(1,ntime);
- vector No(1,nedades)
- vector prior(1,7)
-
- vector yrs(1,ntime)
- vector Desemb(1,ntime);
- vector CPUE(1,ntime);
- matrix cv_index(1,3,1,ntime)
- vector nm(1,ntime)
- vector Lmed_obs(1,ntime)
- vector Lmed_pred(1,ntime)
- vector edades(1,nedades)
-
- matrix S1(1,nbloques1,1,nedades)
- matrix S2(1,nbloques1,1,nedades)
-
- matrix Sel(1,ntime,1,nedades)
- matrix F(1,ntime,1,nedades)
- matrix Z(1,ntime,1,nedades)
- matrix S(1,ntime,1,nedades)
-
-
- matrix N(1,ntime,1,nedades)
-
- matrix NM(1,ntime,1,nedades)
- matrix NMD(1,ntime,1,ntallas)
- matrix NDv(1,ntime,1,ntallas)
- matrix Nrec(1,ntime,1,ntallas)
- matrix NVflo(1,ntime,1,ntallas)
-
- matrix pred_Ctot(1,ntime,1,ntallas)
- matrix pred_Ctot_a(1,ntime,1,nedades)
-
- matrix pobs(1,ntime,1,ntallas)
- matrix ppred(1,ntime,1,ntallas)
-
- matrix Prob_talla(1,nedades,1,ntallas)
-
- matrix P1(1,nedades,1,ntallas)
- matrix P2(1,nedades,1,ntallas)
- matrix P3(1,nedades,1,ntallas)
- matrix Nv(1,ntime,1,nedades)
- matrix NMDv(1,ntime,1,nedades)
-
- number suma1
- number suma2
- number suma3
- number suma4
-
- number penalty
-
- number So
- number alfa
- number beta
-
- number Linf
- number k
- number Linfh
- number M
- number h
-
- number BDp
- number Npplus
- number Bp_anch 
-
- number nm1;
- number cuenta1;
-
- vector Np(1,nedades)
- vector Zpbr(1,nedades)
- vector Fpbr(1,nedades)
- vector Sp(1,nedades)
-
- matrix Bp(1,npbr,1,ntime_sim)
- vector CTPp(1,nedades)
- matrix Yp(1,npbr,1,ntime_sim)
-
- 
- objective_function_value f
-  
- sdreport_vector BD(1,ntime) // 
- sdreport_vector BT(1,ntime) // 
- sdreport_vector RPR(1,ntime) // 
- vector RPRlp(1,ntime) // 
- 
- sdreport_number SSBo
- sdreport_vector YTPp(1,npbr)//*********afregar
-// sdreport_vector RPRp(1,npbr) // RPR proyectado en la simulacion
-
+//*******************************
+   vector yrs(1,ntime)
+   vector Unos_edad(1,nedades);
+   vector Unos_anos(1,ntime);
+   vector Unos_tallas(1,ntallas);
+   vector edades(1,nedades)
+   vector prior(1,7)
+   matrix cv_index(1,3,1,ntime)
+   vector nm(1,ntime)
+   //------------------------------
+   // Estimados y predichos
+   //------------------------------
+   vector Desemb(1,ntime);
+   vector pred_Desemb(1,ntime);
+   vector CPUE(1,ntime);
+   vector pred_CPUE(1,ntime);
+   matrix pobs(1,ntime,1,ntallas)
+   matrix ppred(1,ntime,1,ntallas)
+   vector Lmed_obs(1,ntime)
+   vector Lmed_pred(1,ntime)
+   //------------------------------  
+   //Matriz edad-talla
+   //------------------------------
+   number Linf
+   number k
+   number Linfh
+   vector mu_edad(1,nedades)
+   vector sigma_edad(1,nedades)
+   matrix Prob_talla(1,nedades,1,ntallas)
+   matrix P1(1,nedades,1,ntallas)
+   matrix P2(1,nedades,1,ntallas)
+   matrix P3(1,nedades,1,ntallas)
+   //------------------------------
+   // Selectividades
+   //------------------------------
+   matrix S1(1,nbloques1,1,nedades)
+   matrix S2(1,nbloques1,1,nedades)
+   matrix Sel(1,ntime,1,nedades)
+   //------------------------------  
+   // Mortalidades y sobrevivencia
+   //------------------------------
+   number M
+   matrix F(1,ntime,1,nedades)
+   matrix Z(1,ntime,1,nedades)
+   matrix S(1,ntime,1,nedades)
+   //------------------------------
+   // Dinámica
+   //------------------------------
+   number h
+   number So
+   number alfa
+   number beta 
+   vector BDo(1,ntime);
+   vector No(1,nedades)
+   vector Neq(1,nedades);
+   matrix N(1,ntime,1,nedades)
+   matrix NM(1,ntime,1,nedades)
+   matrix NMD(1,ntime,1,ntallas)
+   matrix NDv(1,ntime,1,ntallas)
+   matrix Nrec(1,ntime,1,ntallas)
+   matrix NVflo(1,ntime,1,ntallas)
+   matrix Nv(1,ntime,1,nedades)
+   matrix NMDv(1,ntime,1,nedades)
+   //------------------------------
+   // Captura a la talla y edad
+   //------------------------------
+   matrix pred_Ctot(1,ntime,1,ntallas)
+   matrix pred_Ctot_a(1,ntime,1,nedades)
+   //------------------------------
+   // Variables 
+   //------------------------------
+   vector BMflo(1,ntime)
+   vector Brec(1,ntime)
+   vector Rpred(1,ntime);
+   sdreport_vector Rest(1,ntime);
+   sdreport_vector BD(1,ntime) // 
+   sdreport_vector BT(1,ntime) // 
+   sdreport_vector RPR(1,ntime) // 
+   sdreport_number SSBo
+   //-------------------------------------
+   //FUNCTION Eval_PBR
+   //-------------------------------------
+   vector Fspr(1,nedades)
+   vector Zspr(1,nedades)
+   vector Nspro(1,nedades)
+   vector Nspr(1,nedades)
+   number Bspro
+   number Bspr
+   vector ratio_spr(1,npbr)
+   
+   number Bo
+   vector Brms(1,npbr)
+   sdreport_vector RPRrms(1,ntime)
+   sdreport_vector Frpr(1,ntime)
+   //------------------------------ 
+   // Verosimilitud
+   //------------------------------
+   number nm1;
+   number cuenta1;
+   number suma1
+   number suma2
+   number suma3
+   number suma4
+   number penalty
+   vector likeval(1,10);
+   objective_function_value f
+   //------------------------------
+   // Proyección
+   //------------------------------
+   number BDp
+   number Npplus
+   number Bp_anch 
+   
+   vector Np(1,nedades)
+   vector Zpbr(1,nedades)
+   vector Fpbr(1,nedades)
+   vector Sp(1,nedades)
+   matrix Bp(1,nmF,1,ntime_sim)
+   vector CTPp(1,nedades)
+   matrix Yp(1,nmF,1,ntime_sim)
+   vector RPRlp(1,ntime) // 
+   sdreport_vector YTPp(1,nmF)//*********afregar
+   
 //####################################################################
 PRELIMINARY_CALCS_SECTION
 //####################################################################
@@ -277,14 +318,16 @@ PROCEDURE_SECTION
  Eval_biomasas();
  Eval_capturas_predichas();
  Eval_indices();
+ Eval_PBR();
  Eval_logverosim();
  Eval_funcion_objetivo();
+ Eval_CTP();
 
- if(last_phase()){Eval_CTP();}
-
-//####################################################################
+//======================================================================
+ 
 FUNCTION Eval_prob_talla_edad
-//####################################################################
+   
+//======================================================================
 
  int i, j;
 
@@ -299,9 +342,11 @@ FUNCTION Eval_prob_talla_edad
 
   Prob_talla = ALK( mu_edad, sigma_edad, Tallas);
 
-//####################################################################
+//======================================================================
+  
 FUNCTION dvar_matrix ALK(dvar_vector& mu, dvar_vector& sig, dvector& x)
-//####################################################################
+  
+//======================================================================
   
 	//RETURN_ARRAYS_INCREMENT();
 	int i, j;
@@ -325,11 +370,11 @@ FUNCTION dvar_matrix ALK(dvar_vector& mu, dvar_vector& sig, dvector& x)
 	//RETURN_ARRAYS_DECREMENT();
 	return(pdf);
 
-
-
-//####################################################################
+//======================================================================
+	
 FUNCTION Eval_selectividad
-//####################################################################
+  
+//======================================================================
   
  int i,j;
 
@@ -354,9 +399,11 @@ FUNCTION Eval_selectividad
    }
 
 
-//####################################################################
+//======================================================================
+   
 FUNCTION Eval_mortalidades
-//####################################################################
+     
+//======================================================================
 
  F=elem_prod(Sel,outer_prod(mfexp(log_F),Unos_edad));
 
@@ -364,9 +411,12 @@ FUNCTION Eval_mortalidades
 
  S=mfexp(-1.0*Z);
 
-//####################################################################
+
+//======================================================================
+ 
 FUNCTION Eval_abundancia
-//####################################################################
+  
+//======================================================================
   
  int i, j;
 
@@ -375,9 +425,11 @@ FUNCTION Eval_abundancia
   log_Ro=log_priorRo;
  }
 
- h=hprior;
 
+
+ //---------------------------------------------------------
  // Biomasa desovante virgen de largo plazo
+ //---------------------------------------------------------
  No(1)=exp(log_Ro+0.5*square(sigmaR)); //
 
  for (int j=2;j<=nedades;j++)
@@ -386,11 +438,17 @@ FUNCTION Eval_abundancia
 
  SSBo=sum(elem_prod(No*exp(-dt(1)*M)*Prob_talla,elem_prod(msex,Wmed)));
 
+ //----------------------------------------------------------
+ // Relación stock-recluta Beverton y Holt
+ //----------------------------------------------------------
+ 
+ h=hprior;
  alfa=4*h*exp(log_Ro+0.5*square(sigmaR))/(5*h-1);//
  beta=(1-h)*SSBo/(5*h-1);// Reclutamiento
 
-// Abundancia inicial
-
+ //----------------------------------------------------------
+ // Abundancia inicial
+ //----------------------------------------------------------
  N(1)=elem_prod(No,exp(dev_log_No));
 
  BD(1)=sum(elem_prod(elem_prod(N(1),exp(-dt(1)*Z(1)))*Prob_talla,elem_prod(msex,Wmed)));
@@ -398,7 +456,9 @@ FUNCTION Eval_abundancia
  Rpred(1)=exp(log_Ro+0.5*square(sigmaR));
 
 
-// se estima la sobrevivencia por edad(a+1) y a?o(t+1)
+ //----------------------------------------------------------
+ // Sobrevivencia por edad(a+1) y año(t+1)
+ //----------------------------------------------------------
  for (i=1;i<ntime;i++)
  {
     Rpred(i+1)=exp(log_Ro+0.5*square(sigmaR)); // 
@@ -417,9 +477,11 @@ FUNCTION Eval_abundancia
 
    Rest=column(N,1);
 
-//####################################################################
+//======================================================================
+ 
 FUNCTION Eval_deinteres
-//####################################################################
+  
+//======================================================================
   
 // Rutina para calcular RPR
  Nv=N;// solo para empezar los calculos
@@ -439,9 +501,11 @@ FUNCTION Eval_deinteres
 
  RPRlp=BD/SSBo;
 
-//####################################################################
+//======================================================================
+ 
 FUNCTION Eval_biomasas
-//####################################################################
+  
+//======================================================================
   
  NMD=elem_prod(N,mfexp(-dt(1)*Z))*Prob_talla;
  NMD=elem_prod(NMD,outer_prod(Unos_anos,msex));
@@ -453,9 +517,11 @@ FUNCTION Eval_biomasas
  BMflo=NVflo*Wmed;
  BT=(N*Prob_talla)*Wmed;
 
-//####################################################################
+//======================================================================
+ 
 FUNCTION Eval_capturas_predichas
-//####################################################################
+  
+//======================================================================
   
 // matrices de capturas predichas por edad y a?o
  pred_Ctot_a=elem_prod(elem_div(F,Z),elem_prod(1.-S,N));
@@ -473,9 +539,11 @@ FUNCTION Eval_capturas_predichas
  Lmed_pred=Tallas*trans(ppred);
  Lmed_obs=Tallas*trans(pobs);
 
-//####################################################################
+//======================================================================
+ 
 FUNCTION Eval_indices
-//####################################################################
+  
+//======================================================================
   
 
    for (int i=1;i<=ntime;i++){
@@ -485,9 +553,57 @@ FUNCTION Eval_indices
        }
    }
 
-//####################################################################
+//========================================================================
+   
+FUNCTION Eval_PBR
+     
+//========================================================================
+     if(opt_Ro<0)
+     {
+       log_Ro=log_priorRo;
+     }
+     
+     for (int i=1;i<=npbr;i++){
+       Fspr = Sel(ntime)*mfexp(log_Fref(i));
+       Zspr = Fspr+M;
+       
+       Nspro(1)=mfexp(log_Ro);
+       Nspr(1)=mfexp(log_Ro);
+       
+       for (int j=2;j<=nedades;j++)
+       {   No(j)=No(j-1)*exp(-1.*M);}
+       No(nedades)=No(nedades)/(1-exp(-1.*M));
+       
+       SSBo=sum(elem_prod(No*exp(-dt(1)*M)*Prob_talla,elem_prod(msex,Wmed)));
+       
+       
+       for (int j=2;j<=nedades;j++)
+       {
+         Nspro(j)=Nspro(j-1)*mfexp(-1.*M);
+         
+         Nspr(j)=Nspr(j-1)*mfexp(-Zspr(j-1));
+       }
+       
+       Nspro(nedades)=Nspro(nedades)/(1-mfexp(-1.*M)); 
+       Nspr(nedades)=Nspr(nedades)/(1-mfexp(-Zspr(nedades))); 
+       
+       Bspro   = sum(elem_prod(Nspro*mfexp(-dt(1)*M)*Prob_talla,elem_prod(msex,Wmed)));
+       Bspr    = sum(elem_prod(elem_prod(Nspr,mfexp(-dt(1)*Zspr))*Prob_talla,elem_prod(msex,Wmed)));
+       
+       ratio_spr(i)=Bspr/Bspro;
+       Bo    =  Bspro;
+       Brms(i)=Bo*(ratio_spr(i)-0.05);
+     }
+     
+     
+     RPRrms = BD/(Bo*0.35);
+     Frpr   = exp(log_F)/mfexp((log_Fref(1))); 
+     
+//======================================================================
+   
 FUNCTION Eval_logverosim
-//####################################################################
+     
+//======================================================================
 
 // esta funcion evalua el nucleo de las -log-verosimilitudes marginales para
 // series con datos 0.
@@ -501,7 +617,11 @@ FUNCTION Eval_logverosim
     suma1+=square(log(CPUE(i)/pred_CPUE(i))*1/cv_index(2,i));}
  }
 
+//======================================================================
+ 
 FUNCTION Eval_funcion_objetivo
+   
+//======================================================================
 
  suma3=0; suma4=0; penalty=0;
 
@@ -523,16 +643,22 @@ FUNCTION Eval_funcion_objetivo
 
  if (active(log_F)){
  penalty+=1000*norm2(log_F-mean(log_F));}
+ 
+ if(active(log_Fref)){
+   penalty+=1000*norm2(ratio_spr-pbr);}
 
  f=(sum(likeval)+penalty);
 
  if(last_phase){
  f=sum(likeval);}
 
+//======================================================================
+ 
 FUNCTION  Eval_CTP
-//-----------------------------------------------------------------
 
-  for (int i=1;i<=npbr;i++){ // ciclo de PBR
+//======================================================================
+
+  for (int i=1;i<=nmF;i++){ // ciclo de PBR
 
   Np=N(ntime);
   Sp=S(ntime);
@@ -547,11 +673,11 @@ FUNCTION  Eval_CTP
   Np(2,nedades)=++elem_prod(Np(1,nedades-1),Sp(1,nedades-1));
   Np(nedades)+=Np(nedades)*Sp(nedades);
 
-  Fpbr=F(ntime)*pbr(i);//
+  Fpbr=F(ntime)*mF(i);//
   
  if(opt_Frms>0)//agregada 1 Activado Frms/ -1 Activa F ultimo a?o
   {
-   Fpbr=Frms*pbr(i);//agregada Activar o desactivar -1
+   Fpbr=Frms*mF(i);//agregada Activar o desactivar -1
   }
 
   Zpbr=Fpbr+M;
