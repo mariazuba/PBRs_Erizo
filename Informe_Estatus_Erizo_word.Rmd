@@ -33,15 +33,14 @@ dir.1       <-paste(dir.0,"/codigos_admb",sep="")
 dir.fun     <-paste(dir.0,"/funciones/",sep="")
 ```
 
-
 ```{r PRIMER PASO CORRE MODELOS BASE XN, eval=FALSE, echo=FALSE, warning=FALSE}
 setwd(dir.1)
 #para mac
-#system("~/admb-12.2/admb MAETXN")
+system("admb MAETXN")
 #system("./MAETXN")
 
 #para windows
-system("admb MAETXN")
+#system("admb MAETXN")
 system("./MAETXN")
 ```
 
@@ -95,19 +94,15 @@ source(paste(dir.fun,"Fn_Retrospectivo.R",sep=""))
 Retrospectivo("MAETXN",dir.0,dir.1,"/RetrospectivoXN") 
 ```
 
-
 ```{r RetrospectivoXS, echo=F, warning=FALSE,eval=F}
 source(paste(dir.fun,"Fn_Retrospectivo.R",sep=""))
 Retrospectivo("MAETXS",dir.0,dir.1,"/RetrospectivoXS") 
 ```
 
-
 ```{r RetrospectivoXI, echo=F, warning=FALSE,eval=F}
 source(paste(dir.fun,"Fn_Retrospectivo.R",sep=""))
 Retrospectivo("MAETXI",dir.0,dir.1,"/RetrospectivoXI") 
 ```
-
-
 
 ```{r VerosimilitudXN, echo=F, warning=F,eval=F}
 source(paste(dir.fun,"Fn_Verosimilitud.R",sep=""))
@@ -125,8 +120,8 @@ Verosimilitud("MAETXS",dir.0,dir.1,"/VerosimilitudXS",logRo,priorRo)
 
 ```{r VerosimilitudXI, echo=F, warning=F,eval=F}
 source(paste(dir.fun,"Fn_Verosimilitud.R",sep=""))
-logRo    <- 4.80889832023
-priorRo <- seq(3,6.5,0.1)
+logRo    <- 4.82869986656
+priorRo <- seq(4.75,4.85,0.005)
 Verosimilitud("MAETXI",dir.0,dir.1,"/VerosimilitudXI",logRo,priorRo) 
 ```
 
@@ -167,16 +162,49 @@ rango_Loo   <-seq(128, 136, 0.5)
 Rango_Loo("MAETXI",dir.0,dir.1,"/RangoLoo_XI",rango_Loo) 
 ```
 
-
 # 1. RESUMEN EJECUTIVO
 
+El presente documento corresponde a un extracto del segundo Reporte de Gestión considerado en el proyecto "Programa de Seguimiento de las Pesquerías Bentónicas Bajo Planes de Manejo, Año 2019", en el marco del Convenio de Desempeño D. Ex. N°170/2018 del MINECOM, entre el Instituto de Fomento Pesquero y el Ministerio de Economía y Empresas de Menor Tamaño.
+
+Este documento contiene la evaluación de stock para la determinación del estatus de erizo (*Loxechinus albus*) en las denominadas Décima Región Norte, Décima Región Sur y Úndécima Región, que no presentan cambios notables con respecto a la evaluación del periodo anterior. El punto biológico de referencia propuesto, un 40% de reducción de la Biomasa Desovante Virginal, señala para la zona X Norte una reducción a un nivel de 20% la Biomasa Desovante, a un 43,1% la situación de la población en la zona X Sur y a un 20,8% la condición de la zona XI. Los resultados fueron presentados al Comité Científico Técnico Bentónico como antecedente para la recomendación de rango de cuota global para el año 2020 en la macrozona X y XI regiones.
+
 # 2. INTRODUCCIÓN
+
+Con el objetivo de una gestión participativa de los usuarios de las pesquerías bentónicas en la administración de los recursos de los cuales son usuarios, la Subsecretaría de Pesca y Acuicultura (SSPA) desarrolló en años recientes un enfoque de manejo, basado en un principio en Mesas de Trabajo. Estas mesas tuvieron el propósito de avanzar en la formulación de Planes de Manejo Bentónicos, que posteriormente, al amparo de las disposiciones de la Ley 20.560 del año 2012 y la Ley 20.657 de 2013, generaron la creación de los actuales Comités de Manejo de Pesquerías Bentónicas.
+
+Estos Planes de Manejo Bentónicos, constituyen una medida administrativa de comanejo de las pesquerías, con menor estructuración reglamentaria que las tradicionales AMERB, pero con mayor cobertura territorial, de recursos involucrados y número de usuarios.
+
+En el presente programa de Seguimiento de Pesquerías, parte del soporte para los Planes de Manejo tiene su inicio en el año 2015, con el objetivo de generar información que permita un pronunciamiento del estado de los recursos pesqueros administrados bajo el Plan de Manejo. Así, este programa se organiza de forma de implementar y desarrollar modelos de evaluación para recursos que carecen de esta asistencia técnica en forma previa, en muchos de los casos. La condición incipiente de esta forma de administrar los recursos bentónicos en Chile, ha generado Planes de Manejo heterogéneos, con diversidad de objetivos, que han hecho que la asesoría se enmarque en la transversalidad que supone la sostenibilidad y enfoque precautorio que enmarca la Ley de Pesca. La asesoría en el corto plazo, debe reconocer esta diversidad y considera escenarios de desarrollos metodológicos de evaluación con diversos niveles de robustez estadística e incertidumbre. A su véz, los Planes de Manejo Bentónicos, no necesariamente tienen considerado en su diseño en forma explícita los indicadores que permiten la evaluación de sus objetivos, por lo que se requiere, además, generar los medios de evaluación apropiados a una diversidad de recursos, con las limitaciones ya señaladas.  
 
 # 3. ANTECEDENTES
 
 ## Contexto Normativo de los Planes de Manejo Bentónico
 
+La Ley General de Pesca y Acuicultura (LGPA), en el Título I, Artículo 2, numeral 33, define al Plan de Manejo como un "compendio de normas y conjunto de acciones que permiten administrar una pesquería, basado en el conocimiento actualizado de los aspectos biopesqueros, económico y social que se tenga de ella". En este contexto, la LGPA, incorpora los Planes de Manejo Bentónicos y los Comités de Manejo como un elemento para la administración de recursos bentónicos de invertebrados y algas. Lo anterior, permite el establecimiento de un Plan de Manejo aplicable a todo o parte de una Región política, dando la posibilidad a los usuarios de contribuir en la ordenación y administración del recurso o recursos identificados en el Plan de Manejo.
+
+En el Título II, Párrafo 3°, Artículo 8°, se establece que para la administración y manejo de las pesquerías que tengan su acceso cerrado, así como las pesquerías declaradas en régimen de recuperación y desarrollo incipiente, la SSPA deberá establecer un Plan de Manejo, el que deberá contener, a lo menos, los siguientes aspectos:
+
+Antecedentes generales, tales como el área de aplicación, recursos involucrados, áreas o caladeros de pesca de las flotas que capturan dicho recurso y caracterización de los actores, tanto artesanales como industriales y del mercado. Objetivos, metas y plazos para mantener o llevar la pesquería al rendimiento máximo sostenible de los recursos involucrados en el plan. Estrategias para alcanzar los objetivos y metas planteados, las que podrán contener las medidas de conservación y administración que deberán adoptarse de conformidad a lo establecido en esta ley, y acuerdos para resolver la interacción entre los diferentes sectores pesqueros involucrados en la pesquería. • Criterios de evaluación del cumplimiento de los objetivos y estrategias establecidos. • Estrategias de contingencia para abordar las variables que pueden afectar la pesquería. • Requerimientos de investigación y de fiscalización. • Cualquier otra materia que se considere de interés para el cumplimiento del objetivo del Plan.
+
+La Ley permite elaborar un Plan de Manejo con participación de los usuarios de la pesquería, incorporando, diversas instancias de participación que contribuyan a dar mayor viabilidad al Plan (Palta et al., 2014). En este contexto, para la elaboración de la propuesta, implementación, evaluación y adecuación del Plan de Manejo, la SSPA debe encargarse de constituir un Comité de Manejo, el que tendrá el carácter de asesor de esta institución y será presidido por el funcionario que el Subsecretario de Pesca designe para tal efecto.
+
+Dicho Comité, es integrado por no menos de dos ni más de siete representantes de los pescadores artesanales inscritos en la pesquería involucrada, debiendo provenir de regiones distintas en caso que haya más de una involucrada, tres representantes del sector pesquero industrial que cuenten con algún título regulado en la ley sobre dicha pesquería, debiendo provenir de regiones o unidades de pesquería distintas en caso que haya más de una involucrada, un representante de las plantas de proceso de dicho recurso y un representante del Sernapesca.
+
+La Ley establece que un reglamento determinará la forma de designación de los integrantes de dicho Comité. El Comité de Manejo deberá establecer el periodo en el cual se evaluará el Plan de Manejo, el que no podrá exceder de cinco años desde su formulación.
+
+Además del Comité de Manejo, se establece el funcionamiento de un Comité Científico Técnico (art. 153, LGPA). Uno de los roles del Comité Científico Técnico es pronunciarse, en el plazo de dos meses respecto del Plan de Manejo elaborado en el seno del Comité de Manejo. El Comité de Manejo recibirá la respuesta del Comité Científico y modificará la propuesta, si corresponde. Posteriormente, la Subsecretaría aprobará el plan mediante resolución, y sus disposiciones tendrán carácter de obligatorio para todos los actores y embarcaciones involucradas.
+
+La propuesta de Plan de Manejo es sometida a consulta pública, a través del sitio electrónico de la SSPA. Tratándose de pesquerías bentónicas de carácter local, se deberá además informar el inicio del proceso de consulta, mediante mensaje radial y publicación en extracto en un diario de circulación regional. Los interesados podrán formular observaciones dentro del plazo de un mes contado desde la fecha de publicación en el sitio electrónico. Recibidas las observaciones, la Subsecretaría evaluará la pertinencia de reformular la propuesta y dará pública respuesta a las observaciones planteadas .
+
+En el Plan de Manejo se podrá considerar un procedimiento de certificación de la información de desembarque (artículo 63, LGPA, 2013), para aquellas pesquerías que no contemplen un sistema obligatorio, el cual será efectuado conforme a reglas establecidas (artículo 64 E, LGPA, 2013) y será obligatorio para todos los participantes de la pesquería.
+
+En el caso de los recursos bentónicos, invertebrados y algas, se introducen en los Planes de Manejo, herramientas de control o asignación del esfuerzo pesquero, desarrollado en una determinada área de una o más regiones. Esta figura permitirá realizar una administración con sentido de acercamiento a la realidad de la actividad extractiva local con la consideración de la movilidad de los pescadores participantes. En los casos que el Plan, sea aplicable sólo a una parte de la Región, implicará la participación de aquellos que cumplan con los criterios de participación establecidos, entre los cuales deberá considerarse el haber efectuado operaciones extractivas en el área de aplicación del plan. Se estableció además una evaluación del Plan al menos cada tres años o 5 años, al término de los cuales, sólo podrán continuar operando en el área, quienes cumplan con los requisitos de participación .
+
 ## Plan de Manejo de erizo en las regiones de Los Lagos y Aysén
+
+Durante el año 2001 fue objetada la Resolución N° 1783 (24/8/2001), emitida por la Subsecretaría de Pesca, que permitía la operación en Zonas Contiguas de pescadores de la Región de Los Lagos, lo que llevó a una suspensión de las actividades de extracción y una protesta social, que instala a las autoridades de las regiones involucradas a buscar una solución entre las partes, que resultó en el llamado Acuerdo de la Moneda del 4/10/2001. Este acuerdo condicionó la operación de la actividad con distintas medidas regulatorias (Pesca de Investigación, certificación de desembarques, registro de pescadores y otros). En el año 2005, ante la necesidad de un ordenamiento de la actividad, se implementó el Plan de Manejo, encargado en el año 2013 a la Universidad Austral por la Subsecretaría de Pesca. Así, inicia el primer Plan de Manejo Pesquero en Chile.
+
+En un principio, la estimación de cuotas de erizo obedeció a a criterios en base a un promedio de la extracción de años recientes, y una asignación por zonas de pesca acordadas en la COMPEB (componente de gestión del Plan de Manejo, asesorado por un Grupo Técnico Asesor por recurso, llamado GTA), situación que se mantuvo hasta el año 2014, cuando en las cuotas, ahora recomendadas por el Comité Científico Técnico Bentónico (CCTB) según la modificación de la Ley de Pesca del año 2013, se consideran evaluaciones indirectas, realizadas por IFOP y además una asesoría alternativa. Así, esta pesquería, una de las más importantes del mundo para estos equinodermos, junto con las de macroalgas, son objeto de la recomendación del CCTB, siendo la asesoría de este programa de investigación una proposición de estatus en base a puntos de referencia aún no sancionados por dicho Comité.  
 
 # 4. OBJETIVOS
 
@@ -204,15 +232,40 @@ Evaluar el estado de situación del/de los recurso/s objetivo y generar y analiz
 
 #### Unidades de stock
 
+En las regiones X y XI de Chile se desarrollan un gran número de pesquerías artesanales con gran impacto en la economía y sociedad, siendo la pesquería del erizo la principal en términos del aporte a los desembarques nacionales de este recurso (57%) solo compartido con la Región de Magallanes (Sernapesca, 2018).
+
+De acuerdo a la complejidad espacial de las poblaciones de erizo que sostienen las pesquerías en términos de monitoreo, evaluación y manejo, Molinet *et al*. (2011) realizó una zonificación a través de los polígonos determinados en función de un análisis de similitudes, flota, composición de especies y del juicio experto de su pesquería. Esto se tradujo en el establecimiento de 12 zonas agrupadas por características comunes (polígonos), los cuales, posteriormente fueron agrupados para definir las 3 macrozonas que actualmente se utilizan para la evaluación de stock (Canales *et al*., 2014). La estructuración de las macrozonas y sus respectivos polígonos queda como indica la siguiente **Tabla 1** y **Figura 1**.
+
++-------------+---------------------------+----------------+
+| Zona        | Delimitación              | Polígonos      |
++=============+===========================+================+
+| **X Norte** | Pto Montt (41.28S) --     | 1,2            |
+|             |                           |                |
+|             | Butachauques (42.15S)     |                |
++-------------+---------------------------+----------------+
+| **X Sur**   | Butachauques (42.15S) --  | 4,5,6,13       |
+|             |                           |                |
+|             | Isla Guafo (43.42 S)      |                |
++-------------+---------------------------+----------------+
+| **XI**      | Isla Queitao (43.42 S) -- | 7,8,9,10,11,12 |
+|             |                           |                |
+|             | Peninsula Taitao (46.5°S) |                |
++-------------+---------------------------+----------------+
+
+: **Tabla 1.** Delimitación de las macrozonas de evaluación de stock de erizo en función de los polígonos de captura.
+
+De acuerdo a esta segmentación espacial, y utilizando estos polígonos, la evaluación de stock fue realizada para 3 zonas de manera independiente: 1) zona norte X Región, 2) zona sur X Región y 3) Undécima (XI Región) (**Figura 2**). Esta propuesta de evaluación por macrozonas, está dada por las recomendaciones técnicas que indican que las dinámicas de una población en función del manejo
+suceden a un nivel macro, meso y micro escala, dado que algunas recomendaciones (FAO, 2005) sugieren que para minimizar la fuente de error en la evaluación de stock de recursos con estructuración espacial como los erizos, no se debe sobrestimar la extensión de la unidad de stock.
+
 #### Actualización de antecedentes y datos
 
-1.  Análisis de los desembarques
+##### 1. Análisis de los desembarques
 
-2.  Estructura de tallas de la pesquería
+##### 2. Estructura de tallas de la pesquería
 
-3.  Índice de abundancia relativa (CPUE)
+##### 3. Índice de abundancia relativa (CPUE)
 
-4.  Parámetros de historia de vida
+##### 4. Parámetros de historia de vida
 
 -   Crecimiento
 
@@ -302,7 +355,7 @@ baseXI <- data.frame(rbind(indXI, predXI))
 
 ```
 
-```{r  Fig_ajustesIndices_XN, echo=FALSE,message=FALSE, warning=FALSE, fig.align="center", fig.height=6, fig.path=dir.Fig, fig.width=6, dev=fig, include=T, fig.cap="**Figura 1**. Ajuste del modelo a la información de CPUE, desembarque para el erizo de la zona X Norte. Los puntos representan a las observaciones junto a sus niveles de incertidumbre. La línea negra sólida muestra el valor estimado por el modelo"}
+```{r  Fig_ajustesIndices_XN, echo=FALSE,message=FALSE, warning=FALSE, fig.align="center", fig.height=6, fig.path=dir.Fig, fig.width=6, dev=fig, include=T, fig.cap="**Figura 8**. Ajuste del modelo a la información de CPUE, desembarque para el erizo de la zona X Norte. Los puntos representan a las observaciones junto a sus niveles de incertidumbre. La línea negra sólida muestra el valor estimado por el modelo"}
 
 cpueXN <- ggplot(baseXN %>% filter(Asesoria!='observado', variable=='CPUE'), 
        aes(yrs,value)) + 
@@ -336,7 +389,7 @@ cpueXN/desXN + plot_layout(guides="collect")
 
 ```
 
-```{r Fig_ajustesCompFXN,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=8,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Ajustes de la proporción de tallas de erizo de la zona XN"}
+```{r Fig_ajustesCompFXN,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=8,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura 9**. Ajuste del modelo a las estructuras de talla de las capturas de erizo zona X Norte. Las barras representan las proporciones de capturas observadas y las líneas, el ajuste del modelo. El modelo no ajusta para datos previos al año 1996."}
 age  <-rep1$Tallas                                          
 nage<-length(age)   
 
@@ -391,7 +444,7 @@ plot(log(predD),Res_Desemb, ylim=c(-0.01,0.01),main="Residuales vs ajustado",yla
 abline(h=0,col="darkgray")
 qqnorm(Res_Desemb,ylim=c(-0.01,0.01)); qqline(Res_Desemb, col = 2)
 
-```    
+```
 
 ```{r Fig_residuosCompXN,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=6,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Residuos de la proporción de tallas de erizo de la zona X Norte"}
 
@@ -427,11 +480,7 @@ box()
 
 ```
 
-
-
 2.  ***Análisis retrospectivo***
-
-
 
 ```{r VariablesXN_std, echo=F,message=FALSE, warning=FALSE, include=T}
 
@@ -613,7 +662,6 @@ Rt/BD/Ft |Rtrel/BDrel/Ftrel
 
 3.  ***Perfil de verosimilitud***
 
-
 ```{r Fig_VerosimilitudXN,echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Perfil de verosimilitud erizo zona X norte", fig.height=10, fig.width=10}
 
 source(paste(dir.fun,"functions.R",sep=""))
@@ -651,10 +699,9 @@ legend(30,3,names[c(7,2:6)],col=1:7,lty=c(1,rep(2,6)),lwd=2,bty="n",cex=0.7)
 
 ```
 
+4.  ***Análisis de sensibilidad***
 
-4. ***Análisis de sensibilidad***
-
-4.1. Mortalidad natural 
+4.1. Mortalidad natural
 
 ```{r Dat_SenMortalidadNatural_XN, echo=F, message=FALSE, warning=FALSE, include=T}
 dir<-paste(dir.0,"/MortalidadNatural_XN",sep="")
@@ -684,7 +731,6 @@ dataBD <- as.data.frame(retroBD) %>% mutate(year=years) %>% melt(id.vars='year')
 dataF <- as.data.frame(retroF) %>% mutate(year=years) %>% melt(id.vars='year')
 
 ```
-
 
 ```{r Fig_MortalidadNatural_XN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Análisis de sensibilidad de la Mortalidad natural de erizo de la zona norte", fig.height=5, fig.width=5}
 
@@ -755,7 +801,6 @@ dataF <- as.data.frame(retroF) %>% mutate(year=years) %>% melt(id.vars='year')
 
 ```
 
-
 ```{r Fig_Loo_XN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Análisis de sensibilidad del rango de Loo de erizo de la zona norte", fig.height=5, fig.width=5}
 
 
@@ -794,10 +839,9 @@ Rt/BD/Ft
 
 ```
 
-
 #### Variables de estado
 
-```{r Fig_VarpoblXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Variables poblacionales de Erizo zona X Norte", fig.height=6, fig.width=8}
+```{r Fig_VarpoblXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Variables de biomasas totales, desovantes, reclutamientos y desvíos estimadas por el modelo para el erizo de la zona X Norte período 1960 - 2019.", fig.height=6, fig.width=8}
 
 
 Rt <- ggplot(VarPob) + 
@@ -859,7 +903,6 @@ par(mfrow=c(1,1),mar=c(4,4,1,1))
 
 ```
 
-
 #### Puntos Biológicos de Referencia
 
 ```{r Fig_PBRsXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Puntos Biológicos de referencia de Erizo zona X Norte", fig.height=7, fig.width=6}
@@ -900,14 +943,11 @@ Ft <- ggplot(VarPob) +
 
 ```
 
-
 #### Indicadores del estatus
-
-
 
 #### Estatus del erizo de la zona norte de la Región de Los Lagos
 
-```{r Fig_DiagramaFaseXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase Erizo zona X Norte", fig.height=8, fig.width=10}
+```{r Fig_DiagramaFaseXN, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase propuesto para erizo zona X Norte. En el eje Y se presenta la razón entre el nivel de reducción de la biomasa desovante (BD) estimada en la evaluación de stock respecto de la biomasa objetivo ($BD_{RMS}$), la cual define el estatus de sub-explotación, plena explotación, sobreexplotación y colapso. El eje X representa la razón entre la mortalidad por pesca proveniente de la evaluación respecto del F40% considerado objetivo para alcanzar el RMS (proxy), sobre la línea continua ($F/F_{RMS}>1$), se define la condición de sobrepesca.", fig.height=8, fig.width=10}
 Zona<- "Erizo Zona X Norte"
 Frms<-dat1$FMRS
 BDo<-rep1$BDo
@@ -967,8 +1007,6 @@ labs(x = expression("BD/BD"[RMS]), y = expression("F/F"[RMS]),fill='Estados de e
   ggtitle(Zona)
 
 ```
-
-
 
 ### 6.1.2. Erizo zona sur Región de Los Lagos
 
@@ -1065,7 +1103,7 @@ plot(log(predD),Res_Desemb, ylim=c(-0.01,0.01),main="Residuales vs ajustado",yla
 abline(h=0,col="darkgray")
 qqnorm(Res_Desemb,ylim=c(-0.01,0.01)); qqline(Res_Desemb, col = 2)
 
-```    
+```
 
 ```{r Fig_residuosCompXS,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=6,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Residuos de la proporción de tallas de erizo de la zona X sur"}
 
@@ -1100,7 +1138,6 @@ mtext("a)",side=3,line=0.25,adj=-0.15,cex=1.5)
 box()
 
 ```
-
 
 2.  Análisis retrospectivo de erizo zona X sur
 
@@ -1323,7 +1360,7 @@ legend(30,3,names[c(7,2:6)],col=1:7,lty=c(1,rep(2,6)),lwd=2,bty="n",cex=0.7)
 
 ```
 
-4.1. Mortalidad natural 
+4.1. Mortalidad natural
 
 ```{r Dat_SenMortalidadNatural_XS, echo=F, message=FALSE, warning=FALSE, include=T}
 dir<-paste(dir.0,"/MortalidadNatural_XS",sep="")
@@ -1353,7 +1390,6 @@ dataBD <- as.data.frame(retroBD) %>% mutate(year=years) %>% melt(id.vars='year')
 dataF <- as.data.frame(retroF) %>% mutate(year=years) %>% melt(id.vars='year')
 
 ```
-
 
 ```{r Fig_MortalidadNatural_XS, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Análisis de sensibilidad de la Mortalidad natural de erizo de la zona X sur", fig.height=5, fig.width=5}
 
@@ -1425,7 +1461,6 @@ dataF <- as.data.frame(retroF) %>% mutate(year=years) %>% melt(id.vars='year')
 
 ```
 
-
 ```{r Fig_Loo_XS, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Análisis de sensibilidad del rango de Loo de erizo de la zona X sur", fig.height=7, fig.width=5}
 
 
@@ -1464,7 +1499,6 @@ Ft <- ggplot() +
 Rt/BD/Ft
 
 ```
-
 
 #### Variables de estado de erizo Zona X sur.
 
@@ -1529,7 +1563,6 @@ par(mfrow=c(1,1),mar=c(4,4,1,1))
 
 ```
 
-
 #### Puntos Biológicos de Referencia
 
 ```{r Fig_PBRsXS, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Puntos Biológicos de referencia de Erizo zona X Sur", fig.height=7, fig.width=6}
@@ -1571,7 +1604,6 @@ Ft <- ggplot(VarPob) +
 
 
 ```
-
 
 #### Indicadores del estatus
 
@@ -1673,7 +1705,6 @@ cpueXI/desXI + plot_layout(guides="collect")
 
 ```
 
-
 ```{r ajustesCompFXI,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=8,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**.Ajustes de la proporción de tallas de erizo de la zona XI"}
 age  <-rep3$Tallas                                          
 nage<-length(age)   
@@ -1703,8 +1734,6 @@ nyearc1  <- length(yearc1)
 
 ```
 
-
-
 1.  Análisis de residuos
 
 ```{r Fig_residualesIndicesXI,warning=F, include=T, message=F, echo=FALSE,fig.height=7,fig.width=6,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Residuos de la CPUE y desembarques de erizo de la zona XI"}
@@ -1731,7 +1760,7 @@ plot(log(predD),Res_Desemb, ylim=c(-0.01,0.01),main="Residuales vs ajustado",yla
 abline(h=0,col="darkgray")
 qqnorm(Res_Desemb,ylim=c(-0.01,0.01)); qqline(Res_Desemb, col = 2)
 
-```    
+```
 
 ```{r Fig_residuosCompXI,warning=F, include=T, message=F, echo=FALSE,fig.height=8,fig.width=6,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="**Figura x**. Residuos de la proporción de tallas de erizo de la zona XI"}
 
@@ -1766,7 +1795,6 @@ mtext("a)",side=3,line=0.25,adj=-0.15,cex=1.5)
 box()
 
 ```
-
 
 2.  Análisis retrospectivo
 
@@ -1957,7 +1985,7 @@ source(paste(dir.fun,"functions.R",sep=""))
 dir       <-paste(dir.0,"/VerosimilitudXI",sep="")
 setwd(dir)
 
-casos <-34
+casos <-21
 logRo    <- rep(0,casos)
 likeval  <- matrix(ncol=5,nrow=casos)
 slikeval <- matrix(ncol=6,nrow=casos)
@@ -1980,14 +2008,14 @@ TLk2 <- data.frame(exp(logRo),slikeval);colnames(TLk2)<-names
 par(mar=c(4,4,1,1))
 plot(TLk2$Ro,TLk2$Total,type="l",lwd=3,ylim=c(0,3),xlim=c(0.5,200),xaxs="i",ylab="L-min(L)",xlab="Ro",las=1,main='Erizo zona XI',cex.axis=0.7,cex.main=0.8,cex.lab=0.8)
 
-lines(c(0,TLk2$Ro),rep(2,casos+1),lty=2,lwd=2)
-for(i in 2:6){lines(TLk2$Ro,TLk2[,i],col=i,lty=2,lwd=2)}
-legend(30,3,names[c(7,2:6)],col=1:7,lty=c(1,rep(2,6)),lwd=2,bty="n",cex=0.7)
+#lines(c(0,TLk2$Ro),rep(2,casos+1),lty=2,lwd=2)
+#for(i in 2:6){lines(TLk2$Ro,TLk2[,i],col=i,lty=2,lwd=2)}
+#legend(30,3,names[c(7,2:6)],col=1:7,lty=c(1,rep(2,6)),lwd=2,bty="n",cex=0.7)
 
 
 ```
 
-4.1. Mortalidad natural 
+4.1. Mortalidad natural
 
 ```{r Dat_SenMortalidadNatural_XI, echo=F, message=FALSE, warning=FALSE, include=T}
 dir<-paste(dir.0,"/MortalidadNatural_XI",sep="")
@@ -2017,7 +2045,6 @@ dataBD <- as.data.frame(retroBD) %>% mutate(year=years) %>% melt(id.vars='year')
 dataF <- as.data.frame(retroF) %>% mutate(year=years) %>% melt(id.vars='year')
 
 ```
-
 
 ```{r Fig_MortalidadNatural_XI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Análisis de sensibilidad de la Mortalidad natural de erizo de la zona XI", fig.height=5, fig.width=5}
 
@@ -2089,7 +2116,6 @@ dataF <- as.data.frame(retroF) %>% mutate(year=years) %>% melt(id.vars='year')
 
 ```
 
-
 ```{r Fig_Loo_XI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Análisis de sensibilidad del rango de Loo de erizo de la zona XI", fig.height=7, fig.width=5}
 
 
@@ -2128,8 +2154,6 @@ Ft <- ggplot() +
 Rt/BD/Ft
 
 ```
-
-
 
 #### Variables de estado
 
@@ -2195,7 +2219,6 @@ par(mfrow=c(1,1),mar=c(4,4,1,1))
 
 ```
 
-
 #### Puntos Biológicos de Referencia
 
 ```{r  Fig_PBRsXI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Puntos Biológicos de referencia de Erizo zona XI", fig.height=7, fig.width=6}
@@ -2238,13 +2261,9 @@ BD/Ft
 
 ```
 
-
 #### Indicadores del estatus
 
-
-
 #### Estatus del erizo de la Región de Aysén
-
 
 ```{r Fig_DiagramaFaseXI, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Diagrama de fase Erizo zona XI", fig.height=8, fig.width=10}
 Zona<- "Erizo Zona XI"
