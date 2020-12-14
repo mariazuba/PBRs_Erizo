@@ -33,6 +33,15 @@ dir.1       <-paste(dir.0,"/codigos_admb",sep="")
 dir.fun     <-paste(dir.0,"/funciones/",sep="")
 ```
 
+```{r}
+dat.file    = "MAETXN.dat" #Cambiar despues por info actualizada y borrar esto
+dat1        <- lisread(paste(dir.2,dat.file, sep='/'));
+names(dat1) <- str_trim(names(dat1), side="right")
+dat         <- dat1
+```
+
+
+
 
 ```{r PRIMER PASO CORRE MODELOS BASE XN, eval=FALSE, echo=FALSE, warning=FALSE}
 setwd(dir.1)
@@ -204,13 +213,76 @@ Evaluar el estado de situación del/de los recurso/s objetivo y generar y analiz
 
 #### Unidades de stock
 
+
+![Zonas de evaluación estructuradas en base a los polígonos espaciales de la operación de pesca de erizo X-XI regiones (Molinet *et al.*, 2011) que son consideradas como unidades de stock para este estudio.](Figuras/Area_estudio.png){width="12cm"}
+
 #### Actualización de antecedentes y datos
 
 1.  Análisis de los desembarques
 
+
+(figura de Tallas)
+
+![Zonas de evaluación estructuradas en base a los polígonos espaciales de la operación de pesca de erizo X-XI regiones (Molinet *et al.*, 2011) que son consideradas como unidades de stock para este estudio.](Figuras/Area_estudio.png){width="12cm"}
+
+
 2.  Estructura de tallas de la pesquería
 
+
+
+
 3.  Índice de abundancia relativa (CPUE)
+
+Para la obtención de un índice de abundancia, se utilizaron modelos lineales generalizados (GLM; McCullagh & Nelder, 1989) donde el valor esperado de la captura (kg) por hora de buceo como Captura Por Unidad de Esfuerzo (CPUE) se supone explicada por un arreglo de factores siguiendo una combinación lineal de la forma:
+
+                  E(𝐶𝑃𝑈𝐸𝑦,𝑡,𝑧,𝑝)=𝑔−1(𝑐𝑡𝑒+𝐴𝑦+𝑇𝑡+ 𝑃𝑝+𝜎𝑦,𝑡,𝑝,𝑧)
+                  
+Donde g es la función de enlace, A es el factor año, T el factor trimestral, P la profundidad y σ es el término de error aleatorio. El análisis de devianza permitió evaluar la importancia de cada efecto en cada subregion de evaluación, y en algunos casos como es la zona X norte, se analizó la interacción de primer orden Año*profundidad sobre la base de evidencias de mejoras en el rendimiento de pesca anual debido a cambios en la profundidad. El efecto anual en su escala exponencial exp(A) fue considerado como índice de abundancia para efectos de la evaluación de stock. El tratamiento de los datos consideró como rangos de profundidad los intervalos <15 m; 16-30 m; 31-45 m; y > 45 m) así como la exclusión de los registros superiores 450 kg/hora de buceo y aquellos por debajo 1 kg/hora, esto en base al conocimiento de terreno respecto del régimen operacional del buceo extractivo.
+Junto a ello, esta vez se utilizaron Modelos Lineales Generalizados Mixtos (GLMM), los cuales combinan las ideas de los modelos lineales generalizados con las ideas de modelado de efectos aleatorios. La respuesta es una variable aleatoria, Yi, que toma valores observados, yi, para i = 1, ..., n, y sigue una distribución de familia exponencial con la forma:
+
+```{r datInd2, warning=F, include=T, message=F, echo=FALSE,fig.height=6,fig.width=5,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap="CPUE de entrada al modelo de evaluación de stock para las tres unidades de stock de erizo"}
+
+
+cpueXN_obs  <- data.frame(rep1$CPUE_obs)
+cpueXS_obs  <- data.frame(rep2$CPUE_obs)
+cpueXI_obs  <- data.frame(rep3$CPUE_obs)
+
+
+ obscpueXN  <- as.data.frame(cpueXN_obs) %>% 
+   mutate(year=yearc) %>% 
+   melt(id.vars='year') %>% 
+   mutate(type='CPUE_XNorte')
+ obscpueXS  <- as.data.frame(cpueXS_obs) %>% 
+   mutate(year=yearc) %>% 
+   melt(id.vars='year') %>% 
+   mutate(type='CPUE_XSur')
+ obscpueXI  <- as.data.frame(cpueXI_obs) %>% 
+   mutate(year=yearc) %>% 
+   melt(id.vars='year') %>%
+   mutate(type='CPUE_XI')
+ 
+
+Ind2  <-rbind(obscpueXN,obscpueXS,obscpueXI)
+
+
+p2 <- ggplot()  +
+  geom_line(data=Ind2, aes(x=year, y =value), stat="identity", fill='gray66', 
+                   color = 'gray28') + 
+  facet_wrap(type~.,scale="free",dir = 'v', as.table = TRUE) + 
+  labs(x="Años", y="Nominal CPUE (kg/hora*Buzo)")+
+  theme(panel.background = element_rect(fill ="gray99")) + 
+  theme(panel.grid=element_line(color="gray66"))+
+  scale_x_continuous(breaks = seq(from = 1995, to = 2020, by = 1))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 2))+
+  theme
+  xlim(1996,2020)+
+  ylim(50, 200)
+p2
+
+```
+
+
+
 
 4.  Parámetros de historia de vida
 
@@ -356,10 +428,12 @@ nyearc1  <- length(yearc1)
  
   fig1 <- ggplot(filter(mat, type=='obs')) + 
           geom_bar(aes(x = edad, y = value), stat="identity", fill='gray66', color = 'gray78') + 
-          facet_wrap(~year, dir = 'v', as.table = TRUE) + labs(x = 'Longitud', y = 'Proporción') +
+          facet_wrap(~year, dir = 'v', as.table = TRUE) +
+          labs(x = 'Longitud', y = 'Proporción') +
           geom_line(data = mat %>% filter(type != 'obs'), aes(x = edad, y = value, colour=type)) +
           scale_colour_manual(values=c('red'),name="") +
-          theme(panel.background = element_rect(fill ="gray99")) + theme(panel.grid=element_line(color=NA)) +
+          theme(panel.background = element_rect(fill ="gray99")) + 
+          theme(panel.grid=element_line(color=NA)) +
           ggtitle("FLOTA Zona XNorte") + theme(plot.title = element_text(size = 12))
   fig1
 
