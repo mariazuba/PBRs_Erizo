@@ -142,7 +142,7 @@ PARAMETER_SECTION
  //-------------------------------------------------------------- 
  // Fpbr
  //--------------------------------------------------------------
-  init_bounded_vector log_Fref(1,npbr,0.01,2.,opt_Fpbr)
+ // init_bounded_vector log_Fref(1,npbr,0.01,2.,opt_Fpbr)
   //init_vector log_Fref(1,npbr,opt_Fpbr);
  
 //*******************************
@@ -314,7 +314,7 @@ PROCEDURE_SECTION
  Eval_biomasas();
  Eval_capturas_predichas();
  Eval_indices();
- Eval_PBR();
+ //Eval_PBR();
  Eval_logverosim();
  Eval_funcion_objetivo();
 
@@ -550,7 +550,7 @@ FUNCTION Eval_indices
 
 //========================================================================
    
-FUNCTION Eval_PBR
+ /** FUNCTION Eval_PBR
      
 //========================================================================
      if(opt_Ro<0)
@@ -587,7 +587,7 @@ FUNCTION Eval_PBR
      RPRrms = BD/(Bo*0.35);
      Frpr   = exp(log_F)/mfexp((log_Fref(1))); 
      
-     
+  **/   
 
      
      
@@ -633,11 +633,13 @@ FUNCTION Eval_funcion_objetivo
  if(active(dev_log_No)){
  likeval(5)=1./(2*square(sigmaR))*norm2(dev_log_No);}
 
- if (active(log_F)){
+ if(active(log_F)){
  penalty+=1000*norm2(log_F-mean(log_F));}
  
- if(active(log_Fref)){
+ //funcion PBR
+ /** if(active(log_Fref)){ 
  penalty+=1000*norm2(ratio_spr-pbr);}
+ **/ 
  
  f=(sum(likeval)+penalty);
 
