@@ -26,6 +26,7 @@ library(patchwork)
 dir.Fig        <-"Figuras/"
 fig            <-c("pdf","bmp")
 
+
 #DIRECTORIOS
 carpetabase <-getwd()
 dir.0       <-carpetabase
@@ -2566,6 +2567,61 @@ labs(x = expression("BD/BD"[RMS]), y = expression("F/F"[RMS]),fill='Estados de e
 ```
 
 ### 6.1.4. Análisis integrado de las tres zonas de estudio
+
+Finalmente se presentan los resultados dde las biomasas totales, ya sean estas por zona y sumando todo. Primero la biomass desovante y luego la total.
+
+```{r echo=F}
+# Desovante
+totd <- BD1 + BD2 + BD3
+biod <- cbind(years, BD1, BD2, BD3, totd)
+biod <- as.data.frame(biod)
+biod <-fortify(biod)
+
+# Total
+tot <- BT1 + BT2 + BT3
+biot <- cbind(years, BT1, BT2, BT3, tot)
+biot <- as.data.frame(biot)
+biot <-fortify(biot)
+```
+
+
+```{r Plot_Biomasas, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Biomasas Totales y Desovantes"}
+# Grafico de Biomasas Desovantes
+
+bd<- ggplot(biod) + 
+     geom_line(aes(x=years, y=BD1, colour = 'X Norte'), size=0.5)+
+     geom_line(aes(x=years, y=BD2, color = 'X Sur'), size=0.5)+
+     geom_line(aes(x=years, y=BD3, color = 'XI'), size=0.5)+
+    labs(x = '', y = 'Biomasas desovantes (t.)')  +
+    scale_x_continuous(breaks = seq(from = years[1], to = years[nyears], by = 2)) +
+   scale_colour_manual("", 
+                      breaks = c('X Norte','X Sur','XI'),
+                      values = c("red", "green", "blue")) +
+    theme_bw(base_size=12) +
+     ggtitle('')+
+     theme(plot.title = element_text(hjust = 0.5),
+           axis.text.x = element_text(angle=90))
+
+# Grafico de Biomasas Totales
+
+bt<- ggplot(biot) + 
+     geom_line(aes(x=years, y=BT1, colour = 'X Norte'), size=0.5)+
+     geom_line(aes(x=years, y=BT2, colour = 'X Sur'), size=0.5)+
+     geom_line(aes(x=years, y=BT3, colour = 'XI'), size=0.5)+
+    labs(x = '', y = 'Biomasas totales (t.)')  +
+    scale_x_continuous(breaks = seq(from = years[1], to = years[nyears], by = 2)) +
+    scale_colour_manual("", 
+                      breaks = c('X Norte','X Sur','XI'),
+                      values = c("red", "green", "blue")) +
+    theme_bw(base_size=12) +
+     ggtitle('')+
+      theme(plot.title = element_text(hjust = 0.5),
+           axis.text.x = element_text(angle=90))
+
+bd/bt 
+```
+ 
+
 
 # 7. DISCUSIÓN
 
