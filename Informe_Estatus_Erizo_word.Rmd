@@ -2588,6 +2588,7 @@ biot <-fortify(biot)
 ```{r Plot_Biomasas, echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**. Biomasas Totales y Desovantes"}
 # Grafico de Biomasas Desovantes
 
+
 bd<- ggplot(biod) + 
      geom_line(aes(x=years, y=BD1, colour = 'X Norte'), size=0.5)+
      geom_line(aes(x=years, y=BD2, color = 'X Sur'), size=0.5)+
