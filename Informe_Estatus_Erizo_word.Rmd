@@ -21,6 +21,7 @@ library(ggthemes)
 library(stringr)
 library(knitr)
 library(patchwork)
+library(kableExtra)
 
 # FIGURAS
 dir.Fig        <-"Figuras/"
@@ -424,6 +425,8 @@ Para la obtención de un índice de abundancia, se utilizaron modelos lineales g
                   E(𝐶𝑃𝑈𝐸𝑦,𝑡,𝑧,𝑝)=𝑔−1(𝑐𝑡𝑒+𝐴𝑦+𝑇𝑡+𝑃𝑝+𝜎𝑦,𝑡,𝑝,𝑧)
                   
 
+
+$$E(CPUE y, t, z, p) =  g^{1} (cte + Ay + Tt + Pp + \epsilon,  y , t, p, z)$$
 Donde g es la función de enlace, A es el factor año, T el factor trimestral, P la profundidad y σ es el término de error aleatorio. El análisis de devianza permitió evaluar la importancia de cada efecto en cada subregion de evaluación, y en algunos casos como es la zona X norte, se analizó la interacción de primer orden Año\*profundidad sobre la base de evidencias de mejoras en el rendimiento de pesca anual debido a cambios en la profundidad. El efecto anual en su escala exponencial exp(A) fue considerado como índice de abundancia para efectos de la evaluación de stock. El tratamiento de los datos consideró como rangos de profundidad los intervalos \<15 m; 16-30 m; 31-45 m; y \> 45 m) así como la exclusión de los registros superiores 450 kg/hora de buceo y aquellos por debajo 1 kg/hora, esto en base al conocimiento de terreno respecto del régimen operacional del buceo extractivo.
 
 ```{r datInd2, warning=F, include=T, message=F, echo=FALSE,fig.height=6,fig.width=5,fig.align="center",fig.path=dir.Fig,dev=fig, fig.cap= "CPUE de entrada al modelo de evaluación de stock para las tres unidades de stock de erizo",eval=T}
@@ -435,16 +438,16 @@ cpueXI_obs  <- data.frame(rep3$CPUE_obs)
 
 
  obscpueXN  <- as.data.frame(cpueXN_obs) %>% 
-   mutate(year=years) %>% 
-   melt(id.vars='year') %>% 
+   mutate(years=years) %>% 
+   melt(id.vars='years') %>% 
    mutate(type='CPUE_XNorte')
  obscpueXS  <- as.data.frame(cpueXS_obs) %>% 
-   mutate(year=years) %>% 
-   melt(id.vars='year') %>% 
+   mutate(years=years) %>% 
+   melt(id.vars='years') %>% 
    mutate(type='CPUE_XSur')
  obscpueXI  <- as.data.frame(cpueXI_obs) %>% 
-   mutate(year=years) %>% 
-   melt(id.vars='year') %>%
+   mutate(years=years) %>% 
+   melt(id.vars='years') %>%
    mutate(type='CPUE_XI')
  
 
@@ -452,7 +455,7 @@ Ind2  <-rbind(obscpueXN,obscpueXS,obscpueXI)
 
 
 p2 <- ggplot()  +
-  geom_line(data=Ind2, aes(x=year, y =value), stat="identity", fill='gray66', 
+  geom_line(data=Ind2, aes(x=years, y =value), stat="identity", fill='gray66', 
                    color = 'gray28') + 
   facet_wrap(type~.,scale="free",dir = 'v', as.table = TRUE) + 
   labs(x="Años", y="Nominal CPUE (kg/hora*Buzo)")+
@@ -2705,6 +2708,14 @@ bt<- ggplot(biot) +
 bd/bt 
 ```
 
+A su vez, se presentan los valores estimados de cada variable de biomasas para cada zona a través de los años.
+
+```{r}
+biodm <- as.matrix(biod)
+kable(biodm, format = "pipe",caption = "Biomasas Totales por zona", align = "c")
+```
+
+
 ## 5.7. Analisis exploratorio de los datos de AMERB de las regiones de Los Lagos y Aysén y su pertinencia en la evaluación de stock
 
 # 6. DISCUSIÓN
@@ -2782,7 +2793,7 @@ Resultados de la evaluación de stock
 Para proponer recomendaciones modelo-basadas para la pesquería del erizo, es necesario entender la evaluación de stock en este tipo de recursos espacialmente estructurados, dado que el desarrollo de modelos clásicos en la teoría de la dinámica de las poblaciones explotadas ha sido motivado principalmente en el campo de los vertebrados, y por su parte, pesquerías de invertebrados como el erizo han mostrado un lento proceso de evaluación formal alrededor del mundo (Cheng & Berek, 2003, Cheng, 2002, Hilborn and Walters, 1992). Para poder aplicar modelos de evaluación de stock en invertebrados, ciertas consideraciones deben ser atendidas, como por ejemplo, considerar el conjunto de poblaciones relacionadas con una fuerte y persistente estructuración espacial (Jamieson, 1995) y la redistribución del esfuerzo de pesca a través de la entidad poblacional analizada (Caddy and Defeo, 2003).
 Desde este punto de vista se de- ben tomar en cuenta los PBR que tiendan a evitar una eventual sobrepesca por reclutamiento, consi- derando aquellos PBR que entreguen un diagnósti- co respecto a la biomasa desovante disponible cada año para la renovación poblacional. En este contex- to, aquí se utilizaron los PBR provenientes de la biomasa desovante por recluta (BPR). Al respecto se puede señalar, que la mortalidad por pesca 2003 (Fact), se encuentra muy cercana al criterio de F40% (Fig. 4). Además, la curva de BPR presenta ausen- cia de elasticidad, en el sentido que a niveles bajos de mortalidad por pesca, la curva cambia rápida- mente desde un nivel de F66% a F45% , pero cuando se aumentan los niveles de mortalidad por pesca por sobre F33% , los niveles de BPR son estables. Bajo el esquema selectivo actual, esto produciría (indepen- diente de las altas mortalidades por pesca que po- drían existir en la población) el escape de una frac- ción de desovantes, permitiendo sustentar la pobla- ción, aunque a niveles bajos de stock y por lo tanto no recomendable como política pesquera.
 El diagnóstico de las tres unidades (zonas) analizadas consideró como referentes valores “proxies” del Rendimiento Máximo Sostenido (RMS), y que se refieren a una reducción de biomasa virginal al 40%. Para todos los efectos se consideró un nivel de “steepness” h=0.8 para la relación S/R. Para estos efectos se calcularon los niveles de mortalidad por pesca de referencia en base a un análisis de equilibrio por recluta considerando las particularidades de cada unidad de stock y las variaciones anuales de la selectividad. La biomasa desovante virginal se calculó en base al valor de reclutamiento de largo plazo sin explotación, mientras la reducción de esta variable se estableció en base a la razón entre la biomasa desovante de cada año respecto a su condición inicial. De acuerdo a lo anterior se determinó que la reducción poblacional alcanza el 23.1%, 15% y 24% en zonas X Norte, X Sur y XI respectivamente. Analizando los resultados a la luz de las evaluaciones anteriores, en la zona X Norte, el nivel de reducción poblacional alcanza un 23.1%, muy por debajo del enfoque precautorio del 40% de BD/BDo y 6.7% por encima de la última evaluación realizada el año 2015. Esta situación se debe a la baja en los niveles de esfuerzo realizado en la zona X Norte y un alza en el reclutamiento para el año 2016. En la zona X Sur también la reducción poblacional es de 15%, un 10.4% debajo de la última evaluación de stock realizada el año 2015. Al igual que en Xnor esta zona se encuentra bajo un nivel de sobre-explotación. En XI también la reducción poblacional se estimó en un 24%, una disminución de un 20.8% respecto a la última evaluación de stock realizada el año 2015, esto podría deberse al desplazamiento de la flota hacia zonas australes de la región, causando un aumento del esfuerzo de pesca. Los resultados para X Norte mostraron que desde el 2006 la mortalidad por pesca se ubica significativamente por sobre el criterio de referencia FMRS=F40% pero con tendencia decreciente en los últimos 3 años, mientras la biomasa desovante ha estado por casi 10 años por debajo de la biomasa en el BMRS. El diagrama de fase ubica la condición actual en situación de sobre-explotación (B<Brms) (Figura 47). Por su parte, en la zona X Sur también se estimó una condición similar de sobre-explotación con un nivel de mortalidad por pesca alto en los últimos años, por sobre el criterio FMRS=F40%, y por ende con evidencias de sobre-pesca (Figura 50), con niveles de reducción de la biomasa desovante bajo los objetivos de manejo tentativos desde el comienzo de la pesquería (década del 80). Finalmente, en XI región los resultados mostraron que las variables biomasa y mortalidad por pesca se ubican bajo los objetivos de manejo, sin embargo, este continua siendo stock en mejor condición de estatus (Figura 53). Gran parte de la reducción poblacional en toda la X Región se habría debido a extensos períodos de fuertes anomalías en los reclutamientos junto al crecimiento del esfuerzo de pesca sobre especies de menor longitud. Esta situación también ha comenzado a suceder en la XI, en donde los altos niveles de mortalidad por pesca, han situado al recurso en una situación de vulnerabilidad. La tendencia general de la población de erizos en la X y XI región es a la baja, y las proyecciones a largo plazo son arriesgadas. De acuerdo a esto, se recomiendan las CBA para el año 2017 con enfoque precautorio para cada una de las zonas con distintos niveles de riesgo. Considerando un riesgo medio (30%) en función de los un objetivo de manejo en torno al MRS, para la zona X Norte se tienen 844 tons., para la zona X Sur se proponen 3010 tons. Por ultimo para la zona XI, se proponen 8711 tons. De acuerdo a los análisis de sensibilidad, y considerando los distintos escenarios probados (steepness y parámetros de crecimiento), no se encontraron mayores diferencias en los estatus del erizo en las 3 zonas evaluadas. Sin embargo, las piezas de información referentes a las estructuras de tallas son las que mayor ponderan en este modelo. Esto se comprueba mediante los resultados de la última evaluación en la zona XI.
- 
+ 
 7. REFERENCIAS
 Arias, E., N. Barahona, G. Jerez y E. Lozada, 1995. Monitoreo del recurso erizo en la X y XI regiones, 1994. Informe Final FIP 93-13: 1-74.
 Arrau. L, 1958. Desarrollo del erizo comestible en Chile, Loxechinus albus (Molina). Revista de Biología Marina 7: 39-61.
