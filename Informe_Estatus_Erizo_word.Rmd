@@ -860,7 +860,7 @@ Ftrel <- ggplot(Ft_retroRel) + lims(y=c(-1,1)) +
 Rt/BD/Ft |Rtrel/BDrel/Ftrel
 
 ```
-
+names
 #####  ***4. Perfil de verosimilitud***
 
 ```{r Fig_VerosimilitudXN,echo=FALSE, message=FALSE, warning=FALSE, include=T, fig.align="center", fig.cap="**Figura x**.	Perfil de verosimilitud erizo zona X norte", fig.height=10, fig.width=10}
